@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "1051210703087",
+    "firebase_url": "https://socialnetwork-fda05.firebaseio.com",
+    "project_id": "socialnetwork-fda05",
+    "storage_bucket": "socialnetwork-fda05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051210703087:android:810bbd3fd063e1ac",
+        "android_client_info": {
+          "package_name": "com.mykompany.socialnetwork"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1051210703087-5gcs7bcsgfk0ic434i914j8l6u672tef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgD-ns2l67lnAiA1FlJ8kIsrICG447rNI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051210703087:android:ed4d4548bbc452e2",
+        "android_client_info": {
+          "package_name": "hungphinguyen98.company.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1051210703087-5gcs7bcsgfk0ic434i914j8l6u672tef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgD-ns2l67lnAiA1FlJ8kIsrICG447rNI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
