@@ -59,8 +59,8 @@ buck-out/
 #
 .expo/
 /ios/Pods/
-# google-services.json
-# GoogleService-Info.plist
+/android/app/google-services.json
+/ios/GoogleService-Info.plist
 
 # RNFirebaseStarter
 yarn.lock
