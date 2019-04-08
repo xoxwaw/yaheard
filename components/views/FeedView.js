@@ -21,17 +21,40 @@ export default class Feed extends React.Component {
     constructor(){
         super();
         this.ref = firebase.firestore().collection('posts');
-        this.state = {items: []};
+        this.storage = firebase.storage();
+        this.state = {items: [], images: [], imgURL: {}};
+
     }
     componentDidMount() {
-        this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)
+        this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        this.loadImage("images/image.png");
     }
 
     componentWillUnmount() {
         this.unsubscribe();
     }
+
+    loadImage(path) {
+        setTimeout(() => {
+        this.storage.ref(path).getDownloadURL()
+          .then((url) => {
+            console.log(url);
+            this.setState({imgURL: {uri: url}});
+          });
+      }, 2000);
+        // this.setState({imgURL: {uri: downloadURL}});
+
+    }
+
+
     onCollectionUpdate = (querySnapshot) => {
         const items = [];
+        // var pathRef = this.storage.ref('images/image.png');
+        // pathRef.getDownloadURL().then(function(url) {
+        //      _url = url;
+        // }, function(error){
+        //     alert(error);
+        // });
         querySnapshot.forEach((doc) => {
             const {post, user, upvote, downvote} = doc.data();
             items.push({
@@ -42,9 +65,10 @@ export default class Feed extends React.Component {
             });
         });
         this.setState({
-        items
+        items:items
         });
     }
+
   render() {
     return (
         <ScrollView>
@@ -64,6 +88,13 @@ export default class Feed extends React.Component {
               })
           }
           </View>
+          <Card>
+          <Image
+            style={{width: 300, height: 200}}
+            source={this.state.imgURL}
+          />
+          </Card>
+
         </ScrollView>
     );
   }

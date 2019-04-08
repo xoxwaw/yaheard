@@ -3,23 +3,15 @@ import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Imag
 import { SwitchNavigator } from 'react-navigation'
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
-import RNFetchBlob from 'react-native-fetch-blob';
-
 
 const storage = firebase.storage()
 
-// Prepare Blob support
-const Blob = RNFetchBlob.polyfill.Blob
-const fs = RNFetchBlob.fs
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-window.Blob = Blob
-
-const uploadImage = (uri, mime = 'application/octet-stream') => {
+const uploadImage = (uri, mime = 'image/png') => {
     // return new Promise((resolve, reject) => {
         // const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
         const sessionId = new Date().getTime()
         // let uploadBlob = null
-        const imageRef = storage.ref('images').child(`${sessionId}`)
+        const imageRef = storage.ref().child('images/image.png')
         imageRef.put(uri, { contentType: mime });
         // this.setState({uploadURL: imageRef.getDownloadURL()})
         // fs.readFile(uploadUri, 'base64')
@@ -131,7 +123,7 @@ export default class Create extends React.Component {
             onChangeText={post_content => this.setState({ post_content })}
             // value={this.state.post_content}
           />
-          
+
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
               <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.writePost} />
