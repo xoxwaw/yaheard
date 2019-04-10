@@ -53,7 +53,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ImagePickerPackage(),
             new RNGestureHandlerPackage(),
             new VectorIconsPackage(),
-        new RNFirebasePackage(),
         // add/remove these packages as appropriate
         new RNFirebaseAdMobPackage(),
         new RNFirebaseAnalyticsPackage(),
