@@ -6,53 +6,56 @@ import ImagePicker from 'react-native-image-picker';
 
 const storage = firebase.storage()
 
-const uploadImage = (uri, mime = 'image/png') => {
-    // return new Promise((resolve, reject) => {
-        // const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
-        const sessionId = new Date().getTime()
-        // let uploadBlob = null
-        const imageRef = storage.ref().child('images/image.png')
-        imageRef.put(uri, { contentType: mime });
-        // this.setState({uploadURL: imageRef.getDownloadURL()})
-        // fs.readFile(uploadUri, 'base64')
-        // .then((data) => {
-        //     return Blob.build(data, { type: `${mime};BASE64` })
-        // })
-        // .then((blob) => {
-        //     uploadBlob = blob
-        //     return imageRef.put(blob, { contentType: mime })
-        // })
-        // .then(() => {
-        //     uploadBlob.close()
-        //     return imageRef.getDownloadURL()
-        // })
-        // .then((url) => {
-        //     resolve(url)
-        // })
-        // .catch((error) => {
-        //     reject(error)
-        // })
-    // })
-  }
 export default class Create extends React.Component {
-  state = { post_content: '', errorMessage: null,user: "", image : null }
+  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {} }
   constructor(props){
       super(props);
       this._retrieveData();
       this.ref = firebase.firestore().collection('posts');
   }
-  writePost = () => {
-      var {post_content, errorMessage, user, url} = this.state;
+  findCoordinates = () => {
+      navigator.geolocation.getCurrentPosition(
+          position => {
+              const location = JSON.stringify(position);
+              this.setState({ location: location });
+              console.log(location);
+          },
+          error => Alert.alert(error.message),
+          { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
+  }
+  uploadImage = (uri, mime = 'image/png') => {
+          const sessionId = new Date().getTime()
+          const path = 'images/image.png'
+          const imageRef = storage.ref().child(path)
+          imageRef.put(uri, { contentType: mime });
+          storage.ref(path).getDownloadURL()
+          .then((url) =>{
+              this.setState({post_content: url})
+          }
+          )
+    }
+  writePost = (isText) => {
+      var {post_title, post_content, errorMessage, user,location} = this.state;
       this.ref.add({
-          post: post_content,
+          body: {
+              content: post_content,
+              title : post_title,
+          },
+          isText : isText,
           user: user,
-          upvote: 1,
-          downvote: 0,
+          vote : {
+              upvote: 1,
+              downvote: 0
+          },
+          location: location,
+          time: new Date().getTime()
       }).then((data)=>{
+          console.log("Upload successfully")
           //success callback
       }).catch((error)=>{
           //error callback
-          alert(error)
+          console.log(error)
       });
       this.props.navigation.navigate('routeMain');
   }
@@ -64,7 +67,6 @@ export default class Create extends React.Component {
   _takePicture = () => {
       const options = {
           title: 'Select Photo',
-          customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
           storageOptions: {
               skipBackup: true,
               path: 'images',
@@ -88,25 +90,26 @@ export default class Create extends React.Component {
               const source = { uri: response.uri };
               // You can also display the image using data:
               // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-              uploadImage(response.uri);
-              this.setState({image: source});
+              this.uploadImage(response.uri);
+              this.writePost(false);
+
               // .catch(error => console.log(error));
           }
       });
     }
 
-  _retrieveData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('user');
-    if (value !== null) {
-      // We have data!!
-      this.setState({user: value});
-    }
-  } catch (error) {
-      alert(error);
-    // Error retrieving data
-  }
-};
+    _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('user');
+            if (value !== null) {
+                // We have data!!
+                this.setState({user: value});
+            }
+        } catch (error) {
+            alert(error);
+            // Error retrieving data
+        }
+    };
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
@@ -126,7 +129,7 @@ export default class Create extends React.Component {
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.writePost} />
+              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.writePost(true)} />
             </View>
             <View style={{ flex: 1, padding: 10 }}>
               <Button style={ styles.button } title="Clear" color="#4C9A2A" onPress = {this._takePicture}/>
