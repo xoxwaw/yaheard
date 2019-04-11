@@ -15,92 +15,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   }
 });
-function degreesToRadians(degrees) {
-    return (degrees * Math.PI)/180;
-}
-function wrapLongitude(longitude) {
-  if (longitude <= 180 && longitude >= -180) {
-    return longitude;
-  }
-  const adjusted = longitude + 180;
-  if (adjusted > 0) {
-    return (adjusted % 360) - 180;
-  }
-  return 180 - (-adjusted % 360);
-}
 
-function metersToLongitudeDegrees(distance, latitude) {
-  const EARTH_EQ_RADIUS = 6378137.0;
-  const E2 = 0.00669447819799;
-  const EPSILON = 1e-12;
-  const radians = degreesToRadians(latitude);
-  const num = Math.cos(radians) * EARTH_EQ_RADIUS * Math.PI / 180;
-  const denom = 1 / Math.sqrt(1 - E2 * Math.sin(radians) * Math.sin(radians));
-  const deltaDeg = num * denom;
-  if (deltaDeg < EPSILON) {
-    return distance > 0 ? 360 : 0;
-  }
-  // else
-  return Math.min(360, distance / deltaDeg);
-}
 
-function boundingBoxCoordinates(center, radius) {
-  const KM_PER_DEGREE_LATITUDE = 110.574;
-  const latDegrees = radius / KM_PER_DEGREE_LATITUDE;
-  const latitudeNorth = Math.min(90, center.latitude + latDegrees);
-  const latitudeSouth = Math.max(-90, center.latitude - latDegrees);
-  // calculate longitude based on current latitude
-  const longDegsNorth = metersToLongitudeDegrees(radius, latitudeNorth);
-  const longDegsSouth = metersToLongitudeDegrees(radius, latitudeSouth);
-  const longDegs = Math.max(longDegsNorth, longDegsSouth);
-  return {
-    swCorner: { // bottom-left (SW corner)
-      latitude: latitudeSouth,
-      longitude: wrapLongitude(center.longitude - longDegs),
-    },
-    neCorner: { // top-right (NE corner)
-      latitude: latitudeNorth,
-      longitude: wrapLongitude(center.longitude + longDegs),
-    },
-  };
-}
-
-function distance(location1, location2) {
-  const radius = 6371; // Earth's radius in kilometers
-  const latDelta = degreesToRadians(location2.latitude - location1.latitude);
-  const lonDelta = degreesToRadians(location2.longitude - location1.longitude);
-
-  const a = (Math.sin(latDelta / 2) * Math.sin(latDelta / 2)) +
-          (Math.cos(degreesToRadians(location1.latitude)) * Math.cos(degreesToRadians(location2.latitude)) *
-          Math.sin(lonDelta / 2) * Math.sin(lonDelta / 2));
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return radius * c;
-}
-
-const getDocumentNearBy = (area) => {
-    let box = boundingBoxCoordinates(area.center, area.radius);
-    const lesserGeopoint = new GeoPoint(box.swCorner.latitude, box.swCorner.longitude);
-    const greaterGeopoint = new GeoPoint(box.neCorner.latitude, box.neCorner.longitude);
-
-    let docRef = firebase.firestore().collection("posts");
-    let query = docRef.whereField("location", '>', lesserGeopoint).whereField("location", '<', greaterGeopoint);
-    return query.get()
-    .then((snapshot) => {
-        const allLocs = []; // used to hold all the loc data
-        snapshot.forEach((loc) => {
-            // get the data
-            const data = loc.data();
-            // calculate a distance from the center
-            data.distanceFromCenter = distance(area.center, data.location);
-            // add to the array
-            allLocs.push(data);
-        });
-        return allLocs;
-    }).catch((err) => {
-        return new Error('Error while retrieving events');
-    });
-}
 
 export default class Feed extends React.Component {
 
@@ -108,7 +24,7 @@ export default class Feed extends React.Component {
         super();
         this.ref = firebase.firestore().collection('posts');
         this.storage = firebase.storage();
-        this.state = {items: [], images: [], imgURL: {}, location: 'unknown'};
+        this.state = {items: [], images: [], query: null, location: 'unknown'};
 
     }
     componentDidMount() {
@@ -118,12 +34,17 @@ export default class Feed extends React.Component {
                     longitude: position.coords.longitude,
                     latitude: position.coords.latitude
                 }
+                console.log(location);
                 this.setState({ location });
+                var query = this.getDocumentNearBy(1.0);
+                this.setState({ query });
+                console.log(query);
+                this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
             },
-            error => Alert.alert(error.message),
+            error => alert(error.message),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
-        this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+
 
         // this.loadImage("images/image.png");
     }
@@ -140,9 +61,25 @@ export default class Feed extends React.Component {
           });
       }, 2000);
     }
+    getDocumentNearBy = (distance) => {
+        const lat = 0.0144927536231884;
+        const lon = 0.0181818181818182;
+        const {longitude, latitude} = this.state.location;
+        const lowerLat = latitude - (lat * distance);
+        const lowerLon = longitude - (lon * distance);
+
+        const greaterLat = latitude + (lat * distance)
+        const greaterLon = longitude + (lon * distance)
+
+        let lesserGeopoint = new firebase.firestore.GeoPoint(lowerLat,lowerLon)
+        let greaterGeopoint = new firebase.firestore.GeoPoint(greaterLat, greaterLon)
+
+        let docRef = firebase.firestore().collection("posts")
+        let query = docRef.where("location", '>', lesserGeopoint).where("location", '<', greaterGeopoint)
+        return query;
+    }
 
     onCollectionUpdate = (querySnapshot) => {
-
         const items = [];
         querySnapshot.forEach((doc) => {
             const {body, isText, location, time, user, vote} = doc.data();

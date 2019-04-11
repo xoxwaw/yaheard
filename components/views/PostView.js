@@ -5,6 +5,7 @@ import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
 
 const storage = firebase.storage()
+const firestore = firebase.firestore();
 
 export default class Create extends React.Component {
   state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true }
@@ -23,7 +24,7 @@ export default class Create extends React.Component {
               }
               this.setState({ location });
           },
-          error => Alert.alert(error.message),
+          error => alert(error.message),
           { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
       );
   }
@@ -63,7 +64,7 @@ export default class Create extends React.Component {
               upvote: 1,
               downvote: 0
           },
-          location: location,
+          location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
           time: new Date().getTime()
       }).then((data)=>{
           console.log("Upload successfully")
