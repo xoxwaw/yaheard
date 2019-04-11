@@ -1,4 +1,5 @@
 {
   "name": "SocialNetwork",
-  "displayName": "SocialNetwork"
+  "displayName": "SocialNetwork",
+  "sdkVersion": "32.0.0"
 }
