@@ -7,7 +7,7 @@ import ImagePicker from 'react-native-image-picker';
 const storage = firebase.storage()
 
 export default class Create extends React.Component {
-  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {} }
+  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true }
   constructor(props){
       super(props);
       this._retrieveData();
@@ -25,18 +25,24 @@ export default class Create extends React.Component {
       );
   }
   uploadImage = (uri, mime = 'image/png') => {
-          const sessionId = new Date().getTime()
-          const path = 'images/image.png'
-          const imageRef = storage.ref().child(path)
-          imageRef.put(uri, { contentType: mime });
-          storage.ref(path).getDownloadURL()
-          .then((url) =>{
-              this.setState({post_content: url})
-          }
-          )
+          const sessionId = new Date().getTime().toString();
+          const path = 'images/' + sessionId + ".png";
+          console.log(path)
+          const imageRef = storage.ref(path);
+          imageRef.put(uri, { contentType: mime }).then((snapshot)=>{
+              imageRef.getDownloadURL().then((url)=>{
+                  this.setState({post_content: url, isText: false});
+                  this.writePost();
+                  console.log(this.state);
+              }).catch((error)=>{
+                  console.log(error.message);
+              })
+          });
+
     }
-  writePost = (isText) => {
-      var {post_title, post_content, errorMessage, user,location} = this.state;
+
+  writePost = () => {
+      var {post_title, post_content, errorMessage, user,location, isText} = this.state;
       this.ref.add({
           body: {
               content: post_content,
@@ -61,6 +67,16 @@ export default class Create extends React.Component {
   }
   clearText = () => {
     //not yet written
+  }
+
+  handleTextPost = () =>{
+      this.setState({isText: true});
+      this.writePost();
+  }
+
+  handleImagePost = () => {
+      this.setState({isText: false});
+      this._takePicture();
   }
 
 
@@ -91,11 +107,10 @@ export default class Create extends React.Component {
               // You can also display the image using data:
               // const source = { uri: 'data:image/jpeg;base64,' + response.data };
               this.uploadImage(response.uri);
-              this.writePost(false);
-
               // .catch(error => console.log(error));
           }
       });
+
     }
 
     _retrieveData = async () => {
@@ -129,10 +144,10 @@ export default class Create extends React.Component {
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.writePost(true)} />
+              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.handleTextPost} />
             </View>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Clear" color="#4C9A2A" onPress = {this._takePicture}/>
+              <Button style={ styles.button } title="Clear" color="#4C9A2A" onPress = {this.handleImagePost}/>
             </View>
           </View>
         </View>

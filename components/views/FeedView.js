@@ -124,7 +124,6 @@ export default class Feed extends React.Component {
         setTimeout(() => {
         this.storage.ref(path).getDownloadURL()
           .then((url) => {
-            console.log(url);
             this.setState({imgURL: {uri: url}});
           });
       }, 2000);
@@ -139,6 +138,8 @@ export default class Feed extends React.Component {
                 user: user,
                 post: body.content,
                 up: vote.upvote,
+                isText: isText,
+                location: location,
                 down: vote.downvote
             });
         });
@@ -168,12 +169,7 @@ export default class Feed extends React.Component {
                   if (u.isText == true){
                       return (
                           <Card>
-                          <ListItem
-                          key={i}
-                          title={u.post}
-                          subtitle={u.user}
-                          >
-                          </ListItem>
+                          <Text>{u.post}</Text>
                           </Card>
                       );
                   }else{
