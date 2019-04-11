@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Image, View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import firebase from 'react-native-firebase';
-import { Icon } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
   head_view: {
@@ -45,8 +45,7 @@ export default class Header extends Component {
           <TouchableOpacity style={{ padding: 5 }} onPress={this.logOut}>
             <Icon
               size={25}
-              name='log-out'
-              type='feather'
+              name='sign-out'
               color='#4C9A2A'
             />
           </TouchableOpacity>

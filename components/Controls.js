@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { Icon } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from 'react-navigation';
 
 const styles = StyleSheet.create({
@@ -8,8 +8,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#efefef',
     paddingTop: 10,
-    borderWidth: 0.5,
-    borderColor: '#ACDF87',
     alignItems:"center"
   },
   touch : {
@@ -25,9 +23,9 @@ class Controls extends React.Component {
           <View style={styles.control_button}>
             <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routePost') }>
               <Icon
+                style={{textAlign: "center"}}
                 size={25}
-                name='edit'
-                type='feather'
+                name='pencil'
                 color='#4C9A2A'
               />
             </TouchableOpacity>
@@ -35,9 +33,9 @@ class Controls extends React.Component {
           <View style={styles.control_button}>
             <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeFeed') }>
               <Icon
+                style={{textAlign: "center"}}
                 size={25}
-                name='home'
-                type='feather'
+                name='globe'
                 color='#4C9A2A'
               />
             </TouchableOpacity>
@@ -45,9 +43,9 @@ class Controls extends React.Component {
           <View style={styles.control_button}>
             <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeProfile') }>
               <Icon
+                style={{textAlign: "center"}}
                 size={25}
                 name='user'
-                type='feather'
                 color='#4C9A2A'
               />
             </TouchableOpacity>
@@ -55,9 +53,9 @@ class Controls extends React.Component {
           <View style={styles.control_button}>
             <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeMap') }>
               <Icon
+                style={{textAlign: "center"}}
                 size={25}
-                name='map'
-                type='feather'
+                name='comment'
                 color='#4C9A2A'
               />
             </TouchableOpacity>
@@ -65,9 +63,9 @@ class Controls extends React.Component {
           <View style={styles.control_button}>
             <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSettings') }>
               <Icon
+                style={{textAlign: "center"}}
                 size={25}
-                name='settings'
-                type='feather'
+                name='cogs'
                 color='#4C9A2A'
               />
             </TouchableOpacity>
