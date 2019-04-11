@@ -108,12 +108,14 @@ export default class Feed extends React.Component {
         super();
         this.ref = firebase.firestore().collection('posts');
         this.storage = firebase.storage();
-        this.state = {items: [], images: [], imgURL: {}, location: null};
+        this.state = {items: [], images: [], imgURL: {}, location: {}};
 
     }
     componentDidMount() {
+        this.findCoordinates();
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        this.loadImage("images/image.png");
+        this._storeData();
+        // this.loadImage("images/image.png");
     }
 
     componentWillUnmount() {
@@ -129,8 +131,38 @@ export default class Feed extends React.Component {
       }, 2000);
     }
 
+    findCoordinates = () => {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                this.setState({ location: {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    error: null,
+                } });
+                console.log(location);
+            },
+            error => Alert.alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        );
+        setTimeout(()=>{
+            this.storage.ref("images/").delete().then(function(){
+                console.log("files deleted successfully")
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },5000);
+
+    }
+    _storeData = async () => {
+        try {
+            await AsyncStorage.setItem('location', this.state.location);
+        } catch (error) {
+            // Error saving data
+        }
+    };
 
     onCollectionUpdate = (querySnapshot) => {
+
         const items = [];
         querySnapshot.forEach((doc) => {
             const {body, isText, location, time, user, vote} = doc.data();

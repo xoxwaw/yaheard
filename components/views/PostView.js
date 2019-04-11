@@ -13,36 +13,31 @@ export default class Create extends React.Component {
       this._retrieveData();
       this.ref = firebase.firestore().collection('posts');
   }
-  findCoordinates = () => {
-      navigator.geolocation.getCurrentPosition(
-          position => {
-              const location = JSON.stringify(position);
-              this.setState({ location: location });
-              console.log(location);
-          },
-          error => Alert.alert(error.message),
-          { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-      );
-  }
+
   uploadImage = (uri, mime = 'image/png') => {
           const sessionId = new Date().getTime().toString();
           const path = 'images/' + sessionId + ".png";
           console.log(path)
           const imageRef = storage.ref(path);
           imageRef.put(uri, { contentType: mime }).then((snapshot)=>{
-              imageRef.getDownloadURL().then((url)=>{
-                  this.setState({post_content: url, isText: false});
-                  this.writePost();
-                  console.log(this.state);
-              }).catch((error)=>{
-                  console.log(error.message);
-              })
+              setTimeout(()=>{
+                  imageRef.getDownloadURL().then((url)=>{
+                      this.setState({post_content: url, isText: false});
+                      this.writePost();
+                      console.log(this.state);
+                  }).catch((error)=>{
+                      console.log(error.message);
+                  })
+              },3000
+          )
+
           });
 
     }
 
   writePost = () => {
       var {post_title, post_content, errorMessage, user,location, isText} = this.state;
+
       this.ref.add({
           body: {
               content: post_content,
@@ -121,6 +116,17 @@ export default class Create extends React.Component {
                 this.setState({user: value});
             }
         } catch (error) {
+            alert(error);
+            // Error retrieving data
+        }
+        try {
+            const value = await AsyncStorage.getItem('location');
+            if (value !== null) {
+                // We have data!!
+                this.setState({location: value});
+                console.log(this.state.location);
+            }
+        }catch (error) {
             alert(error);
             // Error retrieving data
         }
