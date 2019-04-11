@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage } from 'react-native';
 import {Card, ListItem, Icon } from 'react-native-elements';
 import firebase from 'react-native-firebase';
 
@@ -108,13 +108,23 @@ export default class Feed extends React.Component {
         super();
         this.ref = firebase.firestore().collection('posts');
         this.storage = firebase.storage();
-        this.state = {items: [], images: [], imgURL: {}, location: {}};
+        this.state = {items: [], images: [], imgURL: {}, location: 'unknown'};
 
     }
     componentDidMount() {
-        this.findCoordinates();
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const location = {
+                    longitude: position.coords.longitude,
+                    latitude: position.coords.latitude
+                }
+                this.setState({ location });
+            },
+            error => Alert.alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        );
         this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        this._storeData();
+
         // this.loadImage("images/image.png");
     }
 
@@ -130,36 +140,6 @@ export default class Feed extends React.Component {
           });
       }, 2000);
     }
-
-    findCoordinates = () => {
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                this.setState({ location: {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    error: null,
-                } });
-                console.log(location);
-            },
-            error => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
-        setTimeout(()=>{
-            this.storage.ref("images/").delete().then(function(){
-                console.log("files deleted successfully")
-            }).catch((error)=>{
-                console.log(error);
-            })
-        },5000);
-
-    }
-    _storeData = async () => {
-        try {
-            await AsyncStorage.setItem('location', this.state.location);
-        } catch (error) {
-            // Error saving data
-        }
-    };
 
     onCollectionUpdate = (querySnapshot) => {
 
@@ -178,18 +158,6 @@ export default class Feed extends React.Component {
         this.setState({
         items:items
         });
-    }
-
-    findCoordinates = () => {
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                const location = JSON.stringify(position);
-
-                this.setState({ location: location });
-            },
-            error => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
     }
 
   render() {

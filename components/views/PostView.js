@@ -14,6 +14,20 @@ export default class Create extends React.Component {
       this.ref = firebase.firestore().collection('posts');
   }
 
+  componentDidMount(){
+      navigator.geolocation.getCurrentPosition(
+          position => {
+              const location = {
+                  longitude: position.coords.longitude,
+                  latitude: position.coords.latitude
+              }
+              this.setState({ location });
+          },
+          error => Alert.alert(error.message),
+          { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
+  }
+
   uploadImage = (uri, mime = 'image/png') => {
           const sessionId = new Date().getTime().toString();
           const path = 'images/' + sessionId + ".png";
@@ -116,17 +130,6 @@ export default class Create extends React.Component {
                 this.setState({user: value});
             }
         } catch (error) {
-            alert(error);
-            // Error retrieving data
-        }
-        try {
-            const value = await AsyncStorage.getItem('location');
-            if (value !== null) {
-                // We have data!!
-                this.setState({location: value});
-                console.log(this.state.location);
-            }
-        }catch (error) {
             alert(error);
             // Error retrieving data
         }
