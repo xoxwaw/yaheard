@@ -120,17 +120,26 @@ export default class TextPost extends React.Component {
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
-        <View style={{ flexDirection: 'row', height: 50, backgroundColor: 'whitesmoke' }}>
-          <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
-            <Icon
-              style={{textAlign: "center"}}
-              size={25}
-              name='arrow-left'
-              color='#4C9A2A'
-            />
-          </TouchableOpacity>
-          <Text style={styles.header}>Create Text Post</Text>
+
+        <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
+
+          <View style={{ flex: 1, height: '100%' }}>
+            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
+              <Icon
+                style={{textAlign: "center"}}
+                size={25}
+                name='arrow-left'
+                color='#4C9A2A'
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flex: 8, height: '100%' }}>
+            <Text style={styles.header}>Create Text Post</Text>
+          </View>
+
         </View>
+
         <Text style={styles.header}>What did you hear?</Text>
         <View style={styles.container}>
           <TextInput
@@ -144,14 +153,10 @@ export default class TextPost extends React.Component {
             onChangeText={post_content => this.setState({ post_content })}
             // value={this.state.post_content}
           />
-          <Progress.Circle color="#4C9A2A" progress={0.4} size={50} />
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
               <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.writePost} />
-            </View>
-            <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Clear" color="#4C9A2A" onPress = {this._takePicture}/>
             </View>
           </View>
         </View>
@@ -168,7 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#4C9A2A',
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: 5,
     flex: 1,
   },
   container : {
@@ -178,11 +183,12 @@ const styles = StyleSheet.create({
     flex: 15,
   },
   textbox : {
-    backgroundColor: '#ddd',
-    borderColor: '#ccc',
-    borderWidth: 2,
+    height: 40,
+    fontSize:20,
     width: '90%',
-    marginBottom: 10,
-    height: 200,
+    borderColor: '#9b9b9b',
+    borderBottomWidth: 1,
+    marginTop: 8,
+    marginVertical: 15
   }
 });

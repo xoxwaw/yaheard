@@ -120,7 +120,7 @@ export default class ImagePost extends React.Component {
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
-        <View style={{ flexDirection: 'row', height: 50, backgroundColor: 'whitesmoke' }}>
+        <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
           <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
             <Icon
               style={{textAlign: "center"}}

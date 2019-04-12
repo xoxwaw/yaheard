@@ -24,7 +24,10 @@ export default class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{color:'#4C9A2A', fontSize: 40}}>Login</Text>
+        <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }} >
+          <Text style={{fontSize: 50, fontFamily: 'Pacifico-Bold', color: '#4C9A2A', width: 140, justifyContent: 'center', alignItems: 'center' }}>YaHeard</Text>
+        </View>
+        <Text style={{color:'#4C9A2A', fontSize: 30}}>Login</Text>
         {this.state.errorMessage &&
           <Text style={{ color: 'red' }}>
             {this.state.errorMessage}
