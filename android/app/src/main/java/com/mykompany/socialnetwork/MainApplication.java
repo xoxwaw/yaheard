@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.imagepicker.ImagePickerPackage;
@@ -48,6 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.asList(
         new MainReactPackage(),
+            new ImageResizerPackage(),
             new RNFetchBlobPackage(),
             new RNFirebasePackage(),
             new ImagePickerPackage(),

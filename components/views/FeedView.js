@@ -44,7 +44,9 @@ export default class Feed extends React.Component {
             error => alert(error.message),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
-
+        if (this.state.query == null){
+            this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        }
 
         // this.loadImage("images/image.png");
     }

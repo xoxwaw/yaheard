@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Imag
 import { SwitchNavigator } from 'react-navigation'
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
+import ImageResizer from 'react-native-image-resizer';
 
 const storage = firebase.storage()
 const firestore = firebase.firestore();
@@ -29,9 +30,9 @@ export default class Create extends React.Component {
       );
   }
 
-  uploadImage = (uri, mime = 'image/png') => {
+  uploadImage = (uri, mime = 'image/jpeg') => {
           const sessionId = new Date().getTime().toString();
-          const path = 'images/' + sessionId + ".png";
+          const path = 'images/' + sessionId + ".jpeg";
           console.log(path)
           const imageRef = storage.ref(path);
           imageRef.put(uri, { contentType: mime }).then((snapshot)=>{
@@ -114,13 +115,27 @@ export default class Create extends React.Component {
               console.log('User tapped custom button: ', response.customButton);
           } else {
               const source = { uri: response.uri };
+              console.log(response.uri)
+              this.resize(response.uri);
               // You can also display the image using data:
               // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-              this.uploadImage(response.uri);
+
               // .catch(error => console.log(error));
           }
       });
 
+    }
+
+    resize = (uri) =>{
+        ImageResizer.createResizedImage(uri, 800,600, 'JPEG', 80)
+        .then((data) =>{
+            console.log(data.uri);
+            this.uploadImage(data.uri);
+            console.log("Upload successfully");
+        }).catch(err =>{
+            console.log(err);
+            alert('Unable to resize');
+        })
     }
 
     _retrieveData = async () => {
