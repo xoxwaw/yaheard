@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image } from 'react-native';
-import { SwitchNavigator } from 'react-navigation'
+import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity } from 'react-native';
+import { withNavigation  } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -119,6 +120,26 @@ export default class TextPost extends React.Component {
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
+
+        <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
+
+          <View style={{ flex: 1, height: '100%' }}>
+            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
+              <Icon
+                style={{textAlign: "center"}}
+                size={25}
+                name='arrow-left'
+                color='#4C9A2A'
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flex: 8, height: '100%' }}>
+            <Text style={styles.header}>Create Text Post</Text>
+          </View>
+
+        </View>
+
         <Text style={styles.header}>What did you hear?</Text>
         <View style={styles.container}>
           <TextInput
@@ -166,11 +187,12 @@ const styles = StyleSheet.create({
     flex: 15,
   },
   textbox : {
-    backgroundColor: '#ddd',
-    borderColor: '#ccc',
-    borderWidth: 2,
+    height: 40,
+    fontSize:20,
     width: '90%',
-    marginBottom: 10,
-    height: 200,
+    borderColor: '#9b9b9b',
+    borderBottomWidth: 1,
+    marginTop: 8,
+    marginVertical: 15
   }
 });

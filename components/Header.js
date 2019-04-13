@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, View, Text, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -12,9 +12,10 @@ const styles = StyleSheet.create({
     borderColor: '#68BB59',
   },
   head_text: {
-    fontSize: 22,
+    fontSize: 25,
+    fontFamily: 'Pacifico-Bold',
     marginLeft: 20,
-    marginTop: 10,
+    marginTop: 5,
     color: '#4C9A2A',
   },
   button_view: {
@@ -29,7 +30,14 @@ const styles = StyleSheet.create({
 export default class Header extends Component {
   logOut = () => {
     firebase.auth().signOut().then(function() {
-      alert('user logged out');
+      Alert.alert(
+        'Logged Out',
+        'You have been logged out of YaHeard',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        { cancelable: false }
+      )
     }, function(error) {
       alert('error');
     });
@@ -38,7 +46,7 @@ export default class Header extends Component {
     return (
       <View style={styles.head_view}>
         <View style={{flex: 0.9}}>
-          <Text style={styles.head_text}>OverHeard</Text>
+          <Text style={styles.head_text}>YaHeard</Text>
         </View>
 
         <View style={styles.button_view}>

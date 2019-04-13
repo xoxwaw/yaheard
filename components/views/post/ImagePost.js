@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image } from 'react-native';
-import { SwitchNavigator } from 'react-navigation'
+import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity } from 'react-native';
+import { withNavigation  } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -119,7 +120,17 @@ export default class ImagePost extends React.Component {
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
-        <Text style={styles.header}>What did you hear?</Text>
+        <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
+          <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
+            <Icon
+              style={{textAlign: "center"}}
+              size={25}
+              name='arrow-left'
+              color='#4C9A2A'
+            />
+          </TouchableOpacity>
+          <Text style={styles.header}>Create Image Post</Text>
+        </View>
         <View style={styles.container}>
           <TextInput
             multiline
