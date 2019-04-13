@@ -117,10 +117,6 @@ export default class Create extends React.Component {
               const source = { uri: response.uri };
               console.log(response.uri)
               this.resize(response.uri);
-              // You can also display the image using data:
-              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-              // .catch(error => console.log(error));
           }
       });
 
