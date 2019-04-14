@@ -136,24 +136,24 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.2.0)
   - "GoogleToolboxForMac/NSData+zlib (2.2.0)":
     - GoogleToolboxForMac/Defines (= 2.2.0)
-  - GoogleUtilities/AppDelegateSwizzler (5.5.0):
+  - GoogleUtilities/AppDelegateSwizzler (5.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (5.5.0)
-  - GoogleUtilities/ISASwizzler (5.5.0)
-  - GoogleUtilities/Logger (5.5.0):
+  - GoogleUtilities/Environment (5.7.0)
+  - GoogleUtilities/ISASwizzler (5.7.0)
+  - GoogleUtilities/Logger (5.7.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (5.5.0):
+  - GoogleUtilities/MethodSwizzler (5.7.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (5.5.0):
+  - GoogleUtilities/Network (5.7.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (5.5.0)"
-  - GoogleUtilities/Reachability (5.5.0):
+  - "GoogleUtilities/NSData+zlib (5.7.0)"
+  - GoogleUtilities/Reachability (5.7.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (5.5.0):
+  - GoogleUtilities/UserDefaults (5.7.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (0.0.5)":
     - "gRPC-C++/Implementation (= 0.0.5)"
@@ -179,6 +179,17 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.7.0)
+  - React (0.11.0):
+    - React/Core (= 0.11.0)
+  - react-native-fetch-blob (0.10.6):
+    - React/Core
+  - react-native-image-resizer (1.0.1):
+    - React
+  - React/Core (0.11.0)
+  - RNGestureHandler (1.1.0):
+    - React
+  - RNVectorIcons (6.4.2):
+    - React
 
 DEPENDENCIES:
   - Crashlytics (~> 3.10.9)
@@ -194,6 +205,10 @@ DEPENDENCIES:
   - Firebase/Performance (~> 5.15.0)
   - Firebase/RemoteConfig (~> 5.15.0)
   - Firebase/Storage (~> 5.15.0)
+  - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -226,6 +241,17 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
+    - React
+
+EXTERNAL SOURCES:
+  react-native-fetch-blob:
+    :path: "../node_modules/react-native-fetch-blob"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
 
 SPEC CHECKSUMS:
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
@@ -250,14 +276,19 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 101ce89b94fdf60ec64ba7b6e9b9d812dc765936
   GoogleAppMeasurement: 98b71f5e04142793729a5ef23e5b96651ff4b70f
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
-  GoogleUtilities: 6481e6318c5fcabaaa8513ef8120f329055d7c10
+  GoogleUtilities: 273e67030e0de313e7304f6dcfa96fc5214f6c23
   "gRPC-C++": 19eec1ffd34de29453f5fab5b4697ad0f240ad51
   gRPC-Core: f4836515817c0eb479aeeb9cc27c91c4ba62a9f6
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
+  React: ab1a2e21deb34965c38328d5ec40cc7d12c6050a
+  react-native-fetch-blob: 63394b1d7b0781547b3e4463b3195790177b1222
+  react-native-image-resizer: 04a3409e7d4ad646c4468671c69dec490def139c
+  RNGestureHandler: afde2addc517e85cc97a25bfe119acbee779a7ce
+  RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
 
-PODFILE CHECKSUM: 72441cf416d5af5740c90ab52c772f269f985b11
+PODFILE CHECKSUM: 957568c33010a7066a28e6716069a75f7527725b
 
 COCOAPODS: 1.5.3
