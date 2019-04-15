@@ -32,7 +32,7 @@ class Main extends React.Component {
           <View style={{height: '88%'}}>
             <ContentNav navigation={this.props.navigation} />
           </View>
-          <View style={{height: '6%'}}>
+          <View style={{minHeight: 50, height: '6%'}}>
             <Controls />
           </View>
         </View>
