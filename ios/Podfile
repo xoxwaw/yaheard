@@ -7,24 +7,21 @@ target 'SocialNetwork' do
 
   # Pods for SocialNetwork
 
-  # Required by RNFirebase
-  pod 'Firebase/Core', '~> 5.15.0'
+  pod 'Firebase/Auth', '~> 5.20.1'
+  pod 'Firebase/Core', '~> 5.20.1'
+  pod 'Firebase/Database', '~> 5.20.1'
+  pod 'Firebase/Functions', '~> 5.20.1'
+  pod 'Firebase/DynamicLinks', '~> 5.20.1'
+  pod 'Firebase/Firestore', '~> 5.20.1'
+  pod 'Firebase/Invites', '~> 5.20.1'
+  pod 'Firebase/Messaging', '~> 5.20.1'
+  pod 'Firebase/RemoteConfig', '~> 5.20.1'
+  pod 'Firebase/Storage', '~> 5.20.1'
+  pod 'Firebase/Performance', '~> 5.20.1'
 
-  # [OPTIONAL PODS] - comment out pods for firebase products you won't be using.
-  pod 'Firebase/AdMob', '~> 5.15.0'
-  pod 'Firebase/Auth', '~> 5.15.0'
-  pod 'Firebase/Core', '~> 5.15.0'
-  pod 'Firebase/Database', '~> 5.15.0'
-  pod 'Firebase/Functions', '~> 5.15.0'
-  pod 'Firebase/DynamicLinks', '~> 5.15.0'
-  pod 'Firebase/Firestore', '~> 5.15.0'
-  # pod 'Firebase/Invites', '~> 5.15.0'
-  pod 'Firebase/Messaging', '~> 5.15.0'
-  pod 'Firebase/RemoteConfig', '~> 5.15.0'
-  pod 'Firebase/Storage', '~> 5.15.0'
-  pod 'Firebase/Performance', '~> 5.15.0'
-  pod 'Fabric', '~> 1.7.13'
-  pod 'Crashlytics', '~> 3.10.9'
+  # Crashlytics
+  pod 'Fabric', '~> 1.9.0'
+  pod 'Crashlytics', '~> 3.12.0'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
@@ -33,5 +30,32 @@ target 'SocialNetwork' do
   pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
 
   pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+  'Core',
+  'CxxBridge',
+  'DevSupport',
+  'RCTText',
+  'RCTNetwork',
+  'RCTWebSocket',
+  'RCTAnimation',
+  'RCTImage',
+  # Add any other subspecs you want to use in your project
+  ]
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+
+  # Third party deps podspec link
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 end
+install! 'cocoapods', :deterministic_uuids => false
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    
+    if target.name == "React"
+      target.remove_from_project
+    end
+  end
+end
+
