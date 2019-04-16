@@ -28,37 +28,12 @@ const styles = StyleSheet.create({
 });
 
 export default class Header extends Component {
-  logOut = () => {
-    firebase.auth().signOut().then(function() {
-      Alert.alert(
-        'Logged Out',
-        'You have been logged out of YaHeard',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: false }
-      )
-    }, function(error) {
-      alert('error');
-    });
-  }
   render() {
     return (
       <View style={styles.head_view}>
         <View style={{flex: 0.9}}>
           <Text style={styles.head_text}>YaHeard</Text>
         </View>
-
-        <View style={styles.button_view}>
-          <TouchableOpacity style={{ padding: 5 }} onPress={this.logOut}>
-            <Icon
-              size={25}
-              name='sign-out'
-              color='#4C9A2A'
-            />
-          </TouchableOpacity>
-        </View>
-
       </View>
     );
   }

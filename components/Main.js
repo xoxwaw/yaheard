@@ -26,13 +26,13 @@ class Main extends React.Component {
     return (
       <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}>
         <View style={{flexDirection: 'column'}}>
-          <View style={{height: '6%'}}>
+          <View style={{minHeight: 50, height: '6%'}}>
             <Header />
           </View>
           <View style={{height: '88%'}}>
             <ContentNav navigation={this.props.navigation} />
           </View>
-          <View style={{height: '6%'}}>
+          <View style={{minHeight: 50, height: '6%'}}>
             <Controls />
           </View>
         </View>

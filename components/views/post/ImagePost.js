@@ -4,77 +4,84 @@ import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
+import ImageResizer from 'react-native-image-resizer';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
 
+const storage = firebase.storage();
 
-const storage = firebase.storage()
-
-// Prepare Blob support
-const Blob = RNFetchBlob.polyfill.Blob
-const fs = RNFetchBlob.fs
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-window.Blob = Blob
-
-const uploadImage = (uri, mime = 'application/octet-stream') => {
-    // return new Promise((resolve, reject) => {
-        // const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
-        const sessionId = new Date().getTime()
-        // let uploadBlob = null
-        const imageRef = storage.ref('images').child(`${sessionId}`)
-        imageRef.put(uri, { contentType: mime });
-        // this.setState({uploadURL: imageRef.getDownloadURL()})
-        // fs.readFile(uploadUri, 'base64')
-        // .then((data) => {
-        //     return Blob.build(data, { type: `${mime};BASE64` })
-        // })
-        // .then((blob) => {
-        //     uploadBlob = blob
-        //     return imageRef.put(blob, { contentType: mime })
-        // })
-        // .then(() => {
-        //     uploadBlob.close()
-        //     return imageRef.getDownloadURL()
-        // })
-        // .then((url) => {
-        //     resolve(url)
-        // })
-        // .catch((error) => {
-        //     reject(error)
-        // })
-    // })
-  }
 export default class ImagePost extends React.Component {
-  state = { post_content: '', errorMessage: null,user: "", image : null }
+  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true }
   constructor(props){
       super(props);
       this._retrieveData();
       this.ref = firebase.firestore().collection('posts');
   }
+  componentDidMount(){
+      navigator.geolocation.getCurrentPosition(
+          position => {
+              const location = {
+                  longitude: position.coords.longitude,
+                  latitude: position.coords.latitude
+              }
+              this.setState({ location });
+          },
+          error => alert(error.message),
+          { enableHighAccuracy: false, timeout: 50000}
+      );
+  }
+  uploadImage = (uri, mime = 'image/jpeg') => {
+          const sessionId = new Date().getTime().toString();
+          const path = 'images/' + sessionId + ".jpeg";
+          console.log(path)
+          const imageRef = storage.ref(path);
+          imageRef.put(uri, { contentType: mime }).then((snapshot)=>{
+              setTimeout(()=>{
+                  imageRef.getDownloadURL().then((url)=>{
+                      this.setState({post_content: url, isText: false});
+                      this.writePost();
+                      console.log(this.state);
+                  }).catch((error)=>{
+                      console.log(error.message);
+                  })
+              },3000
+          )
+
+      });
+
+  }
   writePost = () => {
-      var {post_content, errorMessage, user, url} = this.state;
+      var {post_title, post_content, errorMessage, user,location, isText} = this.state;
+
       this.ref.add({
-          post: post_content,
+          body: {
+              content: post_content,
+              title : post_title,
+          },
+          isText : isText,
           user: user,
-          upvote: 1,
-          downvote: 0,
+          vote : {
+              upvote: 1,
+              downvote: 0
+          },
+          location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
+          time: new Date().getTime()
       }).then((data)=>{
+          console.log("Upload successfully")
           //success callback
       }).catch((error)=>{
           //error callback
-          alert(error)
+          console.log(error)
       });
       this.props.navigation.navigate('routeMain');
   }
-  clearText = () => {
-    //not yet written
+  handleImagePost = () => {
+      this.setState({isText: false});
+      this._takePicture();
   }
-
-
   _takePicture = () => {
       const options = {
           title: 'Select Photo',
-          customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
           storageOptions: {
               skipBackup: true,
               path: 'images',
@@ -96,27 +103,36 @@ export default class ImagePost extends React.Component {
               console.log('User tapped custom button: ', response.customButton);
           } else {
               const source = { uri: response.uri };
-              // You can also display the image using data:
-              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-              uploadImage(response.uri);
-              this.setState({image: source});
-              // .catch(error => console.log(error));
+              console.log(response.uri)
+              this.resize(response.uri);
           }
       });
+
     }
 
-  _retrieveData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('user');
-    if (value !== null) {
-      // We have data!!
-      this.setState({user: value});
-    }
-  } catch (error) {
-      alert(error);
-    // Error retrieving data
+    resize = (uri) =>{
+        ImageResizer.createResizedImage(uri, 800,600, 'JPEG', 80)
+        .then((data) =>{
+            console.log(data.uri);
+            this.uploadImage(data.uri);
+            console.log("Upload successfully");
+        }).catch(err =>{
+            console.log(err);
+            alert('Unable to resize');
+        })
   }
-};
+  _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('user');
+            if (value !== null) {
+                // We have data!!
+                this.setState({user: value});
+            }
+        } catch (error) {
+            alert(error);
+            // Error retrieving data
+        }
+  };
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
@@ -147,10 +163,7 @@ export default class ImagePost extends React.Component {
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.writePost} />
-            </View>
-            <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Clear" color="#4C9A2A" onPress = {this._takePicture}/>
+              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.handleImagePost} />
             </View>
           </View>
         </View>
