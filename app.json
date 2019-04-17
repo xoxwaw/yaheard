@@ -1,5 +1,5 @@
 {
   "name": "SocialNetwork",
   "displayName": "SocialNetwork",
-  "sdkVersion": "32.0.0"
+  "expo":{"sdkVersion": "32.0.0"}
 }
