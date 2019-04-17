@@ -16,6 +16,7 @@ export default class ImagePost extends React.Component {
       super(props);
       this._retrieveData();
       this.ref = firebase.firestore().collection('posts');
+      this.user_ref = firebase.firestore().collection('user_post');
   }
   componentDidMount(){
       navigator.geolocation.getCurrentPosition(
@@ -52,7 +53,6 @@ export default class ImagePost extends React.Component {
   }
   writePost = () => {
       var {post_title, post_content, errorMessage, user,location, isText} = this.state;
-
       this.ref.add({
           body: {
               content: post_content,
@@ -67,12 +67,16 @@ export default class ImagePost extends React.Component {
           location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
           time: new Date().getTime()
       }).then((data)=>{
-          console.log("Upload successfully")
+          this.user_ref.add({
+              post_id : data.id,
+              username: user
+          })
           //success callback
       }).catch((error)=>{
           //error callback
           console.log(error)
       });
+
       this.props.navigation.navigate('routeMain');
   }
   handleImagePost = () => {
