@@ -13,8 +13,8 @@ render() {
     return (
       <View style={styles.container}>
       <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }} >
-        <Text style={{fontSize: 50, fontFamily: 'Pacifico-Bold', color: '#4C9A2A', width: 140, justifyContent: 'center', alignItems: 'center' }}>YaHeard</Text>
-      </View>
+        <Text style={{fontSize: 50, fontFamily: 'Pacifico-Bold', color: '#4C9A2A', width: '100%', textAlign: 'center'}}>YaHeard</Text>      
+        </View>
       <Text style={{color:'#4C9A2A', fontSize: 30}}>Sign Up</Text>
         {this.state.errorMessage &&
           <Text style={{ color: 'red' }}>
