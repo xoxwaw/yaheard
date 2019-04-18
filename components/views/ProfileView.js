@@ -11,9 +11,7 @@ export default class Profile extends React.Component {
         this.user_post = firebase.firestore().collection('user_post');
         this.post_ref = firebase.firestore().collection('posts');
         this.storage = firebase.storage();
-        this.state = {username: "", karma: 1, recent_posts : [], email: "ex@x.com"};
-
-
+        this.state = {username: "", karma: 1, recent_posts : [], email: ""};
     }
     componentDidMount(){
         this._retrieveData();

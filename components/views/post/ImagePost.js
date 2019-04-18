@@ -11,7 +11,7 @@ import * as Progress from 'react-native-progress';
 const storage = firebase.storage();
 
 export default class ImagePost extends React.Component {
-  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true }
+  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true, imageURL : ""}
   constructor(props){
       super(props);
       this._retrieveData();
@@ -31,8 +31,10 @@ export default class ImagePost extends React.Component {
           { enableHighAccuracy: false, timeout: 50000}
       );
   }
-  uploadImage = (uri, mime = 'image/jpeg') => {
+  uploadImage = () => {
         //set view to loading image
+        var uri = this.state.imageURL;
+        var mime = 'image/jpeg'
           const sessionId = new Date().getTime().toString();
           const path = 'images/' + sessionId + ".jpeg";
           console.log(path)
@@ -53,7 +55,7 @@ export default class ImagePost extends React.Component {
 
   }
   writePost = () => {
-      var {post_title, post_content, errorMessage, user,location, isText} = this.state;
+      var {post_title, post_content, errorMessage, user,location, isText, imageURL} = this.state;
       this.ref.add({
           body: {
               content: post_content,
@@ -119,6 +121,7 @@ export default class ImagePost extends React.Component {
         ImageResizer.createResizedImage(uri, 800,600, 'JPEG', 80)
         .then((data) =>{
             console.log(data.uri);
+            this.setState({imageURL: data.uri})
             this.uploadImage(data.uri);
             console.log("Upload successfully");
         }).catch(err =>{
@@ -168,10 +171,10 @@ export default class ImagePost extends React.Component {
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
-                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" />
+                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" onPress = {this.handleImagePost} />
             </View>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.handleImagePost} />
+              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.uploadImage} />
             </View>
           </View>
           <View>
