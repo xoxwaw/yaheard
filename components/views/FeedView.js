@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage } from 'react-native';
-import {Card, ListItem, Icon } from 'react-native-elements';
+import {Card, ListItem} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
 const styles = StyleSheet.create({
@@ -118,6 +119,51 @@ export default class Feed extends React.Component {
                             <Text style={styles.title}>{u.title}</Text>
                           <Text style={styles.content}>{u.post}</Text>
                           <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
+						  <View style={{ flex: 1, flexDirection: 'row' }}>
+					  	<View style={styles.control_button}>
+				      	<TouchableOpacity style={{padding:10}}>
+							<Icon
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		name='arrow-circle-up'
+		            		color='#4C9A2A'
+		          		    />
+						  </TouchableOpacity>
+						  </View>
+						  <View style={styles.control_button}>
+						  <TouchableOpacity style={{padding:10}}>
+							<Icon
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		name='arrow-circle-down'
+		            		color='#4C9A2A'
+		          		    />
+						  
+						  </TouchableOpacity>
+						  </View>
+						  <View style={styles.control_button}>
+						  <TouchableOpacity style={{padding:10}}>
+							<Text
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		color='#4C9A2A'>
+							{'report'}
+							</Text>
+						  
+						  </TouchableOpacity>
+						  </View>
+						  <View style={styles.control_button}>
+						  <TouchableOpacity style={{padding:10}}>
+							<Text
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		color='#4C9A2A'>
+							{'comment'}
+							</Text>
+						  
+						  </TouchableOpacity>
+						  </View>
+						  </View>
                           </Card>
                       );
                   }else{
@@ -129,6 +175,51 @@ export default class Feed extends React.Component {
                             source={{uri: u.post}}
                           />
                           <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
+						<View style={{ flex: 1, flexDirection: 'row' }}>
+					  	<View style={styles.control_button}>
+				      	<TouchableOpacity style={{padding:10}}>
+							<Icon
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		name='arrow-circle-up'
+		            		color='#4C9A2A'
+		          		    />
+						  </TouchableOpacity>
+						  </View>
+						  <View style={styles.control_button}>
+						  <TouchableOpacity style={{padding:10}}>
+							<Icon
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		name='arrow-circle-down'
+		            		color='#4C9A2A'
+		          		    />
+						  
+						  </TouchableOpacity>
+						  </View>
+						  <View style={styles.control_button}>
+						  <TouchableOpacity style={{padding:10}}>
+							<Text
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		color='#4C9A2A'>
+							{'report'}
+							</Text>
+						  
+						  </TouchableOpacity>
+						  </View>
+						  <View style={styles.control_button}>
+						  <TouchableOpacity style={{padding:10}}>
+							<Text
+		            		style={{textAlign: "center"}}
+		            		size={25}
+		            		color='#4C9A2A'>
+							{'comment'}
+							</Text>
+						  
+						  </TouchableOpacity>
+						  </View>
+						  </View>
                           </Card>
                       )
                   }
