@@ -17,56 +17,88 @@ const styles = StyleSheet.create({
 });
 
 class Controls extends React.Component {
+    state = {
+        color_1 : "#222",
+        color_2 : '#4C9A2A',
+        color_3 : "#222",
+        color_4 : "#222",
+        color_5 : "#222",
+    }
+    press1(){
+        this.props.navigation.navigate('routePost');
+        this.color_1 = '#4C9A2A';
+        this.color_2 = this.color_3 = this.color_4 = this.color_5 = "#222";
+    }
+    press2(){
+        this.props.navigation.navigate('routeFeed');
+        this.color_2 = '#4C9A2A';
+        this.color_1 = this.color_3 = this.color_4 = this.color_5 = "#222";
+    }
+    press3(){
+        this.props.navigation.navigate('routeProfile');
+        this.color_3 = '#4C9A2A';
+        this.color_1 = this.color_2 = this.color_4 = this.color_5 = "#222";
+    }
+    press4(){
+        this.props.navigation.navigate('routeMap');
+        this.color_4 = '#4C9A2A';
+        this.color_1 = this.color_2 = this.color_3 = this.color_5 = "#222";
+    }
+    press5(){
+        this.props.navigation.navigate('routeSettings');
+        this.color_5 = '#4C9A2A';
+        this.color_1 = this.color_2 = this.color_3 = this.color_4 = "#222";
+    }
   render(){
     return (
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <View style={styles.control_button}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routePost') }>
+            <TouchableOpacity style={styles.touch} onPress={this.press1.bind(this)}>
               <Icon
                 style={{textAlign: "center"}}
                 size={25}
                 name='pencil'
-                color='#4C9A2A'
+                color={this.color_1}
               />
             </TouchableOpacity>
           </View>
           <View style={styles.control_button}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeFeed') }>
+            <TouchableOpacity style={styles.touch} onPress={this.press2.bind(this)}>
               <Icon
                 style={{textAlign: "center"}}
                 size={25}
                 name='globe'
-                color='#4C9A2A'
+                color={this.color_2}
               />
             </TouchableOpacity>
           </View>
           <View style={styles.control_button}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeProfile') }>
+            <TouchableOpacity style={styles.touch} onPress={this.press3.bind(this)}>
               <Icon
                 style={{textAlign: "center"}}
                 size={25}
                 name='user'
-                color='#4C9A2A'
+                color={this.color_3}
               />
             </TouchableOpacity>
           </View>
           <View style={styles.control_button}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeMap') }>
+            <TouchableOpacity style={styles.touch} onPress={this.press4.bind(this)}>
               <Icon
                 style={{textAlign: "center"}}
                 size={25}
                 name='comment'
-                color='#4C9A2A'
+                color={this.color_4}
               />
             </TouchableOpacity>
           </View>
           <View style={styles.control_button}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSettings') }>
+            <TouchableOpacity style={styles.touch} onPress={this.press5.bind(this)}>
               <Icon
                 style={{textAlign: "center"}}
                 size={25}
                 name='cogs'
-                color='#4C9A2A'
+                color={this.color_5}
               />
             </TouchableOpacity>
           </View>
