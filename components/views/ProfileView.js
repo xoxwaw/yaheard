@@ -51,6 +51,7 @@ export default class Profile extends React.Component {
                           const {email, karma, username} = child.data()
                           this.setState({
                               username: username,
+                              email: email,
                               karma: karma});
                       })
                   });
@@ -64,10 +65,10 @@ export default class Profile extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, flexDirection: 'column' }}>
-        <Text>PROFILE</Text>
+      <View style={{ flex: 1, flexDirection: 'column'}}>
         <Text>Hello, {this.state.username}</Text>
         <Text>Karma: {this.state.karma}</Text>
+        <Text>{this.state.email}</Text>
         <ScrollView>
           <View containerStyle={{padding: 0}} >
           {

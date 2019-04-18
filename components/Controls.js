@@ -83,16 +83,6 @@ class Controls extends React.Component {
             </TouchableOpacity>
           </View>
           <View style={styles.control_button}>
-            <TouchableOpacity style={styles.touch} onPress={this.press4.bind(this)}>
-              <Icon
-                style={{textAlign: "center"}}
-                size={25}
-                name='comment'
-                color={this.color_4}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.control_button}>
             <TouchableOpacity style={styles.touch} onPress={this.press5.bind(this)}>
               <Icon
                 style={{textAlign: "center"}}
