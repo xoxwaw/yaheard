@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#4C9A2A',
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: 5,
     flex: 1,
   },
   container : {

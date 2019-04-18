@@ -18,7 +18,6 @@ export default class TextPost extends React.Component {
   componentDidMount(){
       navigator.geolocation.getCurrentPosition(
           position => {
-              alert(position.coords.latitude);
               const location = {
                   longitude: position.coords.longitude,
                   latitude: position.coords.latitude
@@ -109,7 +108,6 @@ export default class TextPost extends React.Component {
             minimumFontScale={0.1}
             onChangeText={post_content => this.setState({ post_content })}
           />
-          <Progress.Circle color="#4C9A2A" progress={0.4} size={50} />
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
@@ -133,7 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#4C9A2A',
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: 5,
     flex: 1,
   },
   container : {
