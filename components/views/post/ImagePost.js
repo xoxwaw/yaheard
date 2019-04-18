@@ -32,6 +32,7 @@ export default class ImagePost extends React.Component {
       );
   }
   uploadImage = (uri, mime = 'image/jpeg') => {
+        //set view to loading image
           const sessionId = new Date().getTime().toString();
           const path = 'images/' + sessionId + ".jpeg";
           console.log(path)
@@ -160,7 +161,7 @@ export default class ImagePost extends React.Component {
             numberOfLines={5}
             adjustsFontSizeToFit={true}
             minimumFontScale={0.1}
-            onChangeText={post_content => this.setState({ post_content })}
+            onChangeText={post_title => this.setState({ post_title })}
             // value={this.state.post_content}
           />
           <Progress.Circle color="#4C9A2A" progress={0.4} size={50} />

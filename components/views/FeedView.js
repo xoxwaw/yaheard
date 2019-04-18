@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
+  },
+  content: {
+      fontSize: 12,
+  },
+  title: {
+      fontSize: 14,
   }
 });
 
@@ -88,6 +94,7 @@ export default class Feed extends React.Component {
             items.push({
                 user: user,
                 post: body.content,
+                title: body.title,
                 up: vote.upvote,
                 isText: isText,
                 location: location,
@@ -108,12 +115,14 @@ export default class Feed extends React.Component {
                   if (u.isText == true){
                       return (
                           <Card>
-                          <Text>{u.post}</Text>
+                            <Text style={styles.title}>{u.title}</Text>
+                          <Text style={styles.content}>{u.post}</Text>
                           </Card>
                       );
                   }else{
                       return (
                           <Card>
+                            <Text style={styles.title}>{u.title}</Text>
                           <Image
                             style={{width: 300, height: 200}}
                             source={{uri: u.post}}
