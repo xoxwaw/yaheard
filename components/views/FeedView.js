@@ -117,6 +117,7 @@ export default class Feed extends React.Component {
                           <Card>
                             <Text style={styles.title}>{u.title}</Text>
                           <Text style={styles.content}>{u.post}</Text>
+                          <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
                           </Card>
                       );
                   }else{
@@ -127,6 +128,7 @@ export default class Feed extends React.Component {
                             style={{width: 300, height: 200}}
                             source={{uri: u.post}}
                           />
+                          <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
                           </Card>
                       )
                   }
