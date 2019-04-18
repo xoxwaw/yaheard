@@ -155,7 +155,7 @@ export default class ImagePost extends React.Component {
           <TextInput
             multiline
             style={styles.textbox}
-            placeholder=""
+            placeholder="Title"
             autoCapitalize="none"
             numberOfLines={5}
             adjustsFontSizeToFit={true}
@@ -167,9 +167,15 @@ export default class ImagePost extends React.Component {
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
+                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" />
+            </View>
+            <View style={{ flex: 1, padding: 10 }}>
               <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.handleImagePost} />
             </View>
           </View>
+          <View>
+                <Text style={{ fontSize: 10, color: '#BBB', marginBottom: 20 }}>Currently posting from ({this.state.location.latitude}, {this.state.location.longitude})</Text>
+            </View>
         </View>
       </View>
     );
@@ -179,6 +185,7 @@ const styles = StyleSheet.create({
   button : {
     marginLeft: 10,
     marginRight: 10,
+    marginBottom: 20,
   },
   header : {
     fontSize: 18,
@@ -194,11 +201,12 @@ const styles = StyleSheet.create({
     flex: 15,
   },
   textbox : {
-    backgroundColor: '#ddd',
-    borderColor: '#ccc',
-    borderWidth: 2,
+    height: 40,
+    fontSize:20,
     width: '90%',
-    marginBottom: 10,
-    height: 200,
-  }
+    borderColor: '#9b9b9b',
+    borderBottomWidth: 1,
+    marginTop: 8,
+    marginVertical: 15
+  },
 });

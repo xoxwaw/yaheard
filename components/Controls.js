@@ -18,36 +18,36 @@ const styles = StyleSheet.create({
 
 class Controls extends React.Component {
     state = {
-        color_1 : "#222",
+        color_1 : "#444",
         color_2 : '#4C9A2A',
-        color_3 : "#222",
-        color_4 : "#222",
-        color_5 : "#222",
+        color_3 : "#444",
+        color_4 : "#444",
+        color_5 : "#444",
     }
     press1(){
         this.props.navigation.navigate('routePost');
         this.color_1 = '#4C9A2A';
-        this.color_2 = this.color_3 = this.color_4 = this.color_5 = "#222";
+        this.color_2 = this.color_3 = this.color_4 = this.color_5 = "#444";
     }
     press2(){
         this.props.navigation.navigate('routeFeed');
         this.color_2 = '#4C9A2A';
-        this.color_1 = this.color_3 = this.color_4 = this.color_5 = "#222";
+        this.color_1 = this.color_3 = this.color_4 = this.color_5 = "#444";
     }
     press3(){
         this.props.navigation.navigate('routeProfile');
         this.color_3 = '#4C9A2A';
-        this.color_1 = this.color_2 = this.color_4 = this.color_5 = "#222";
+        this.color_1 = this.color_2 = this.color_4 = this.color_5 = "#444";
     }
     press4(){
         this.props.navigation.navigate('routeMap');
         this.color_4 = '#4C9A2A';
-        this.color_1 = this.color_2 = this.color_3 = this.color_5 = "#222";
+        this.color_1 = this.color_2 = this.color_3 = this.color_5 = "#444";
     }
     press5(){
         this.props.navigation.navigate('routeSettings');
         this.color_5 = '#4C9A2A';
-        this.color_1 = this.color_2 = this.color_3 = this.color_4 = "#222";
+        this.color_1 = this.color_2 = this.color_3 = this.color_4 = "#444";
     }
   render(){
     return (
