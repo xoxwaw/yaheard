@@ -70,6 +70,15 @@ export default class Feed extends React.Component {
           });
       }, 2000);
     }
+
+    upvote = (pid) =>{
+        return this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(1))
+    }
+
+    downvote= (pid) =>{
+        return this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(1))
+    }
+
     getDocumentNearBy = (distance) => {
         const lat = 0.0144927536231884;
         const lon = 0.0181818181818182;
@@ -91,16 +100,18 @@ export default class Feed extends React.Component {
     onCollectionUpdate = (querySnapshot) => {
         const items = [];
         querySnapshot.forEach((doc) => {
-            const {body, isText, location, time, user, vote} = doc.data();
+            const {body, downvote, isText, location, time, upvote, user} = doc.data();
             items.push({
                 user: user,
                 post: body.content,
                 title: body.title,
-                up: vote.upvote,
+                up: upvote,
                 isText: isText,
                 location: location,
-                down: vote.downvote
+                down: downvote,
+                id: doc.id
             });
+
         });
         this.setState({
         items:items
@@ -121,7 +132,7 @@ export default class Feed extends React.Component {
                           <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
 						  <View style={{ flex: 1, flexDirection: 'row' }}>
 					  	<View style={styles.control_button}>
-				      	<TouchableOpacity style={{padding:10}}>
+				      	<TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
 							<Icon
 		            		style={{textAlign: "center"}}
 		            		size={25}
@@ -130,15 +141,16 @@ export default class Feed extends React.Component {
 		          		    />
 						  </TouchableOpacity>
 						  </View>
+                          <View><Text>{u.up - u.down}</Text></View>
 						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}}>
+						  <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
 							<Icon
 		            		style={{textAlign: "center"}}
 		            		size={25}
 		            		name='arrow-circle-down'
 		            		color='#4C9A2A'
 		          		    />
-						  
+
 						  </TouchableOpacity>
 						  </View>
 						  <View style={styles.control_button}>
@@ -149,7 +161,7 @@ export default class Feed extends React.Component {
 		            		color='#4C9A2A'>
 							{'report'}
 							</Text>
-						  
+
 						  </TouchableOpacity>
 						  </View>
 						  <View style={styles.control_button}>
@@ -160,7 +172,7 @@ export default class Feed extends React.Component {
 		            		color='#4C9A2A'>
 							{'comment'}
 							</Text>
-						  
+
 						  </TouchableOpacity>
 						  </View>
 						  </View>
@@ -186,6 +198,7 @@ export default class Feed extends React.Component {
 		          		    />
 						  </TouchableOpacity>
 						  </View>
+                           <View><Text>{u.up - u.down}</Text></View>
 						  <View style={styles.control_button}>
 						  <TouchableOpacity style={{padding:10}}>
 							<Icon
@@ -194,7 +207,7 @@ export default class Feed extends React.Component {
 		            		name='arrow-circle-down'
 		            		color='#4C9A2A'
 		          		    />
-						  
+
 						  </TouchableOpacity>
 						  </View>
 						  <View style={styles.control_button}>
@@ -205,7 +218,7 @@ export default class Feed extends React.Component {
 		            		color='#4C9A2A'>
 							{'report'}
 							</Text>
-						  
+
 						  </TouchableOpacity>
 						  </View>
 						  <View style={styles.control_button}>
@@ -216,7 +229,7 @@ export default class Feed extends React.Component {
 		            		color='#4C9A2A'>
 							{'comment'}
 							</Text>
-						  
+
 						  </TouchableOpacity>
 						  </View>
 						  </View>
