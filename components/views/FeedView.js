@@ -23,16 +23,16 @@ const styles = StyleSheet.create({
   }
 });
 
-
-
 export default class Feed extends React.Component {
 
     constructor(){
         super();
         this.ref = firebase.firestore().collection('posts');
+        this.user_post = firebase.firestore().collection('user_post');
         this.storage = firebase.storage();
-        this.state = {items: [], images: [], query: null, location: 'unknown'};
 
+        this.state = {items: [], images: [], query: null, location: 'unknown', email: ""};
+        this._retrieveData();
     }
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
@@ -57,6 +57,15 @@ export default class Feed extends React.Component {
 
         // this.loadImage("images/image.png");
     }
+    _retrieveData = () =>{
+          AsyncStorage.getItem('user').then(val=>{
+              this.setState({email:val})
+          }).then(res=>{
+              this.console.log("GOT IT")
+          }).catch(err=>{
+              console.log(err);
+          });
+    };
 
     componentWillUnmount() {
         this.unsubscribe();
@@ -72,11 +81,75 @@ export default class Feed extends React.Component {
     }
 
     upvote = (pid) =>{
-        return this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(1))
+        this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
+            const items = [];
+            querySnapshot.forEach(doc=>{
+                const {isUpvote, post, user} = doc.data();
+                items.push({
+                    id: doc.id,
+                    isUpvote: isUpvote,
+                    post: post,
+                    user: user
+                })
+            })
+            if (items.length > 0){
+                const {id,isUpvote, post, user} = items[0];
+                console.log(user,id,isUpvote, post);
+                this.user_post.doc(id).update("isUpvote",true);
+                if (isUpvote == false){
+                    this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(2))
+                }else{
+                    this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(-1));
+                    this.user_post.doc(id).delete();
+                }
+            }else{
+                console.log(pid,this.state.email)
+                this.user_post.add({
+                    user: this.state.email,
+                    post: pid,
+                    isUpvote: true
+                });
+                this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(1))
+            }
+        }).catch(err=>{
+            console.log(err)
+        })
     }
 
     downvote= (pid) =>{
-        return this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(1))
+        this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
+            const items = [];
+            querySnapshot.forEach(doc=>{
+                const {isUpvote, post, user} = doc.data();
+                items.push({
+                    id: doc.id,
+                    isUpvote: isUpvote,
+                    post: post,
+                    user: user
+                })
+            })
+            if (items.length > 0){
+                const {id,isUpvote, post, user} = items[0];
+                console.log(user,id,isUpvote, post);
+                this.user_post.doc(id).update("isUpvote",false);
+                if (isUpvote == true){
+                    this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(2))
+                }else{
+                    this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(-1));
+                    this.user_post.doc(id).delete();
+                }
+            }else{
+                console.log(pid,this.state.email)
+                this.user_post.add({
+                    user: this.state.email,
+                    post: pid,
+                    isUpvote: false
+                });
+                this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(1))
+            }
+        }).catch(err=>{
+            console.log(err)
+        })
     }
 
     getDocumentNearBy = (distance) => {
