@@ -30,8 +30,9 @@ export default class Feed extends React.Component {
         this.ref = firebase.firestore().collection('posts');
         this.user_post = firebase.firestore().collection('user_post');
         this.storage = firebase.storage();
-
-        this.state = {items: [], images: [], query: null, location: 'unknown', email: ""};
+        //orderBy: 0 - new, 1: popular, 2: controversial
+        //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
+        this.state = {items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0};
         this._retrieveData();
     }
     componentDidMount() {
@@ -45,7 +46,6 @@ export default class Feed extends React.Component {
                 this.setState({ location });
                 var query = this.getDocumentNearBy(1.0);
                 this.setState({ query });
-                console.log(query);
                 this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
             },
             error => alert(error.message),
@@ -61,11 +61,12 @@ export default class Feed extends React.Component {
           AsyncStorage.getItem('user').then(val=>{
               this.setState({email:val})
           }).then(res=>{
-              this.console.log("GOT IT")
+              console.log("GOT IT")
           }).catch(err=>{
               console.log(err);
           });
     };
+
 
     componentWillUnmount() {
         this.unsubscribe();
@@ -165,8 +166,16 @@ export default class Feed extends React.Component {
         let lesserGeopoint = new firebase.firestore.GeoPoint(lowerLat,lowerLon)
         let greaterGeopoint = new firebase.firestore.GeoPoint(greaterLat, greaterLon)
 
-        let docRef = firebase.firestore().collection("posts")
+        let docRef = firebase.firestore().collection("posts");
+
         let query = docRef.where("location", '>', lesserGeopoint).where("location", '<', greaterGeopoint)
+        // if (this.state.orderBy == 0){
+        //     query = query.orderBy("date","desc").limit(10);
+        // }else if (this.state.orderBy == 1){
+        //     query = query.orderBy("upvote", "desc")
+        // }else if (this.state.orderBy == 2){
+        //     query = query.orderBy("downvote","desc")
+        // }
         return query;
     }
 
@@ -190,7 +199,12 @@ export default class Feed extends React.Component {
         items:items
         });
     }
-
+    navigateToPost(id){
+        AsyncStorage.setItem('post_id', id).then(val => {
+            console.log("set successfully");
+        }).catch(err=> {console.log(err)});
+        this.props.navigation.navigate('routeFocus');
+    }
   render() {
     return (
         <ScrollView>
@@ -200,7 +214,9 @@ export default class Feed extends React.Component {
                   if (u.isText == true){
                       return (
                           <Card>
+                          <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
                             <Text style={styles.title}>{u.title}</Text>
+                            </TouchableOpacity>
                           <Text style={styles.content}>{u.post}</Text>
                           <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
 						  <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -254,7 +270,9 @@ export default class Feed extends React.Component {
                   }else{
                       return (
                           <Card>
+                          <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
                             <Text style={styles.title}>{u.title}</Text>
+                            </TouchableOpacity>
                           <Image
                             style={{width: 300, height: 200}}
                             source={{uri: u.post}}

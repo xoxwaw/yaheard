@@ -8,6 +8,7 @@ import PostView from './views/PostView';
 import ProfileView from './views/ProfileView';
 import MapView from './views/MapView';
 import SettingsView from './views/SettingsView';
+import FocusView from './views/FocusView'
 
 import Header from './Header';
 import Controls from './Controls';
@@ -18,6 +19,7 @@ const ContentNav = createSwitchNavigator({
   routeProfile: { screen: ProfileView },
   routeMap: { screen: MapView },
   routeSettings: { screen: SettingsView },
+  routeFocus:{screen: FocusView}
 });
 
 class Main extends React.Component {
