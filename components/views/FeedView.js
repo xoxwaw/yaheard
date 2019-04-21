@@ -3,7 +3,12 @@ import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOp
 import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
+
 const win = Dimensions.get('window');
+const image_width = win.width * 0.922;
+const image_height = win.width * 0.922 * 0.75;
+//these are the calculated values for the width and height of an image post reletive to the screen.
+
 const styles = StyleSheet.create({
   content_container: {
     backgroundColor: '#68bb59',
@@ -27,7 +32,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
   },
   title_image: {
-        marginTop: win.width * 0.925 * 0.75, 
+        marginTop: image_height, 
         fontSize: 18,
         borderColor: '#9b9b9b',
         borderBottomWidth: 1,
@@ -288,8 +293,8 @@ export default class Feed extends React.Component {
                                 style= {{ 
                                     flex: 1, 
                                     alignSelf: 'stretch', 
-                                    width: win.width * 0.922, 
-                                    height: win.width * 0.922 * 0.75,  
+                                    width: image_width,
+                                    height: image_height,
                                     position: 'absolute', 
                                     left: -15,
                                     top: -15,
