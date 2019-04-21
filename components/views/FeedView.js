@@ -262,7 +262,7 @@ export default class Feed extends React.Component {
                           <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
 						<View style={{ flex: 1, flexDirection: 'row' }}>
 					  	<View style={styles.control_button}>
-				      	<TouchableOpacity style={{padding:10}}>
+				      	<TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
 							<Icon
 		            		style={{textAlign: "center"}}
 		            		size={25}
@@ -273,7 +273,7 @@ export default class Feed extends React.Component {
 						  </View>
                            <View><Text>{u.up - u.down}</Text></View>
 						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}}>
+						  <TouchableOpacity style={{padding:10}} onPress = {() => this.downvote(u.id)}>
 							<Icon
 		            		style={{textAlign: "center"}}
 		            		size={25}

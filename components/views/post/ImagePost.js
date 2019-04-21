@@ -63,16 +63,15 @@ export default class ImagePost extends React.Component {
           },
           isText : isText,
           user: user,
-          vote : {
-              upvote: 1,
-              downvote: 0
-          },
+          upvote: 1,
+          downvote: 0,
           location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
           time: new Date().getTime()
       }).then((data)=>{
           this.user_ref.add({
-              post_id : data.id,
-              username: user
+              post : data.id,
+              user: user,
+              isUpvote: true
           })
           //success callback
       }).catch((error)=>{

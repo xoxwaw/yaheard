@@ -14,6 +14,7 @@ export default class TextPost extends React.Component {
       super(props);
       this._retrieveData();
       this.ref = firebase.firestore().collection('posts');
+      this.user_post = firebase.firestore().collection("user_post");
   }
   componentDidMount(){
       navigator.geolocation.getCurrentPosition(
@@ -38,20 +39,25 @@ export default class TextPost extends React.Component {
           },
           isText : isText,
           user: user,
-          vote : {
-              upvote: 1,
-              downvote: 0
-          },
+          upvote:1,
+          downvote:0,
           location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
           time: new Date().getTime()
       }).then((data)=>{
+          this.user_post.add({
+              user: user,
+              post: data.id,
+              isUpvote: true
+          })
           console.log("Upload successfully")
           //success callback
       }).catch((error)=>{
           //error callback
           console.log(error)
       });
+
       this.props.navigation.navigate('routeMain');
+
   }
   clearText = () => {
     //not yet written
