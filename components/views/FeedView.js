@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage } from 'react-native';
+import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
 import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
-
+const win = Dimensions.get('window');
 const styles = StyleSheet.create({
   content_container: {
     backgroundColor: '#68bb59',
@@ -17,9 +17,22 @@ const styles = StyleSheet.create({
   },
   content: {
       fontSize: 12,
+      paddingBottom: 20,
   },
   title: {
-      fontSize: 14,
+        fontSize: 18,
+        borderColor: '#9b9b9b',
+        borderBottomWidth: 1,
+        paddingBottom: 10,
+        marginBottom: 20,
+  },
+  title_image: {
+        marginTop: win.width * 0.925 * 0.75, 
+        fontSize: 18,
+        borderColor: '#9b9b9b',
+        borderBottomWidth: 1,
+        paddingBottom: 10,
+        marginBottom: 20,
   }
 });
 
@@ -208,17 +221,17 @@ export default class Feed extends React.Component {
   render() {
     return (
         <ScrollView>
-          <View containerStyle={{padding: 0}} >
+          <View containerStyle={{padding: 0, zIndex: 0}} >
           {
               this.state.items.map((u, i) => {
                   if (u.isText == true){
                       return (
-                          <Card>
+                          <Card borderRadius={8}>
                           <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
                             <Text style={styles.title}>{u.title}</Text>
                             </TouchableOpacity>
                           <Text style={styles.content}>{u.post}</Text>
-                          <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
+                          <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
 						  <View style={{ flex: 1, flexDirection: 'row' }}>
 					  	<View style={styles.control_button}>
 				      	<TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
@@ -269,15 +282,26 @@ export default class Feed extends React.Component {
                       );
                   }else{
                       return (
-                          <Card>
-                          <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
-                            <Text style={styles.title}>{u.title}</Text>
+                          <Card borderRadius={8} style={{overflow: 'hidden'}}>
+                          <TouchableOpacity style={{ flex: 1 }}onPress={()=>this.navigateToPost(u.id)}>
+                            <Image
+                                style= {{ 
+                                    flex: 1, 
+                                    alignSelf: 'stretch', 
+                                    width: win.width * 0.922, 
+                                    height: win.width * 0.922 * 0.75,  
+                                    position: 'absolute', 
+                                    left: -15,
+                                    top: -15,
+                                    borderTopLeftRadius: 8,
+                                    borderTopRightRadius: 8,
+                                }}
+                                source={{uri: u.post}} 
+                                resizeMode={'cover'}
+                            />
+                            <Text style={styles.title_image}>{u.title}</Text>
                             </TouchableOpacity>
-                          <Image
-                            style={{width: 300, height: 200}}
-                            source={{uri: u.post}}
-                          />
-                          <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
+                          <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
 						<View style={{ flex: 1, flexDirection: 'row' }}>
 					  	<View style={styles.control_button}>
 				      	<TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
