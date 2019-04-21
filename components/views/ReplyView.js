@@ -4,8 +4,20 @@ import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
+const styles = StyleSheet.create({
+  content_container: {
+    backgroundColor: '#68bb59',
+    padding: 20,
+  },
+  button : {
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
+  },
+});
 export default class Focus extends React.Component {
     constructor(){
+        super();
         this.post_ref = firebase.firestore().collection('posts');
         this.comment_ref = firebase.firestore().collection('comments');
         this.user_post = firebase.firestore().collection('user_post');
