@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert } from 'react-native';
 import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -78,8 +78,6 @@ export default class ImagePost extends React.Component {
           //error callback
           console.log(error)
       });
-
-      this.props.navigation.navigate('routeMain');
   }
   handleImagePost = () => {
       this.setState({isText: false});
@@ -171,8 +169,14 @@ export default class ImagePost extends React.Component {
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
                 <Button style={ styles.button } title="Choose Image" color="#4C9A2A" onPress={() => {
-                    this.handleImagePost()
-                    this.props.navigation.navigate('routeFeed') 
+                    if (this.state.post_content != ""){
+                        this.handleImagePost()
+                        this.props.navigation.navigate('routeFeed') 
+                    }
+                    else{
+                        console.log('NOTHING TO POST');
+                        Alert.alert('Cannot Post!','Please write something to post!');
+                    }
                 }}/>
             </View>
             <View style={{ flex: 1, padding: 10 }}>
