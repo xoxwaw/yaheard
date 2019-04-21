@@ -72,7 +72,6 @@ export default class Focus extends React.Component {
     }
 
     buildTree(node, comments){
-        console.log(node.id)
         node.response = comments.filter(obj => obj.parent_id == node.id)
         if (node.response.length > 0){
             node.response.forEach(elem=>{
@@ -166,6 +165,21 @@ export default class Focus extends React.Component {
         }).catch(err=>{
             console.log(err)
         })
+    }
+    comment =()=>{
+        const item ={
+            id: this.state.post_id,
+            content: this.state.content
+        }
+    }
+    reply=(comment)=>{
+        const item = {
+            id: comment.id,
+            content: comment.content,
+            post_id: this.state.post_id
+        }
+        AsyncStorage.setItem('comment', JSON.stringify(item))
+        .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeReply'))
     }
     render() {
       return (
