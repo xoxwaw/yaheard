@@ -170,7 +170,10 @@ export default class ImagePost extends React.Component {
 
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
-                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" onPress = {this.handleImagePost} />
+                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" onPress={() => {
+                    this.handleImagePost()
+                    this.props.navigation.navigate('routeFeed') 
+                }}/>
             </View>
             <View style={{ flex: 1, padding: 10 }}>
               <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.uploadImage} />

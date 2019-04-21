@@ -125,7 +125,10 @@ export default class TextPost extends React.Component {
           />
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.handleTextPost} />
+                <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress={() => {
+                    this.handleTextPost()
+                    this.props.navigation.navigate('routeFeed')
+                }}/>
             </View>
             <View style={{ flex: 1, padding: 10 }}>
               <Button style={ styles.button } title="Clear" color="#4C9A2A" onPress = {this._takePicture}/>
