@@ -27,40 +27,77 @@ export default class Focus extends React.Component {
         this.post_ref = firebase.firestore().collection('posts');
         this.comment_ref = firebase.firestore().collection('comments');
         this.user_post = firebase.firestore().collection('user_post');
-        this.state = {post_id : "", user: "", content: "", items : []}
+        this.state = {post_id : "", user: "", content: "", items : [], comments: []}
 
     }
     componentDidMount(){
-        const items = [];
-        AsyncStorage.getItem('post_id').then(val=>{
-            this.unsubscribe = this.post_ref.doc(val).onSnapshot(doc=>{
-                if (doc.exists){
-                    const {body, downvote, isText, location, time, upvote, user} = doc.data();
-                    items.push({
-                        user: user,
-                        post: body.content,
-                        title: body.title,
-                        up: upvote,
-                        isText: isText,
-                        location: location,
-                        down: downvote,
-                        id: doc.id
-                    });
-                    this.setState({items: items});
-                    console.log(this.state.items)
-                }else{
-                    console.log(this.state.post_id);
-                }
-            })
-        }).then(res=>{
-            console.log("GOT IT")
-        }).catch(err=>{
-            console.log(err);
-        });
+        return AsyncStorage.getItem('post').then((value)=>{
+            const item = JSON.parse(value);
+            const items = [];
+            console.log(item.post_id)
+            this.unsubscribe = this.comment_ref.where("post_id", "==", item.post_id).onSnapshot(this.onCollectionUpdate)
+            items.push({
+                user: item.user,
+                post: item.content,
+                title: item.title,
+                up: item.upvote,
+                isText: item.isText,
+                location: item.location,
+                down: item.downvote,
+            });
+            this.setState({items: items});
+        })
     }
+    onCollectionUpdate = (querySnapshot) => {
+        const comments = []
+        querySnapshot.forEach(doc=>{
+            const {content, date, downvote, parent_id, post_id,upvote, user} = doc.data()
+            comments.push({
+                content: content,
+                date: date,
+                up: upvote,
+                down: downvote,
+                parent_id: parent_id,
+                user: user
+            });
+            console.log(content, post_id, user)
+        });
+        this.setState({comments: comments})
+    }
+    // componentWillMount(){
+    //     const items = [];
+    //     AsyncStorage.getItem('post_id').then(val=>{
+    //         this.unsubscribe = this.post_ref.doc(val).onSnapshot(doc=>{
+    //             if (doc.exists){
+    //                 const {body, downvote, isText, location, time, upvote, user} = doc.data();
+    //                 items.push({
+    //                     user: user,
+    //                     post: body.content,
+    //                     title: body.title,
+    //                     up: upvote,
+    //                     isText: isText,
+    //                     location: location,
+    //                     down: downvote,
+    //                     id: doc.id
+    //                 });
+    //                 this.setState({items: items});
+    //
+    //             }else{
+    //                 console.log(this.state.post_id);
+    //             }
+    //         });
+    //
+    //     }).then(res=>{
+    //         console.log("GOT IT ")
+    //     }).catch(err=>{
+    //         console.log(err);
+    //     });
+    //
+    // }
     componentWillUnmount() {
         this.unsubscribe();
     }
+
     _retrieveData = () =>{
 
           AsyncStorage.getItem('user').then(val=>{
@@ -147,14 +184,13 @@ export default class Focus extends React.Component {
     render() {
       return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
-
         <View containerStyle={{padding: 0}} >
         {
             this.state.items.map((u, i) => {
                 if (u.isText == true){
                     return (
                         <Card>
-                        <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
+                        <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                           <Text style={styles.title}>{u.title}</Text>
                           </TouchableOpacity>
                         <Text style={styles.content}>{u.post}</Text>
@@ -210,7 +246,7 @@ export default class Focus extends React.Component {
                 }else{
                     return (
                         <Card>
-                        <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
+                        <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                           <Text style={styles.title}>{u.title}</Text>
                           </TouchableOpacity>
                         <Image
@@ -271,8 +307,19 @@ export default class Focus extends React.Component {
             })
         }
         </View>
-
-
+        <ScrollView>
+        <View>
+        {
+            this.state.comments.map((u,i)=>{
+                return(
+                    <Card>
+                    <Text>{u.content}</Text>
+                    </Card>
+                )
+            })
+        }
+        </View>
+        </ScrollView>
         </View>
       );
     }

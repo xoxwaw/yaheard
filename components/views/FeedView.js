@@ -199,11 +199,19 @@ export default class Feed extends React.Component {
         items:items
         });
     }
-    navigateToPost(id){
-        AsyncStorage.setItem('post_id', id).then(val => {
-            console.log("set successfully");
-        }).catch(err=> {console.log(err)});
-        this.props.navigation.navigate('routeFocus');
+    navigateToPost(post){
+        const items = {
+            post_id: post.id,
+            title: post.title,
+            content: post.post,
+            isText: post.isText,
+            location: post.location,
+            upvote: post.up,
+            downvote: post.down,
+            user: post.user
+        }
+        AsyncStorage.setItem('post', JSON.stringify(items))
+        .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
     }
   render() {
     return (
@@ -214,7 +222,7 @@ export default class Feed extends React.Component {
                   if (u.isText == true){
                       return (
                           <Card>
-                          <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
+                          <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                             <Text style={styles.title}>{u.title}</Text>
                             </TouchableOpacity>
                           <Text style={styles.content}>{u.post}</Text>
@@ -270,7 +278,7 @@ export default class Feed extends React.Component {
                   }else{
                       return (
                           <Card>
-                          <TouchableOpacity onPress={()=>this.navigateToPost(u.id)}>
+                          <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                             <Text style={styles.title}>{u.title}</Text>
                             </TouchableOpacity>
                           <Image
