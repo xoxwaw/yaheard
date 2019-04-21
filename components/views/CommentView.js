@@ -8,7 +8,8 @@ export default class Focus extends React.Component {
     constructor(){
         this.post_ref = firebase.firestore().collection('posts');
         this.comment_ref = firebase.firestore().collection('comments');
-        this.state = {post_id : "", user: "", content: ""}
+        this.user_post = firebase.firestore().collection('user_post');
+        this.state = {content: "",post_content: "",post_id : "", user: ""}
         this._retrieveData();
     }
     _retrieveData = () =>{
@@ -19,32 +20,33 @@ export default class Focus extends React.Component {
           }).catch(err=>{
               console.log(err);
           });
-          AsyncStorage.getItem('post_id').then(val=>{
-              this.setState({post_id:val})
-          }).then(res=>{
-              this.console.log("GOT IT")
-          }).catch(err=>{
-              console.log(err);
-          });
     };
 
     componentDidMount(){
-
+        return AsyncStorage.getItem('comment').then(val=>{
+            const item = JSON.parse(value);
+            this.setState({comment_id: value.id, comment_content: value.content, post_id: item.post_id});
+        })
     }
 
     postComment = () => {
-        const {post_id, user, content} = this.state;
+        this.setState({content: "HELLO EVERYONE"})
+        const {content, post_content, post_id, user} = this.state;
         this.comment_ref.add({
             user: user,
             post_id: post_id,
             content: content,
             upvote: 1,
             downvote: 0,
+            parent_id: "",
             date: new Date.getTime().toString(),
-        })
-    }
-    reply = () =>{
-        
+        }).then(data=>{
+            this.user_ref.add({
+                post : data.id,
+                user: user,
+                isUpvote: true
+            })
+        }).catch(err=> console.log(err));
     }
 
     render() {

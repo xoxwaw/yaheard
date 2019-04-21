@@ -9,6 +9,8 @@ import ProfileView from './views/ProfileView';
 import MapView from './views/MapView';
 import SettingsView from './views/SettingsView';
 import FocusView from './views/FocusView'
+import CommentView from './views/CommentView'
+import ReplyView from './views/ReplyView'
 
 import Header from './Header';
 import Controls from './Controls';
@@ -19,7 +21,9 @@ const ContentNav = createSwitchNavigator({
   routeProfile: { screen: ProfileView },
   routeMap: { screen: MapView },
   routeSettings: { screen: SettingsView },
-  routeFocus:{screen: FocusView}
+  routeFocus:{screen: FocusView},
+  routeComment:{screen: CommentView},
+  routeReply:{screen: ReplyView}
 });
 
 class Main extends React.Component {
