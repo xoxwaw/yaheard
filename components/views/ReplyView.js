@@ -36,12 +36,11 @@ export default class Focus extends React.Component {
 
     componentDidMount(){
         return AsyncStorage.getItem('comment').then(val=>{
-            const item = JSON.parse(value);
-            this.setState({comment_id: value.id, comment_content: value.content, post_id: item.post_id});
+            const item = JSON.parse(val);
+            this.setState({comment_id: item.id, comment_content: item.content, post_id: item.post_id});
         })
     }
     submitReply = () =>{
-        this.setState({content: "HELLO EVERYONE"})
         const {comment_content, comment_id, content, post_id, user} = this.state;
         this.comment_ref.add({
             user: user,
