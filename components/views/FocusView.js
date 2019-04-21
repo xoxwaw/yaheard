@@ -51,7 +51,7 @@ export default class Focus extends React.Component {
     onCollectionUpdate = (querySnapshot) => {
         const comments = []
         querySnapshot.forEach(doc=>{
-            const {content, date, downvote, parent_id, post_id,upvote, user} = doc.data()
+            const {content, date, downvote, layer, parent_id, post_id,upvote, user} = doc.data()
             comments.push({
                 content: content,
                 date: date,
