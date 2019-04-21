@@ -28,7 +28,7 @@ export default class Focus extends React.Component {
         this.comment_ref = firebase.firestore().collection('comments');
         this.user_post = firebase.firestore().collection('user_post');
         this.state = {post_id : "", user: "", content: "", items : [], comments: []}
-
+        this._retrieveData();
     }
     componentDidMount(){
         return AsyncStorage.getItem('post').then((value)=>{
@@ -49,57 +49,43 @@ export default class Focus extends React.Component {
         })
     }
     onCollectionUpdate = (querySnapshot) => {
-        const comments = []
+        const comments = [];
         querySnapshot.forEach(doc=>{
-            const {content, date, downvote, layer, parent_id, post_id,upvote, user} = doc.data()
+            const {content, date, downvote, parent_id, post_id,upvote, user} = doc.data()
             comments.push({
                 content: content,
                 date: date,
                 up: upvote,
                 down: downvote,
                 parent_id: parent_id,
-                user: user
+                user: user,
+                id: doc.id
             });
             console.log(content, post_id, user)
         });
-        this.setState({comments: comments})
+        this.comment_tree = comments.filter(obj => obj.parent_id == "")
+        this.comment_tree.forEach(elem=>{
+            this.buildTree(elem, comments)
+        })
+        this.setState({comments: this.comment_tree})
+        console.log(this.comment_tree);
     }
-    // componentWillMount(){
-    //     const items = [];
-    //     AsyncStorage.getItem('post_id').then(val=>{
-    //         this.unsubscribe = this.post_ref.doc(val).onSnapshot(doc=>{
-    //             if (doc.exists){
-    //                 const {body, downvote, isText, location, time, upvote, user} = doc.data();
-    //                 items.push({
-    //                     user: user,
-    //                     post: body.content,
-    //                     title: body.title,
-    //                     up: upvote,
-    //                     isText: isText,
-    //                     location: location,
-    //                     down: downvote,
-    //                     id: doc.id
-    //                 });
-    //                 this.setState({items: items});
-    //
-    //             }else{
-    //                 console.log(this.state.post_id);
-    //             }
-    //         });
-    //
-    //     }).then(res=>{
-    //         console.log("GOT IT ")
-    //     }).catch(err=>{
-    //         console.log(err);
-    //     });
-    //
-    // }
+
+    buildTree(node, comments){
+        console.log(node.id)
+        node.response = comments.filter(obj => obj.parent_id == node.id)
+        if (node.response.length > 0){
+            node.response.forEach(elem=>{
+                this.buildTree(elem, comments);
+            })
+        }
+    }
+
     componentWillUnmount() {
         this.unsubscribe();
     }
 
     _retrieveData = () =>{
-
           AsyncStorage.getItem('user').then(val=>{
               this.setState({user:val})
           }).then(res=>{

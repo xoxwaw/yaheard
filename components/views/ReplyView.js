@@ -31,28 +31,13 @@ export default class Focus extends React.Component {
     componentDidMount(){
 
     }
-
-    postComment = () => {
-        const {post_id, user, content} = this.state;
-        this.comment_ref.add({
-            user: user,
-            post_id: post_id,
-            content: content,
-            upvote: 1,
-            downvote: 0,
-            date: new Date.getTime().toString(),
-        })
-    }
     reply = () =>{
-        
+
     }
 
     render() {
       return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
-        <View style={{ flex: 1, padding: 10 }}>
-          <Button style={ styles.button } title="Comment!" color="#4C9A2A" onPress = {this.postComment} />
-        </View>
         <View style={{ flex: 1, padding: 10 }}>
           <Button style={ styles.button } title="Reply!" color="#4C9A2A" onPress = {this.reply} />
         </View>
