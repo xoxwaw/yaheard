@@ -51,37 +51,72 @@ export default class Feed extends React.Component {
         this.storage = firebase.storage();
         //orderBy: 0 - new, 1: popular, 2: controversial
         //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
-        this.state = {items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0};
+        this.state = {items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_id:6};
         this._retrieveData();
     }
-
-    reload = () =>{
+    reload = ()=>{
+        this.unsubscribe = this.state.query.onSnapshot(this.onCollectionUpdate);
+    }
+    fetchNextPosts = ()=>{
+        const ind = this.state.last_ind;
+        console.log(ind, this.state.allposts.length)
+        if (ind >= this.state.allposts.length){
+            alert("that's all for now")
+        }else{
+            if (ind+5 < this.state.allposts.length){
+                var items = this.state.items;
+                items.concat(this.state.allposts.slice(ind, ind+5));
+                this.setState({last_ind: ind+5, items: items})
+                console.log(this.state.items)
+            }else{
+                this.setState({items: this.state.allposts});
+            }
+        }
+    }
+    componentDidMount() {
         navigator.geolocation.getCurrentPosition(
             position => {
                 const location = {
                     longitude: position.coords.longitude,
                     latitude: position.coords.latitude
                 }
-                console.log(location);
+                AsyncStorage.getItem('last_location').then(loc=>{
+                    if (loc){
+                        const last_loc = JSON.parse(loc);
+                        if (Math.sqrt((Math.pow((location.longitude - last_loc.longitude), 2)+
+                            Math.pow((location.latitude - last_loc.latitude),2))) <= 0.2){
+                                AsyncStorage.getItem('feed').then(items=>{
+
+                                    if (items){
+                                        const allposts = JSON.parse(items);
+                                        if (items.length > 5){
+                                            AsyncStorage.removeItem('feed').then(val=>{
+                                                // this.setState({items: allposts.slice(0,5), last_id: 6, allposts: allposts});
+                                                // console.log("GOT THEM");
+                                                var query = this.getDocumentNearBy(1.0);
+                                                this.setState({ query });
+                                                this.reload()
+                                            })
+                                        }
+
+                                    }else{
+                                        this.reload();
+                                    }
+                                })
+                            }else{
+                                this.reload();
+                            }
+                    }
+                })
                 this.setState({ location });
-                var query = this.getDocumentNearBy(1.0);
-                this.setState({ query });
-                this.unsubscribe = query.limit(20).onSnapshot(this.onCollectionUpdate);
+                AsyncStorage.setItem('last_location', JSON.stringify(location)).then(val=>{
+                    console.log();
+                });
+
             },
             error => alert(error.message),
             { enableHighAccuracy: false, timeout: 50000}
         );
-    }
-    componentDidMount() {
-        return AsyncStorage.getItem('feed').then(items=>{
-            if (items){
-                const allposts = JSON.parse(items);
-                this.setState({items: allposts});
-                console.log("GOT THEM")
-            }else{
-                this.reload();
-            }
-        })
     }
     _retrieveData = () =>{
           AsyncStorage.getItem('user').then(val=>{
@@ -92,20 +127,6 @@ export default class Feed extends React.Component {
               console.log(err);
           });
     };
-
-
-    // componentWillUnmount() {
-    //     this.unsubscribe();
-    // }
-
-    loadImage(path) {
-        setTimeout(() => {
-        this.storage.ref(path).getDownloadURL()
-          .then((url) => {
-            this.setState({imgURL: {uri: url}});
-          });
-      }, 2000);
-    }
 
     upvote = (pid) =>{
         // this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
@@ -284,9 +305,12 @@ export default class Feed extends React.Component {
         AsyncStorage.setItem('feed', JSON.stringify(items)).then(val=>{
             console.log("save the feed successfully");
         })
-        this.setState({
-        items:items
-        });
+        this.setState({last_ind: 6, allposts:items});
+        if (items.length > 6){
+            this.setState({
+            items:items.slice(0,6)
+            });
+        }
 
     }
 
@@ -390,7 +414,7 @@ export default class Feed extends React.Component {
                         }else{
                             return (
                                 <Card>
-                                    
+
                                     <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                                         <View>
                                             <Image
@@ -463,6 +487,7 @@ export default class Feed extends React.Component {
                     })
                 }
                 </View>
+            <Button title="I WANT MORE" onPress={this.fetchNextPosts}/>
             </ScrollView>
         );
     }

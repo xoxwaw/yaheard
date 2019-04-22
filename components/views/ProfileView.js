@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, AsyncStorage, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, AsyncStorage, ScrollView, Button} from 'react-native';
 import { SwitchNavigator } from 'react-navigation'
 import {Card} from 'react-native-elements'
 import firebase from 'react-native-firebase';
@@ -21,7 +21,7 @@ export default class Profile extends React.Component {
                     const recent_posts = JSON.parse(value);
                     this.setState({recent_posts: recent_posts})
                 }else{
-                    this.unsubscribe = this.post_ref.where('user', '==', val).limit(10).onSnapshot(this.onCollectionUpdate);
+                    this.unsubscribe = this.post_ref.where('user', '==', val).limit(5).onSnapshot(this.onCollectionUpdate);
                 }
             })
         });
@@ -47,11 +47,29 @@ export default class Profile extends React.Component {
         then(val=>console.log("saved recent posts"));
         // this.user_post.
     }
+    fetchRecent = () =>{
+        AsyncStorage.getItem('recent_viewed').then(val=>{
+            if (val){
+                const recent_viewed = JSON.parse(val);
+                this.setState({recent_viewed: recent_viewed})
+            }
+        })
+    }
+    fetchUpvoted = () =>{
+        AsyncStorage.getItem('upvoted').then(val=>{
+            if (val){
+                const upvoted = JSON.parse(val);
+                this.setState({upvoted: upvoted});
+            }
+        })
+    }
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'column'}}>
         <Text>Karma: {this.state.karma}</Text>
         <Text>{this.state.email}</Text>
+        <Button title="History" onPress={this.fetchRecent}/>
+        <Button title="Upvoted" onPress={this.fetchUpvoted}/>
         <ScrollView>
           <View containerStyle={{padding: 0}} >
           {
