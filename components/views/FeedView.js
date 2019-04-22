@@ -46,7 +46,8 @@ export default class Feed extends React.Component {
         this.state = {items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0};
         this._retrieveData();
     }
-    componentDidMount() {
+
+    reload = () =>{
         navigator.geolocation.getCurrentPosition(
             position => {
                 const location = {
@@ -62,9 +63,20 @@ export default class Feed extends React.Component {
             error => alert(error.message),
             { enableHighAccuracy: false, timeout: 50000}
         );
-        if (this.state.query == null){
-            this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        }
+    }
+    componentDidMount() {
+        AsyncStorage.getItem('feed').then(items=>{
+            if (items){
+                const allposts = JSON.parse(items);
+                this.setState({items: allposts});
+                console.log("GOT THEM")
+            }else{
+                this.reload();
+            }
+        })
+        // if (this.state.query == null){
+        //     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+        // }
 
         // this.loadImage("images/image.png");
     }
@@ -79,9 +91,9 @@ export default class Feed extends React.Component {
     };
 
 
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
+    // componentWillUnmount() {
+    //     this.unsubscribe();
+    // }
 
     loadImage(path) {
         setTimeout(() => {
@@ -208,9 +220,13 @@ export default class Feed extends React.Component {
             });
 
         });
+        AsyncStorage.setItem('feed', JSON.stringify(items)).then(val=>{
+            console.log("save successfully");
+        })
         this.setState({
         items:items
         });
+
     }
 
     navigateToComment(post){
@@ -237,7 +253,9 @@ export default class Feed extends React.Component {
     }
     render() {
         return (
+
             <ScrollView contentContainerStyle={{ padding: 0, margin: 0 }}>
+            <Button onPress={this.reload} title="RELOAD"/>
                 <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
                 {
                     this.state.items.map((u, i) => {

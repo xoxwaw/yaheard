@@ -11,56 +11,36 @@ export default class Profile extends React.Component {
         this.user_post = firebase.firestore().collection('user_post');
         this.post_ref = firebase.firestore().collection('posts');
         this.storage = firebase.storage();
-        this.state = {username: "", karma: 1, recent_posts : [], email: ""};
+        this.state = {karma: 1, recent_posts : [], email: ""};
     }
     componentDidMount(){
-        this._retrieveData();
-        this.unsubscribe = this.post_ref.where('user', '==', this.state.email).onSnapshot(this.onCollectionUpdate);
+        AsyncStorage.getItem('user').then(val=>{
+            this.setState({email: val});
+            this.unsubscribe = this.post_ref.where('user', '==', val).onSnapshot(this.onCollectionUpdate);
+        });
+
     }
     componentWillUnmount() {
         this.unsubscribe();
     }
+
     onCollectionUpdate =(snapshot) =>{
         recent_posts = [];
         snapshot.forEach((doc)=>{
-            const {body, isText, location, time, user, vote} = doc.data();
-            console.log(body.content);
+            const {body, downvote, isText, location, time, user, upvote} = doc.data();
             recent_posts.push({
                 title : body.title,
                 content: body.content,
                 isText: isText,
-                up : vote.upvote,
-                down: vote.downvote,
+                up : upvote,
+                down: downvote,
                 location: location,
                 time: time
             });
-        })
+        });
         this.setState({recent_posts: recent_posts});
+        // this.user_post.
     }
-    _retrieveData = async () => {
-          try {
-              const value = await AsyncStorage.getItem('user');
-              if (value !== null) {
-                  // We have data!!
-                  this.setState({email: value})
-                  var query = this.ref.where("email", "==", value);
-                  query.onSnapshot((snapshot) =>{
-                      snapshot.forEach(child => {
-                          const {email, karma, username} = child.data()
-                          this.setState({
-                              username: username,
-                              email: email,
-                              karma: karma});
-                      })
-                  });
-
-              }
-          } catch (error) {
-              alert(error);
-              // Error retrieving data
-          }
-    };
-
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'column'}}>
