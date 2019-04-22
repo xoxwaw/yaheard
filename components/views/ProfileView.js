@@ -16,21 +16,20 @@ export default class Profile extends React.Component {
     componentDidMount(){
         AsyncStorage.getItem('user').then(val=>{
             this.setState({email: val});
-            AsyncStorage.getItem('recent_uploaded').then(val=>{
-                if (val){
-                    const recent_posts = JSON.parse(val);
+            AsyncStorage.getItem('recent_uploaded').then(value=>{
+                if (value){
+                    const recent_posts = JSON.parse(value);
                     this.setState({recent_posts: recent_posts})
                 }else{
-                    this.unsubscribe = this.post_ref.where('user', '==', val).onSnapshot(this.onCollectionUpdate);
+                    this.unsubscribe = this.post_ref.where('user', '==', val).limit(10).onSnapshot(this.onCollectionUpdate);
                 }
             })
         });
     }
-
     onCollectionUpdate =(snapshot) =>{
-        recent_posts = [];
+        const recent_posts = [];
         snapshot.forEach((doc)=>{
-            const {body, downvote, isText, location, time, user, upvote} = doc.data();
+            const {body, downvote, height, isText, location, time, user, upvote, width} = doc.data();
             recent_posts.push({
                 title : body.title,
                 content: body.content,
@@ -38,9 +37,11 @@ export default class Profile extends React.Component {
                 up : upvote,
                 down: downvote,
                 location: location,
-                time: time
+                time: time,
+                user: user,
             });
         });
+        console.log("RECENT"+recent_posts)
         this.setState({recent_posts: recent_posts});
         AsyncStorage.setItem('recent_uploaded',JSON.stringify(recent_posts)).
         then(val=>console.log("saved recent posts"));
@@ -49,7 +50,6 @@ export default class Profile extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'column'}}>
-        <Text>Hello, {this.state.username}</Text>
         <Text>Karma: {this.state.karma}</Text>
         <Text>{this.state.email}</Text>
         <ScrollView>
