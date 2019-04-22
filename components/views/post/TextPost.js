@@ -10,7 +10,7 @@ const storage = firebase.storage();
 
 
 export default class TextPost extends React.Component {
-  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true }
+  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true, id:"" }
   constructor(props){
       super(props);
       this._retrieveData();
@@ -31,7 +31,7 @@ export default class TextPost extends React.Component {
       );
   }
   writePost = () => {
-      var {post_title, post_content, errorMessage, user,location, isText} = this.state;
+      var {post_title, post_content, errorMessage, user,location, isText, id} = this.state;
 
       this.ref.add({
           body: {
@@ -43,13 +43,16 @@ export default class TextPost extends React.Component {
           upvote:1,
           downvote:0,
           location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
-          time: new Date().getTime()
+          time: new Date().getTime(),
+          height: 0,
+          width: 0
       }).then((data)=>{
           this.user_post.add({
               user: user,
               post: data.id,
               isUpvote: true
           })
+          this.setState({id: data.id})
           console.log("Upload successfully")
           //success callback
       }).catch((error)=>{
@@ -78,6 +81,20 @@ export default class TextPost extends React.Component {
             // Error retrieving data
         }
   };
+  navigateToPost(){
+      const items = {
+          post_id: this.state.id,
+          title: this.state.post_title,
+          content: this.state.post_content,
+          isText: true,
+          location: this.state.location,
+          upvote: 1,
+          downvote: 0,
+          user: this.state.user
+      }
+      AsyncStorage.setItem('post', JSON.stringify(items))
+      .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
+  }
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
@@ -136,7 +153,7 @@ export default class TextPost extends React.Component {
                 }}/>
             </View>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Clear" color="#4C9A2A" onPress = {this._takePicture}/>
+              <Button style={ styles.button } title="Clear" color="#4C9A2A"/>
             </View>
           </View>
             <View>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -9,9 +9,12 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
 
 const storage = firebase.storage();
-
+const win = Dimensions.get('window');
+const image_width = win.width * 0.922;
+const image_height = win.width * 0.922 * 0.75;
 export default class ImagePost extends React.Component {
-  state = { post_title : "", post_content: '', errorMessage: null,user: "",  location: {}, isText: true, imageURL : ""}
+  state = { post_title : "", post_content: '', errorMessage: null,user: "",
+            location: {}, isText: false, imageURL : "", id:"", width:800, height:600}
   constructor(props){
       super(props);
       this._retrieveData();
@@ -55,7 +58,7 @@ export default class ImagePost extends React.Component {
 
   }
   writePost = () => {
-      var {post_title, post_content, errorMessage, user,location, isText, imageURL} = this.state;
+      var {post_title, post_content, errorMessage, user,location, isText, imageURL, id, height, width} = this.state;
       this.ref.add({
           body: {
               content: post_content,
@@ -66,13 +69,17 @@ export default class ImagePost extends React.Component {
           upvote: 1,
           downvote: 0,
           location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
-          time: new Date().getTime()
+          time: new Date().getTime(),
+          height: height,
+          width: width
       }).then((data)=>{
           this.user_ref.add({
               post : data.id,
               user: user,
               isUpvote: true
-          })
+          });
+          this.setState({id: data.id})
+
           //success callback
       }).catch((error)=>{
           //error callback
@@ -115,16 +122,21 @@ export default class ImagePost extends React.Component {
     }
 
     resize = (uri) =>{
-        ImageResizer.createResizedImage(uri, 800,600, 'JPEG', 80)
-        .then((data) =>{
-            console.log(data.uri);
-            this.setState({imageURL: data.uri})
-            this.uploadImage(data.uri);
-            console.log("Upload successfully");
-        }).catch(err =>{
-            console.log(err);
-            alert('Unable to resize');
+        Image.getSize(uri, (width, height) =>{
+            const h = parseInt(height * (800/width))
+            this.setState({width: 800, height: h});
+            ImageResizer.createResizedImage(uri, 800, h, 'JPEG', 80)
+            .then((data) =>{
+                console.log(data.uri);
+                this.setState({imageURL: data.uri})
+                this.uploadImage(data.uri);
+                console.log("Upload successfully");
+            }).catch(err =>{
+                console.log(err);
+                alert('Unable to resize');
+            })
         })
+
   }
   _retrieveData = async () => {
         try {
@@ -138,6 +150,20 @@ export default class ImagePost extends React.Component {
             // Error retrieving data
         }
   };
+  navigateToPost(){
+      const items = {
+          post_id: this.state.id,
+          title: this.state.post_title,
+          content: this.state.post_content,
+          isText: false,
+          location: this.state.location,
+          upvote: 1,
+          downvote: 0,
+          user: this.state.user
+      }
+      AsyncStorage.setItem('post', JSON.stringify(items))
+      .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
+  }
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
@@ -165,22 +191,19 @@ export default class ImagePost extends React.Component {
             // value={this.state.post_content}
           />
           <Progress.Circle color="#4C9A2A" progress={0.4} size={50} />
-
+          <Image source={{ uri: this.state.imageURL }}/>
           <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
             <View style={{ flex: 1, padding: 10 }}>
-                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" onPress={() => {
-                    if (this.state.post_content != ""){
-                        this.handleImagePost()
-                        this.props.navigation.navigate('routeFeed') 
-                    }
-                    else{
-                        console.log('NOTHING TO POST');
-                        Alert.alert('Cannot Post!','Please write something to post!');
-                    }
-                }}/>
+                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" onPress={this.handleImagePost}/>
             </View>
             <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {this.uploadImage} />
+              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {()=>{
+                  if (this.state.post_content.length > 0){
+                    this.navigateToPost()
+                }else{
+                    alert("You must choose a photo to upload")
+                }
+            }}/>
             </View>
           </View>
           <View>

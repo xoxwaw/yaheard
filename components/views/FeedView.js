@@ -200,7 +200,7 @@ export default class Feed extends React.Component {
     onCollectionUpdate = (querySnapshot) => {
         const items = [];
         querySnapshot.forEach((doc) => {
-            const {body, downvote, isText, location, time, upvote, user} = doc.data();
+            const {body, downvote, height, isText, location, time, upvote, user,width} = doc.data();
             items.push({
                 user: user,
                 post: body.content,
@@ -209,7 +209,9 @@ export default class Feed extends React.Component {
                 isText: isText,
                 location: location,
                 down: downvote,
-                id: doc.id
+                id: doc.id,
+                width: image_width,
+                height: height * image_width/width,
             });
 
         });
@@ -217,7 +219,7 @@ export default class Feed extends React.Component {
         items:items
         });
     }
-    
+
     navigateToComment(post){
         const item = {
             post_id: post.id,
@@ -306,21 +308,19 @@ export default class Feed extends React.Component {
                       return (
                           <Card borderRadius={8} style={{overflow: 'hidden'}}>
                           <TouchableOpacity style={{ flex: 1 }}onPress={()=>this.navigateToPost(u)}>
+                          <Card borderRadius={8} style={{overflow: 'hidden'}}>
                             <Image
                                 style= {{
                                     flex: 1,
                                     alignSelf: 'stretch',
-                                    width: image_width,
-                                    height: image_height,
+                                    width: u.width,
+                                    height: u.height,
                                     position: 'absolute',
-                                    left: -15,
-                                    top: -15,
-                                    borderTopLeftRadius: 8,
-                                    borderTopRightRadius: 8,
                                 }}
                                 source={{uri: u.post}}
                                 resizeMode={'cover'}
                             />
+                            </Card>
                             <Text style={styles.title_image}>{u.title}</Text>
                             </TouchableOpacity>
                           <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
