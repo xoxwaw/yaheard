@@ -386,11 +386,10 @@ export default class Feed extends React.Component {
                                         <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                                             <Text style={{ fontSize: 24 }}>{u.title}</Text>
                                             <Text style={{ fontSize: 16 }}>{u.post}</Text>
-                                            <Text style={{fontSize: 10, color: '#333', paddingBottom: 20}}>Posted at {u.time}, {u.location.latitude}, {u.location.longitude}.</Text>
                                         </TouchableOpacity>
                                     </View>
 
-                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
 
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10,}} onPress = {() => this.upvote(u.id)}>
@@ -403,8 +402,8 @@ export default class Feed extends React.Component {
                                             </TouchableOpacity>
                                         </View>
 
-                                        <View>
-                                            <Text style={{fontSize: 20, textAlign: 'center', flex: 1, marginTop: 10}}>{u.up - u.down}</Text>
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
                                         </View>
 
                                         <View style={styles.control_button}>
@@ -439,7 +438,13 @@ export default class Feed extends React.Component {
                                                 />
                                             </TouchableOpacity>
                                         </View>
-                                        <View style={{flex: 3}}></View>
+                                        <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
+                                            <View style={{ flex: 1 }}></View>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Posted at {u.time}.</Text>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Lat: {u.location.latitude}.</Text>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Long: {u.location.longitude}.</Text>
+                                            <View style={{ flex: 1 }}></View>
+                                        </View>
                                     </View>
                                 </Card>
                             );
@@ -463,10 +468,9 @@ export default class Feed extends React.Component {
                                         </View>
                                         <View style={{ padding: 20, marginTop: u.height }}>
                                             <Text style={{fontSize: 24}}>{u.title}</Text>
-                                            <Text style={{fontSize: 10, color: '#333', paddingBottom: 20, flex: 1}}>Posted at {u.time}, {u.location.latitude}, {u.location.longitude}.</Text>
                                         </View>
                                     </TouchableOpacity>
-                                    <View style={{ flex: 1, flexDirection: 'row'}}>
+                                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
                                                 <Icon
@@ -511,7 +515,13 @@ export default class Feed extends React.Component {
                                                 />
                                             </TouchableOpacity>
                                         </View>
-                                        <View style={{flex: 3}}></View>
+                                        <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
+                                            <View style={{ flex: 1 }}></View>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Posted at {u.time}.</Text>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Lat: {u.location.latitude}.</Text>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Long: {u.location.longitude}.</Text>
+                                            <View style={{ flex: 1 }}></View>
+                                        </View>
                                     </View>
                                 </Card>
                             )
