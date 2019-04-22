@@ -52,7 +52,6 @@ export default class Focus extends React.Component {
     }
 
     postComment = () => {
-
         const {content, post_content, post_id, user} = this.state;
         this.comment_ref.add({
             user: user,

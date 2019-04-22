@@ -16,12 +16,15 @@ export default class Profile extends React.Component {
     componentDidMount(){
         AsyncStorage.getItem('user').then(val=>{
             this.setState({email: val});
-            this.unsubscribe = this.post_ref.where('user', '==', val).onSnapshot(this.onCollectionUpdate);
+            AsyncStorage.getItem('recent_uploaded').then(val=>{
+                if (val){
+                    const recent_posts = JSON.parse(val);
+                    this.setState({recent_posts: recent_posts})
+                }else{
+                    this.unsubscribe = this.post_ref.where('user', '==', val).onSnapshot(this.onCollectionUpdate);
+                }
+            })
         });
-
-    }
-    componentWillUnmount() {
-        this.unsubscribe();
     }
 
     onCollectionUpdate =(snapshot) =>{
@@ -39,6 +42,8 @@ export default class Profile extends React.Component {
             });
         });
         this.setState({recent_posts: recent_posts});
+        AsyncStorage.setItem('recent_uploaded',JSON.stringify(recent_posts)).
+        then(val=>console.log("saved recent posts"));
         // this.user_post.
     }
   render() {
