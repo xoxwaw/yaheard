@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
+import {Image, View, ScrollView, Text, Button, StyleSheet, RefreshControl, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
 import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -51,8 +51,13 @@ export default class Feed extends React.Component {
         this.storage = firebase.storage();
         //orderBy: 0 - new, 1: popular, 2: controversial
         //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
-        this.state = {items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
+        this.state = {refreshing: false, items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
         this._retrieveData();
+    }
+    _onRefresh = () => {
+        this.setState({refreshing: true});
+        this.unsubscribe = this.state.query.onSnapshot(this.onCollectionUpdate);
+        this.setState({refreshing: false});
     }
     reload = ()=>{
         this.unsubscribe = this.state.query.onSnapshot(this.onCollectionUpdate);
@@ -362,8 +367,14 @@ export default class Feed extends React.Component {
     render() {
         return (
 
-            <ScrollView contentContainerStyle={{ padding: 0, margin: 0 }}>
-            <Button onPress={this.reload} title="RELOAD"/>
+            <ScrollView contentContainerStyle={{ padding: 0, margin: 0 }}
+                refreshControl={
+                    <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh}
+                />
+                }
+            >
                 <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
                 {
                     this.state.items.map((u, i) => {
