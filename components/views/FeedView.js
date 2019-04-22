@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, Text, Button, StyleSheet, RefreshControl, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
+import {Image, Alert, View, ScrollView, Text, Button, StyleSheet, RefreshControl, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
 import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -77,7 +77,7 @@ export default class Feed extends React.Component {
         const ind = this.state.last_ind;
         var extra_posts = []
         if (ind >= this.state.allposts.length){
-            alert("that's all for now")
+            Alert.alert("No more posts","Couldn't find any more posts in your current location! Try moving around.")
         }else{
             if (ind+5 < this.state.allposts.length){
                 var items = this.state.items;
@@ -372,6 +372,7 @@ export default class Feed extends React.Component {
                     <RefreshControl
                     refreshing={this.state.refreshing}
                     onRefresh={this._onRefresh}
+                    color='#4C9A2A'
                 />
                 }
             >
@@ -462,7 +463,7 @@ export default class Feed extends React.Component {
                                         </View>
                                         <View style={{ padding: 20, marginTop: u.height }}>
                                             <Text style={{fontSize: 24}}>{u.title}</Text>
-                                            <Text style={{fontSize: 10, color: '#333', paddingBottom: 20}}>Posted at {u.time}, {u.location.latitude}, {u.location.longitude}.</Text>
+                                            <Text style={{fontSize: 10, color: '#333', paddingBottom: 20, flex: 1}}>Posted at {u.time}, {u.location.latitude}, {u.location.longitude}.</Text>
                                         </View>
                                     </TouchableOpacity>
                                     <View style={{ flex: 1, flexDirection: 'row'}}>
@@ -518,7 +519,16 @@ export default class Feed extends React.Component {
                     })
                 }
                 </View>
-            <Button title="I WANT MORE" onPress={this.fetchNextPosts}/>
+            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
+                <TouchableOpacity onPress={this.fetchNextPosts} style={{ backgroundColor: 'white', borderRadius: 30,  height: 50, width: 50, elevation: 5 }}>
+                    <Icon
+                        style={{textAlign: "center", padding: 10}}
+                        size={30}
+                        name='plus'
+                        color='#4C9A2A'
+                    />
+                </TouchableOpacity>
+            </View>
             </ScrollView>
         );
     }
