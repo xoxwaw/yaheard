@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
-import {Card, ListItem} from 'react-native-elements';
+import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
 const win = Dimensions.get('window');
-const image_width = win.width * 0.922;
+const image_width = win.width - 20;
 const image_height = win.width * 0.922 * 0.75;
 //these are the calculated values for the width and height of an image post reletive to the screen.
 
 const styles = StyleSheet.create({
   content_container: {
     backgroundColor: '#68bb59',
-    padding: 20,
   },
   content_item: {
     backgroundColor: 'whitesmoke',
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
   },
   content: {
       fontSize: 12,
@@ -28,16 +25,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         borderColor: '#9b9b9b',
         borderBottomWidth: 1,
-        paddingBottom: 10,
-        marginBottom: 20,
   },
   title_image: {
         marginTop: image_height,
         fontSize: 18,
         borderColor: '#9b9b9b',
         borderBottomWidth: 1,
-        paddingBottom: 10,
-        marginBottom: 20,
   }
 });
 
@@ -242,143 +235,141 @@ export default class Feed extends React.Component {
         AsyncStorage.setItem('post', JSON.stringify(items))
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
     }
-  render() {
-    return (
-        <ScrollView>
-          <View containerStyle={{padding: 0, zIndex: 0}} >
-          {
-              this.state.items.map((u, i) => {
-                  if (u.isText == true){
-                      return (
-                          <Card>
-                          <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
-                            <Text style={styles.title}>{u.title}</Text>
-                            </TouchableOpacity>
-                          <Text style={styles.content}>{u.post}</Text>
-                          <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
-						  <View style={{ flex: 1, flexDirection: 'row' }}>
-					  	<View style={styles.control_button}>
-				      	<TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
-							<Icon
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		name='arrow-circle-up'
-		            		color='#4C9A2A'
-		          		    />
-						  </TouchableOpacity>
-						  </View>
-                          <View><Text>{u.up - u.down}</Text></View>
-						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
-							<Icon
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		name='arrow-circle-down'
-		            		color='#4C9A2A'
-		          		    />
+    render() {
+        return (
+            <ScrollView contentContainerStyle={{ padding: 0, margin: 0 }}>
+                <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
+                {
+                    this.state.items.map((u, i) => {
+                        if (u.isText == true){
+                            return (
+                                <Card>
+                                    <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
+                                        <Text style={styles.title}>{u.title}</Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.content}>{u.post}</Text>
+                                    <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
+                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
+                                                <Icon
+                                                style={{textAlign: "center"}}
+                                                size={25}
+                                                name='arrow-circle-up'
+                                                color='#4C9A2A'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View>
+                                            <Text>{u.up - u.down}</Text>
+                                        </View>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='arrow-circle-down'
+                                                    color='#4C9A2A'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}}>
+                                                <Text
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    color='#4C9A2A'>
+                                                    {'report'}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                                <Text
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    color='#4C9A2A'>
+                                                    {'comment'}
+                                                </Text>
 
-						  </TouchableOpacity>
-						  </View>
-						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}}>
-							<Text
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		color='#4C9A2A'>
-							{'report'}
-							</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </Card>
+                            );
+                        }else{
+                            return (
+                                <Card>
+                                    <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
+                                        <View style={{ height: u.height - 285 }}>
+                                            <Image
+                                                style= {{
+                                                    width: u.width,
+                                                    height: u.height,
+                                                    position: 'absolute',
+                                                    borderTopLeftRadius: 7,
+                                                    borderTopRightRadius: 7,
+                                                }}
+                                                source={{uri: u.post}}
+                                                resizeMode={"stretch"}
+                                            />
+                                        </View>
+                                        <Text style={styles.title_image}>{u.title}</Text>
+                                    </TouchableOpacity>
+                                    <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
+                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='arrow-circle-up'
+                                                    color='#4C9A2A'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View>
+                                            <Text>{u.up - u.down}</Text>
+                                        </View>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress = {() => this.downvote(u.id)}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='arrow-circle-down'
+                                                    color='#4C9A2A'
+                                                />
 
-						  </TouchableOpacity>
-						  </View>
-						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
-							<Text
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		color='#4C9A2A'>
-							{'comment'}
-							</Text>
-
-						  </TouchableOpacity>
-						  </View>
-						  </View>
-                          </Card>
-                      );
-                  }else{
-                      return (
-                          <Card borderRadius={8} style={{overflow: 'hidden'}}>
-                          <TouchableOpacity style={{ flex: 1 }}onPress={()=>this.navigateToPost(u)}>
-                          <Card borderRadius={8} style={{overflow: 'hidden'}}>
-                            <Image
-                                style= {{
-                                    flex: 1,
-                                    alignSelf: 'stretch',
-                                    width: u.width,
-                                    height: u.height,
-                                    position: 'absolute',
-                                }}
-                                source={{uri: u.post}}
-                                resizeMode={'cover'}
-                            />
-                            </Card>
-                            <Text style={styles.title_image}>{u.title}</Text>
-                            </TouchableOpacity>
-                          <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
-						<View style={{ flex: 1, flexDirection: 'row' }}>
-					  	<View style={styles.control_button}>
-				      	<TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
-							<Icon
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		name='arrow-circle-up'
-		            		color='#4C9A2A'
-		          		    />
-						  </TouchableOpacity>
-						  </View>
-                           <View><Text>{u.up - u.down}</Text></View>
-						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}} onPress = {() => this.downvote(u.id)}>
-							<Icon
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		name='arrow-circle-down'
-		            		color='#4C9A2A'
-		          		    />
-
-						  </TouchableOpacity>
-						  </View>
-						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}}>
-							<Text
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		color='#4C9A2A'>
-							{'report'}
-							</Text>
-
-						  </TouchableOpacity>
-						  </View>
-						  <View style={styles.control_button}>
-						  <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
-							<Text
-		            		style={{textAlign: "center"}}
-		            		size={25}
-		            		color='#4C9A2A'>
-							{'comment'}
-							</Text>
-
-						  </TouchableOpacity>
-						  </View>
-						  </View>
-                          </Card>
-                      )
-                  }
-
-              })
-          }
-          </View>
-
-        </ScrollView>
-    );
-  }
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}}>
+                                                <Text
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    color='#4C9A2A'>
+                                                    {'report'}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                                <Text
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    color='#4C9A2A'>
+                                                    {'comment'}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </Card>
+                            )
+                        }
+                    })
+                }
+                </View>
+            </ScrollView>
+        );
+    }
 }
