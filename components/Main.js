@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { createSwitchNavigator, withNavigation  } from 'react-navigation'
 
 
