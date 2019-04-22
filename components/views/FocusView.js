@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage } from 'react-native';
+import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
 import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
+
+const win = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   content_container: {
     backgroundColor: '#68bb59',
@@ -43,6 +46,8 @@ export default class Focus extends React.Component {
                 isText: item.isText,
                 location: item.location,
                 down: item.downvote,
+                height: item.height,
+                width: item.width,
             });
             this.setState({items: items, post_id: item.post_id});
             AsyncStorage.getItem(item.post_id).then(val=>{
@@ -187,145 +192,61 @@ export default class Focus extends React.Component {
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeReply'))
     }
     render() {
-      return (
-        <View style={{ flex: 1, flexDirection: 'column' }}>
-        <View containerStyle={{padding: 0}} >
-        {
-            this.state.items.map((u, i) => {
-                if (u.isText == true){
-                    return (
-                        <Card>
-                        <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
-                          <Text style={styles.title}>{u.title}</Text>
-                          </TouchableOpacity>
-                        <Text style={styles.content}>{u.post}</Text>
-                        <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <View style={styles.control_button}>
-                      <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
+        return (
+          <View style={{ flex: 1, flexDirection: 'column', width: '100%' }}>
+              <View containerStyle={{padding: 0, width: '100%'}} >
+                  <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 30 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
+                      <View style={{ width: 40, height: 40, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
                           <Icon
-                          style={{textAlign: "center"}}
-                          size={25}
-                          name='arrow-circle-up'
-                          color='#4C9A2A'
+                              style={{textAlign: "center", padding: 10}}
+                              size={20}
+                              name='arrow-left'
+                              color='#4C9A2A'
                           />
-                        </TouchableOpacity>
-                        </View>
-                        <View><Text>{u.up - u.down}</Text></View>
-                        <View style={styles.control_button}>
-                        <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
-                          <Icon
-                          style={{textAlign: "center"}}
-                          size={25}
-                          name='arrow-circle-down'
-                          color='#4C9A2A'
-                          />
-
-                        </TouchableOpacity>
-                        </View>
-                        <View style={styles.control_button}>
-                        <TouchableOpacity style={{padding:10}}>
-                          <Text
-                          style={{textAlign: "center"}}
-                          size={25}
-                          color='#4C9A2A'>
-                          {'report'}
-                          </Text>
-
-                        </TouchableOpacity>
-                        </View>
-                        <View style={styles.control_button}>
-                        <TouchableOpacity style={{padding:10}}>
-                          <Text
-                          style={{textAlign: "center"}}
-                          size={25}
-                          color='#4C9A2A'>
-                          {'comment'}
-                          </Text>
-
-                        </TouchableOpacity>
-                        </View>
-                        </View>
-                        </Card>
-                    );
-                }else{
-                    return (
-                        <Card>
-                        <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
-                          <Text style={styles.title}>{u.title}</Text>
-                          </TouchableOpacity>
-                        <Image
-                          style={{width: 300, height: 200}}
-                          source={{uri: u.post}}
-                        />
-                        <Text style={{fontSize: 10, color: '#BBB'}}>{u.location.latitude}, {u.location.longitude}</Text>
-                      <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <View style={styles.control_button}>
-                      <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
-                          <Icon
-                          style={{textAlign: "center"}}
-                          size={25}
-                          name='arrow-circle-up'
-                          color='#4C9A2A'
-                          />
-                        </TouchableOpacity>
-                        </View>
-                         <View><Text>{u.up - u.down}</Text></View>
-                        <View style={styles.control_button}>
-                        <TouchableOpacity style={{padding:10}} onPress = {() => this.downvote(u.id)}>
-                          <Icon
-                          style={{textAlign: "center"}}
-                          size={25}
-                          name='arrow-circle-down'
-                          color='#4C9A2A'
-                          />
-
-                        </TouchableOpacity>
-                        </View>
-                        <View style={styles.control_button}>
-                        <TouchableOpacity style={{padding:10}}>
-                          <Text
-                          style={{textAlign: "center"}}
-                          size={25}
-                          color='#4C9A2A'>
-                          {'report'}
-                          </Text>
-
-                        </TouchableOpacity>
-                        </View>
-                        <View style={styles.control_button}>
-                        <TouchableOpacity style={{padding:10}}>
-                          <Text
-                          style={{textAlign: "center"}}
-                          size={25}
-                          color='#4C9A2A'>
-                          {'comment'}
-                          </Text>
-
-                        </TouchableOpacity>
-                        </View>
-                        </View>
-                        </Card>
-                    )
-                }
-
-            })
-        }
-        </View>
-        <ScrollView>
-        <View>
-        {
-            this.state.comments.map((u,i)=>{
-                return(
-                    <Card>
-                    <Text>{u.content}</Text>
-                    </Card>
-                )
-            })
-        }
-        </View>
-        </ScrollView>
-        </View>
-      );
-    }
-}
+                      </View>
+                  </TouchableOpacity>
+              {
+                  this.state.items.map((u, i) => {
+                      if (u.isText == true){
+                          return (
+                              <View>
+                                  <Text style={styles.title}>{u.title}</Text>
+                              </View>
+                          );
+                      }else{
+                          return (
+                              <View style={{ width: '100%' }}>
+                                  <Image
+                                      style= {{
+                                          width: win.width,
+                                          height: (u.height / u.width) * win.width,
+                                      }}
+                                      source={{uri: u.post}}
+                                      resizeMode={"contain"}
+                                  />
+                                  
+                              </View>
+                          )
+                      }
+  
+                  })
+              }
+              </View>
+          <ScrollView>
+          <View>
+          {
+              this.state.comments.map((u,i)=>{
+                  return(
+                      <Card>
+                      <Text>{u.content}</Text>
+                      </Card>
+                  )
+              })
+          }
+          </View>
+          </ScrollView>
+          </View>
+        );
+      }
+  }
+  

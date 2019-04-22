@@ -20,11 +20,19 @@ const styles = StyleSheet.create({
   content: {
       fontSize: 12,
       paddingBottom: 20,
+      marginRight: 20,
+      marginTop: 20
+  },
+  control_button :{
+    flex: 1,
+    elevation: 10
   },
   title: {
         fontSize: 18,
         borderColor: '#9b9b9b',
         borderBottomWidth: 1,
+        marginTop: 20,
+        marginRight: 20
   },
   title_image: {
         marginTop: image_height,
@@ -268,7 +276,8 @@ export default class Feed extends React.Component {
                 down: downvote,
                 id: doc.id,
                 width: image_width,
-                height: height * image_width/width,
+                time: time,
+                height: (height / width) * image_width,
             });
 
         });
@@ -298,7 +307,10 @@ export default class Feed extends React.Component {
             location: post.location,
             upvote: post.up,
             downvote: post.down,
-            user: post.user
+            user: post.user,
+            width: post.width,
+            height: post.height,
+            time: post.time,
         }
         AsyncStorage.setItem('post', JSON.stringify(items))
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
@@ -314,14 +326,18 @@ export default class Feed extends React.Component {
                         if (u.isText == true){
                             return (
                                 <Card>
-                                    <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
-                                        <Text style={styles.title}>{u.title}</Text>
-                                    </TouchableOpacity>
-                                    <Text style={styles.content}>{u.post}</Text>
-                                    <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
+                                    <View style={{padding: 20}}>
+                                        <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
+                                            <Text style={{ fontSize: 24 }}>{u.title}</Text>
+                                            <Text style={{ fontSize: 16 }}>{u.post}</Text>
+                                            <Text style={{fontSize: 10, color: '#333', paddingBottom: 20}}>Posted at {u.time}, {u.location.latitude}, {u.location.longitude}.</Text>
+                                        </TouchableOpacity>
+                                    </View>
+
                                     <View style={{ flex: 1, flexDirection: 'row' }}>
+
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this.upvote(u.id)}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
                                                 size={25}
@@ -330,9 +346,11 @@ export default class Feed extends React.Component {
                                                 />
                                             </TouchableOpacity>
                                         </View>
+
                                         <View>
-                                            <Text>{u.up - u.down}</Text>
+                                            <Text style={{fontSize: 20, textAlign: 'center', flex: 1, marginTop: 10}}>{u.up - u.down}</Text>
                                         </View>
+
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
                                                 <Icon
@@ -343,35 +361,38 @@ export default class Feed extends React.Component {
                                                 />
                                             </TouchableOpacity>
                                         </View>
+
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}}>
-                                                <Text
+                                                <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
-                                                    color='#4C9A2A'>
-                                                    {'report'}
-                                                </Text>
+                                                    name='flag'
+                                                    color='#c45e5e'
+                                                />
                                             </TouchableOpacity>
                                         </View>
+
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
-                                                <Text
+                                                <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
-                                                    color='#4C9A2A'>
-                                                    {'comment'}
-                                                </Text>
-
+                                                    name='comments'
+                                                    color='#333'
+                                                />
                                             </TouchableOpacity>
                                         </View>
+                                        <View style={{flex: 3}}></View>
                                     </View>
                                 </Card>
                             );
                         }else{
                             return (
                                 <Card>
+                                    
                                     <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
-                                        <View style={{ height: u.height - 285 }}>
+                                        <View>
                                             <Image
                                                 style= {{
                                                     width: u.width,
@@ -384,10 +405,12 @@ export default class Feed extends React.Component {
                                                 resizeMode={"stretch"}
                                             />
                                         </View>
-                                        <Text style={styles.title_image}>{u.title}</Text>
+                                        <View style={{ padding: 20, marginTop: u.height }}>
+                                            <Text style={{fontSize: 24}}>{u.title}</Text>
+                                            <Text style={{fontSize: 10, color: '#333', paddingBottom: 20}}>Posted at {u.time}, {u.location.latitude}, {u.location.longitude}.</Text>
+                                        </View>
                                     </TouchableOpacity>
-                                    <Text style={{fontSize: 10, color: '#BBB', paddingBottom: 20}}>{u.location.latitude}, {u.location.longitude}</Text>
-                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    <View style={{ flex: 1, flexDirection: 'row'}}>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
                                                 <Icon
@@ -398,8 +421,8 @@ export default class Feed extends React.Component {
                                                 />
                                             </TouchableOpacity>
                                         </View>
-                                        <View>
-                                            <Text>{u.up - u.down}</Text>
+                                        <View style={{flex: 1}}>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
                                         </View>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress = {() => this.downvote(u.id)}>
@@ -414,24 +437,25 @@ export default class Feed extends React.Component {
                                         </View>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}}>
-                                                <Text
+                                                <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
-                                                    color='#4C9A2A'>
-                                                    {'report'}
-                                                </Text>
+                                                    name='flag'
+                                                    color='#c45e5e'
+                                                />
                                             </TouchableOpacity>
                                         </View>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
-                                                <Text
+                                                <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
-                                                    color='#4C9A2A'>
-                                                    {'comment'}
-                                                </Text>
+                                                    name='comments'
+                                                    color='#333'
+                                                />
                                             </TouchableOpacity>
                                         </View>
+                                        <View style={{flex: 3}}></View>
                                     </View>
                                 </Card>
                             )
