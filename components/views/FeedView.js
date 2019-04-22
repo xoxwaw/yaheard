@@ -51,27 +51,40 @@ export default class Feed extends React.Component {
         this.storage = firebase.storage();
         //orderBy: 0 - new, 1: popular, 2: controversial
         //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
-        this.state = {items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_id:6};
+        this.state = {items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
         this._retrieveData();
     }
     reload = ()=>{
         this.unsubscribe = this.state.query.onSnapshot(this.onCollectionUpdate);
     }
+    savePostsToCaches(extra_posts){
+        AsyncStorage.getItem('current_feed').then(val=>{
+            var curr_feed = []
+            if (val){
+                var cur_feed = JSON.parse(val);
+            }
+            curr_feed.concat(extra_posts);
+            AsyncStorage.setItem('current_feed', JSON.stringify(curr_feed)).then(val=>
+            console.log());
+        })
+    }
     fetchNextPosts = ()=>{
         const ind = this.state.last_ind;
-        console.log(ind, this.state.allposts.length)
+        var extra_posts = []
         if (ind >= this.state.allposts.length){
             alert("that's all for now")
         }else{
             if (ind+5 < this.state.allposts.length){
                 var items = this.state.items;
-                items.concat(this.state.allposts.slice(ind, ind+5));
-                this.setState({last_ind: ind+5, items: items})
-                console.log(this.state.items)
+                extra_posts = this.state.allposts.slice(ind, ind+5)
+                this.setState({last_ind: ind+5, items: items.concat(extra_posts)})
+                console.log(ind,items,extra_posts)
             }else{
-                this.setState({items: this.state.allposts});
+                extra_posts = this.state.allposts.slice(ind, this.state.allposts.length)
+                this.setState({items: this.state.allposts, last_ind: this.state.allposts.length});
             }
         }
+        this.savePostsToCaches(extra_posts)
     }
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
@@ -85,20 +98,14 @@ export default class Feed extends React.Component {
                         const last_loc = JSON.parse(loc);
                         if (Math.sqrt((Math.pow((location.longitude - last_loc.longitude), 2)+
                             Math.pow((location.latitude - last_loc.latitude),2))) <= 0.2){
+                                var query = this.getDocumentNearBy(1.0);
+                                this.setState({ query });
                                 AsyncStorage.getItem('feed').then(items=>{
-
                                     if (items){
                                         const allposts = JSON.parse(items);
-                                        if (items.length > 5){
-                                            AsyncStorage.removeItem('feed').then(val=>{
-                                                // this.setState({items: allposts.slice(0,5), last_id: 6, allposts: allposts});
-                                                // console.log("GOT THEM");
-                                                var query = this.getDocumentNearBy(1.0);
-                                                this.setState({ query });
-                                                this.reload()
-                                            })
-                                        }
-
+                                        this.setState({items: allposts.slice(0,5), last_ind: 6, allposts: allposts});
+                                        console.log("GOT THEM");
+                                        // this.reload();
                                     }else{
                                         this.reload();
                                     }
@@ -184,6 +191,17 @@ export default class Feed extends React.Component {
                         elem.up += 1
                         AsyncStorage.setItem(elem.id+"voted", JSON.stringify(true)).then(val=>{console.log()})
                     }
+                });
+                AsyncStorage.getItem('upvoted').then(val=>{
+                    var upvoted = []
+                    if (val){
+                        var upvoted = JSON.parse(val);
+                    }
+                    upvoted.push({
+                        id: pid,
+                        content: elem.id
+                    });
+                    AsyncStorage.setItem('upvoted', upvoted).then(val=>console.log())
                 })
             }
         });
@@ -191,7 +209,8 @@ export default class Feed extends React.Component {
         this.setState({items: superitems})
         AsyncStorage.setItem('feed', JSON.stringify(superitems)).then(val=>{
             console.log("SAVE THE FEED")
-        })
+        });
+
     }
 
     downvote= (pid) =>{
@@ -300,17 +319,18 @@ export default class Feed extends React.Component {
                 time: time,
                 height: (height / width) * image_width,
             });
-
         });
         AsyncStorage.setItem('feed', JSON.stringify(items)).then(val=>{
             console.log("save the feed successfully");
         })
         this.setState({last_ind: 6, allposts:items});
+
         if (items.length > 6){
             this.setState({
             items:items.slice(0,6)
             });
         }
+        this.savePostsToCaches(items.slice(0,6))
 
     }
 
