@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
+  control_button :{
+    flex: 1,
+    elevation: 10
+  },
   content: {
       fontSize: 12,
   },
@@ -194,6 +198,7 @@ export default class Focus extends React.Component {
     render() {
         return (
           <View style={{ flex: 1, flexDirection: 'column', width: '100%' }}>
+          <ScrollView style={{ flex: 1, width: '100%'  }}>
               <View containerStyle={{padding: 0, width: '100%'}} >
                   <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 30 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
                       <View style={{ width: 40, height: 40, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
@@ -211,6 +216,55 @@ export default class Focus extends React.Component {
                           return (
                               <View>
                                   <Text style={styles.title}>{u.title}</Text>
+                                  <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this.upvote(u.id)}>
+                                                <Icon
+                                                style={{textAlign: "center"}}
+                                                size={25}
+                                                name='arrow-circle-up'
+                                                color='#4C9A2A'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
+                                        </View>
+
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='arrow-circle-down'
+                                                    color='#4C9A2A'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='flag'
+                                                    color='#c45e5e'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='comments'
+                                                    color='#333'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                               </View>
                           );
                       }else{
@@ -224,6 +278,56 @@ export default class Focus extends React.Component {
                                       source={{uri: u.post}}
                                       resizeMode={"contain"}
                                   />
+                                  <Text>{u.title}</Text>
+                                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this.upvote(u.id)}>
+                                                <Icon
+                                                style={{textAlign: "center"}}
+                                                size={25}
+                                                name='arrow-circle-up'
+                                                color='#4C9A2A'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
+                                        </View>
+
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='arrow-circle-down'
+                                                    color='#4C9A2A'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='flag'
+                                                    color='#c45e5e'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={styles.control_button}>
+                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                                <Icon
+                                                    style={{textAlign: "center"}}
+                                                    size={25}
+                                                    name='comments'
+                                                    color='#333'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                                   
                               </View>
                           )
@@ -232,18 +336,26 @@ export default class Focus extends React.Component {
                   })
               }
               </View>
-          <ScrollView>
-          <View>
-          {
-              this.state.comments.map((u,i)=>{
-                  return(
-                      <Card>
-                      <Text>{u.content}</Text>
-                      </Card>
-                  )
-              })
-          }
-          </View>
+          
+            <View style={{ backgroundColor: '#bbb', width: '100%', flex: 1 }}>
+            {!this.state.comments.length && 
+                (
+                    <Card>
+                        <Text>No Comments yet!</Text>
+                    </Card> 
+                )
+            }
+            {
+                this.state.comments.map((u,i)=>{
+                    return(
+                        <Card>
+                        <Text>{u.content}</Text>
+                        </Card>
+                    )
+                }) 
+            }
+
+            </View>
           </ScrollView>
           </View>
         );
