@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from 'react-navigation';
 
