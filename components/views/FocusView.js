@@ -34,8 +34,7 @@ export default class Focus extends React.Component {
         return AsyncStorage.getItem('post').then((value)=>{
             const item = JSON.parse(value);
             const items = [];
-            console.log(item.post_id)
-            this.unsubscribe = this.comment_ref.where("post_id", "==", item.post_id).onSnapshot(this.onCollectionUpdate)
+            console.log(item.post_id);
             items.push({
                 user: item.user,
                 post: item.content,
@@ -45,7 +44,14 @@ export default class Focus extends React.Component {
                 location: item.location,
                 down: item.downvote,
             });
-            this.setState({items: items});
+            this.setState({items: items, post_id: item.post_id});
+            AsyncStorage.getItem(item.post_id).then(val=>{
+                if (val){
+                    this.setState({comments: JSON.parse(val)})
+                }else{
+                    this.unsubscribe = this.comment_ref.where("post_id", "==", item.post_id).onSnapshot(this.onCollectionUpdate)
+                }
+            })
         })
     }
     onCollectionUpdate = (querySnapshot) => {
@@ -69,6 +75,9 @@ export default class Focus extends React.Component {
         })
         this.setState({comments: this.comment_tree})
         console.log(this.comment_tree);
+        AsyncStorage.setItem(this.state.post_id, JSON.stringify(this.comment_tree)).then(data=>{
+            console.log("SAVE THE COMMENTS");
+        })
     }
 
     buildTree(node, comments){
@@ -78,10 +87,6 @@ export default class Focus extends React.Component {
                 this.buildTree(elem, comments);
             })
         }
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
     }
 
     _retrieveData = () =>{

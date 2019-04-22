@@ -58,14 +58,14 @@ export default class Feed extends React.Component {
                 this.setState({ location });
                 var query = this.getDocumentNearBy(1.0);
                 this.setState({ query });
-                this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
+                this.unsubscribe = query.limit(20).onSnapshot(this.onCollectionUpdate);
             },
             error => alert(error.message),
             { enableHighAccuracy: false, timeout: 50000}
         );
     }
     componentDidMount() {
-        AsyncStorage.getItem('feed').then(items=>{
+        return AsyncStorage.getItem('feed').then(items=>{
             if (items){
                 const allposts = JSON.parse(items);
                 this.setState({items: allposts});
@@ -74,11 +74,6 @@ export default class Feed extends React.Component {
                 this.reload();
             }
         })
-        // if (this.state.query == null){
-        //     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-        // }
-
-        // this.loadImage("images/image.png");
     }
     _retrieveData = () =>{
           AsyncStorage.getItem('user').then(val=>{
@@ -105,75 +100,132 @@ export default class Feed extends React.Component {
     }
 
     upvote = (pid) =>{
-        this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
-            const items = [];
-            querySnapshot.forEach(doc=>{
-                const {isUpvote, post, user} = doc.data();
-                items.push({
-                    id: doc.id,
-                    isUpvote: isUpvote,
-                    post: post,
-                    user: user
+        // this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
+        //     const items = [];
+        //     querySnapshot.forEach(doc=>{
+        //         const {isUpvote, post, user} = doc.data();
+        //         items.push({
+        //             id: doc.id,
+        //             isUpvote: isUpvote,
+        //             post: post,
+        //             user: user
+        //         })
+        //     })
+        //     if (items.length > 0){
+        //         const {id,isUpvote, post, user} = items[0];
+        //         console.log(user,id,isUpvote, post);
+        //         this.user_post.doc(id).update("isUpvote",true);
+        //         if (isUpvote == false){
+        //             this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(2))
+        //         }else{
+        //             this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(-1));
+        //             this.user_post.doc(id).delete();
+        //         }
+        //     }else{
+        //         console.log(pid,this.state.email)
+        //         this.user_post.add({
+        //             user: this.state.email,
+        //             post: pid,
+        //             isUpvote: true
+        //         });
+        //         this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(1))
+        //     }
+        // }).catch(err=>{
+        //     console.log(err)
+        // });
+        // this.state.items.forEach(elem=>{
+        //     if (elem.id == pid){
+        //         elem.up += 1
+        //     }
+        // })
+        var superitems = this.state.items;
+        superitems.forEach(elem=>{
+            if (elem.id == pid){
+                AsyncStorage.getItem(elem.id+"voted").then(val=>{
+                    if (val){
+                        const value = JSON.parse(val);
+                        if (value == true){
+                            elem.up -= 1
+                            AsyncStorage.removeItem(elem.id + "voted").then(val=>console.log())
+                        }else{
+                            elem.up += 2
+                            AsyncStorage.setItem(elem.id+"voted", JSON.stringify(true)).then(val=>{console.log()})
+                        }
+                    }else{
+                        elem.up += 1
+                        AsyncStorage.setItem(elem.id+"voted", JSON.stringify(true)).then(val=>{console.log()})
+                    }
                 })
-            })
-            if (items.length > 0){
-                const {id,isUpvote, post, user} = items[0];
-                console.log(user,id,isUpvote, post);
-                this.user_post.doc(id).update("isUpvote",true);
-                if (isUpvote == false){
-                    this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(2))
-                }else{
-                    this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(-1));
-                    this.user_post.doc(id).delete();
-                }
-            }else{
-                console.log(pid,this.state.email)
-                this.user_post.add({
-                    user: this.state.email,
-                    post: pid,
-                    isUpvote: true
-                });
-                this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(1))
             }
-        }).catch(err=>{
-            console.log(err)
+        });
+
+        this.setState({items: superitems})
+        AsyncStorage.setItem('feed', JSON.stringify(superitems)).then(val=>{
+            console.log("SAVE THE FEED")
         })
     }
 
     downvote= (pid) =>{
-        this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
-            const items = [];
-            querySnapshot.forEach(doc=>{
-                const {isUpvote, post, user} = doc.data();
-                items.push({
-                    id: doc.id,
-                    isUpvote: isUpvote,
-                    post: post,
-                    user: user
+        // this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
+        //     const items = [];
+        //     querySnapshot.forEach(doc=>{
+        //         const {isUpvote, post, user} = doc.data();
+        //         items.push({
+        //             id: doc.id,
+        //             isUpvote: isUpvote,
+        //             post: post,
+        //             user: user
+        //         })
+        //     })
+        //     if (items.length > 0){
+        //         const {id,isUpvote, post, user} = items[0];
+        //         this.user_post.doc(id).update("isUpvote",false);
+        //         if (isUpvote == true){
+        //             this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(2))
+        //         }else{
+        //             this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(-1));
+        //             this.user_post.doc(id).delete();
+        //         }
+        //     }else{
+        //         console.log(pid,this.state.email)
+        //         this.user_post.add({
+        //             user: this.state.email,
+        //             post: pid,
+        //             isUpvote: false
+        //         });
+        //         this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(1))
+        //     }
+        // }).catch(err=>{
+        //     console.log(err)
+        // })
+        var superitems = this.state.items;
+        superitems.forEach(elem=>{
+            if (elem.id == pid){
+                AsyncStorage.getItem(elem.id+"voted").then(val=>{
+                    if (val){
+                        const value = JSON.parse(val);
+                        console.log(value)
+                        if (value == false){
+                            elem.down -= 1
+                            AsyncStorage.removeItem(elem.id+"voted").then(val=>console.log())
+                        }else{
+                            elem.down += 2
+                            AsyncStorage.setItem(pid+"voted", JSON.stringify(false)).then(val=>{console.log()})
+                        }
+                    }
+                    else{
+                        elem.down += 1
+                        AsyncStorage.setItem(pid+"voted", JSON.stringify(false)).then(val=>{console.log()})
+                    }
                 })
-            })
-            if (items.length > 0){
-                const {id,isUpvote, post, user} = items[0];
-                console.log(user,id,isUpvote, post);
-                this.user_post.doc(id).update("isUpvote",false);
-                if (isUpvote == true){
-                    this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(2))
-                }else{
-                    this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(-1));
-                    this.user_post.doc(id).delete();
-                }
-            }else{
-                console.log(pid,this.state.email)
-                this.user_post.add({
-                    user: this.state.email,
-                    post: pid,
-                    isUpvote: false
-                });
-                this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(1))
             }
-        }).catch(err=>{
-            console.log(err)
+        });
+
+        this.setState({items: superitems})
+        AsyncStorage.setItem('feed', JSON.stringify(superitems)).then(val=>{
+            console.log("SAVE THE FEED")
         })
+
     }
 
     getDocumentNearBy = (distance) => {
@@ -221,7 +273,7 @@ export default class Feed extends React.Component {
 
         });
         AsyncStorage.setItem('feed', JSON.stringify(items)).then(val=>{
-            console.log("save successfully");
+            console.log("save the feed successfully");
         })
         this.setState({
         items:items
