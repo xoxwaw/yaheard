@@ -23,7 +23,7 @@ const Card = (props) => {
 const styles = StyleSheet.create({
   containerStyle: {
     marginHorizontal: 10,
-    backgroundColor: '#DDD',
+    backgroundColor: '#efefef',
     borderRadius: 8,
     marginBottom: 10,
     marginTop: 10,
