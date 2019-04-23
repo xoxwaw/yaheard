@@ -116,6 +116,7 @@ class Feed extends React.Component {
         this.savePostsToCaches(extra_posts)
     }
     componentDidMount() {
+        const MAXIMUM_MOVING_DISTANCE = 0.2;
         navigator.geolocation.getCurrentPosition(
             position => {
                 const location = {
@@ -126,7 +127,7 @@ class Feed extends React.Component {
                     if (loc){
                         const last_loc = JSON.parse(loc);
                         if (Math.sqrt((Math.pow((location.longitude - last_loc.longitude), 2)+
-                            Math.pow((location.latitude - last_loc.latitude),2))) <= 0.2){
+                            Math.pow((location.latitude - last_loc.latitude),2))) <= MAXIMUM_MOVING_DISTANCE){
                                 AsyncStorage.getItem('feed').then(items=>{
                                     if (items){
                                         const allposts = JSON.parse(items);
@@ -195,8 +196,8 @@ class Feed extends React.Component {
             const {body, downvote, height, isText, location, time, upvote, user,width} = doc.data();
             items.push({
                 user: user,
-                post: body.content,
-                title: body.title,
+                post: content,
+                title: title,
                 up: upvote,
                 isText: isText,
                 location: location,
@@ -250,20 +251,7 @@ class Feed extends React.Component {
         .then(val=> console.log("set successfully")).then(res=> this.props.navigation.navigate('routeComment'))
     }
     navigateToPost(post){
-        const items = {
-            post_id: post.id,
-            title: post.title,
-            content: post.post,
-            isText: post.isText,
-            location: post.location,
-            upvote: post.up,
-            downvote: post.down,
-            user: post.user,
-            width: post.width,
-            height: post.height,
-            time: post.time,
-        }
-        AsyncStorage.setItem('post', JSON.stringify(items))
+        AsyncStorage.setItem('post', JSON.stringify(post))
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
     }
     render() {

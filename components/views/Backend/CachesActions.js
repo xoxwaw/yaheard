@@ -50,7 +50,12 @@ module.exports = {
             if (val){
                 var upvoted = JSON.parse(val);
             }
-            upvoted.push(post);
+            var index = upvoted.indexOf(post);
+            if (index > -1){
+                console.log("key exists")
+            }else{
+                upvoted.push(post);
+            }
             AsyncStorage.setItem('upvoted', JSON.stringify(upvoted)).then(val=>console.log())
         })
     },

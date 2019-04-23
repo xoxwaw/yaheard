@@ -69,15 +69,12 @@ export default class ImagePost extends React.Component {
           )
 
       });
-
   }
   writePost = () => {
       var {post_title, post_content, errorMessage, user,location, isText, imageURL, id, height, width} = this.state;
       this.ref.add({
-          body: {
-              content: post_content,
-              title : post_title,
-          },
+          content: post_content,
+          title : post_title,
           isText : isText,
           user: user,
           upvote: 1,
@@ -97,8 +94,8 @@ export default class ImagePost extends React.Component {
               const {body, downvote, height,isText, location, time, upvote, user, width} = data.doc();
               var recent_post = [];
               const new_post = {
-                  title : body.title,
-                  content: body.content,
+                  title : title,
+                  content: content,
                   isText: isText,
                   up : upvote,
                   down: downvote,
@@ -222,7 +219,7 @@ export default class ImagePost extends React.Component {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
             <View style={styles.inputCard}>
-                
+
                 <TextInput
                     multiline
                     style={styles.textbox}
