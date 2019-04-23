@@ -58,19 +58,9 @@ export default class Focus extends React.Component {
         return AsyncStorage.getItem('post').then((value)=>{
             const item = JSON.parse(value);
             const items = [];
-            console.log(item.post_id);
-            items.push({
-                user: item.user,
-                post: item.content,
-                title: item.title,
-                up: item.upvote,
-                isText: item.isText,
-                location: item.location,
-                down: item.downvote,
-                height: item.height,
-                width: item.width,
-            });
-            this.setState({items: items, post_id: item.post_id});
+            items.push(item);
+            console.log(items);
+            this.setState({items: items, post_id: item.id});
             AsyncStorage.getItem(item.post_id).then(val=>{
                 if (val){
                     this.setState({comments: JSON.parse(val)})
