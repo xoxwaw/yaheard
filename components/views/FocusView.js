@@ -58,24 +58,14 @@ export default class Focus extends React.Component {
         return AsyncStorage.getItem('post').then((value)=>{
             const item = JSON.parse(value);
             const items = [];
-            console.log(item.post_id);
-            items.push({
-                user: item.user,
-                post: item.content,
-                title: item.title,
-                up: item.upvote,
-                isText: item.isText,
-                location: item.location,
-                down: item.downvote,
-                height: item.height,
-                width: item.width,
-            });
-            this.setState({items: items, post_id: item.post_id});
-            AsyncStorage.getItem(item.post_id).then(val=>{
+            items.push(item);
+            console.log(items);
+            this.setState({items: items, post_id: item.id});
+            AsyncStorage.getItem(item.id).then(val=>{
                 if (val){
                     this.setState({comments: JSON.parse(val)})
                 }else{
-                    this.unsubscribe = this.comment_ref.where("post_id", "==", item.post_id).onSnapshot(this.onCollectionUpdate)
+                    this.unsubscribe = this.comment_ref.where("post_id", "==", item.id).onSnapshot(this.onCollectionUpdate)
                 }
             })
         })
@@ -194,7 +184,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={{ flex: 1 }}>
-                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
                                         </View>
 
                                         <View style={styles.control_button}>
@@ -240,7 +230,7 @@ export default class Focus extends React.Component {
                                           width: win.width,
                                           height: (u.height / u.width) * win.width,
                                       }}
-                                      source={{uri: u.post}}
+                                      source={{uri: u.content}}
                                       resizeMode={"contain"}
                                   />
                                   <Text>{u.title}</Text>
@@ -257,7 +247,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={{ flex: 1 }}>
-                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
                                         </View>
 
                                         <View style={styles.control_button}>

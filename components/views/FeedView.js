@@ -123,28 +123,8 @@ class Feed extends React.Component {
                     longitude: position.coords.longitude,
                     latitude: position.coords.latitude
                 }
-                AsyncStorage.getItem('last_location').then(loc=>{
-                    if (loc){
-                        const last_loc = JSON.parse(loc);
-                        if (Math.sqrt((Math.pow((location.longitude - last_loc.longitude), 2)+
-                            Math.pow((location.latitude - last_loc.latitude),2))) <= MAXIMUM_MOVING_DISTANCE){
-                                AsyncStorage.getItem('feed').then(items=>{
-                                    if (items){
-                                        const allposts = JSON.parse(items);
-                                        console.log(allposts.length);
-                                        this.setState({items: allposts.slice(0,5), last_ind: 6, allposts: allposts});
-                                        console.log("GOT THEM");
-                                        // this.reload();
-                                    }else{
-                                        this.reload();
-                                    }
-                                })
-                            }else{
-                                this.reload();
-                            }
-                    }
-                })
                 this.setState({ location });
+                this.reload()
                 AsyncStorage.setItem('last_location', JSON.stringify(location)).then(val=>{
                     console.log();
                 });
@@ -198,10 +178,10 @@ class Feed extends React.Component {
                 user: user,
                 content: content,
                 title: title,
-                up: upvote,
+                upvote: upvote,
                 isText: isText,
                 location: location,
-                down: downvote,
+                downvote: downvote,
                 id: doc.id,
                 width: image_width,
                 time: time,
@@ -251,6 +231,7 @@ class Feed extends React.Component {
         .then(val=> console.log("set successfully")).then(res=> this.props.navigation.navigate('routeComment'))
     }
     navigateToPost(post){
+        console.log(post)
         AsyncStorage.setItem('post', JSON.stringify(post))
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
     }
@@ -292,7 +273,7 @@ class Feed extends React.Component {
                                         </View>
 
                                         <View style={{ flex: 1 }}>
-                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
                                         </View>
 
                                         <View style={styles.control_button}>
@@ -371,7 +352,7 @@ class Feed extends React.Component {
                                             </TouchableOpacity>
                                         </View>
                                         <View style={{flex: 1}}>
-                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
+                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
                                         </View>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress = {() => this._downvote(u)}>
