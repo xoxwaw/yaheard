@@ -231,6 +231,7 @@ class Feed extends React.Component {
         .then(val=> console.log("set successfully")).then(res=> this.props.navigation.navigate('routeComment'))
     }
     navigateToPost(post){
+        console.log(post)
         AsyncStorage.setItem('post', JSON.stringify(post))
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
     }
