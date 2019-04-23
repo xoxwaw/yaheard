@@ -193,10 +193,10 @@ class Feed extends React.Component {
     onCollectionUpdate = (querySnapshot) => {
         const items = [];
         querySnapshot.forEach((doc) => {
-            const {body, downvote, height, isText, location, time, upvote, user,width} = doc.data();
+            const {content, downvote, height, isText, location, time,title, upvote, user,width} = doc.data();
             items.push({
                 user: user,
-                post: content,
+                content: content,
                 title: title,
                 up: upvote,
                 isText: isText,
@@ -274,7 +274,7 @@ class Feed extends React.Component {
                                     <View style={{padding: 20}}>
                                         <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                                             <Text style={{ fontSize: 24 }}>{u.title}</Text>
-                                            <Text style={{ fontSize: 16 }}>{u.post}</Text>
+                                            <Text style={{ fontSize: 16 }}>{u.content}</Text>
                                         </TouchableOpacity>
                                     </View>
 
@@ -351,7 +351,7 @@ class Feed extends React.Component {
                                                     borderTopLeftRadius: 7,
                                                     borderTopRightRadius: 7,
                                                 }}
-                                                source={{uri: u.post}}
+                                                source={{uri: u.content}}
                                                 resizeMode={"stretch"}
                                             />
                                         </View>
