@@ -140,43 +140,47 @@ export default class TextPost extends React.Component {
         </View>
 
         <View style={styles.container}>
-        <TextInput
-            multiline
-            style={styles.titletextbox}
-            placeholder="Title"
-            autoCapitalize="none"
-            numberOfLines={5}
-            adjustsFontSizeToFit={true}
-            minimumFontScale={0.1}
-            onChangeText={post_title => this.setState({ post_title })}
-          />
-          <TextInput
-            multiline
-            style={styles.textbox}
-            placeholder="What did you hear?"
-            autoCapitalize="none"
-            numberOfLines={5}
-            adjustsFontSizeToFit={true}
-            minimumFontScale={0.1}
-            onChangeText={post_content => this.setState({ post_content })}
-          />
-          <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
-            <View style={{ flex: 1, padding: 10 }}>
-                <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress={() => {
-                    if (this.state.post_content != ""){
-                        this.handleTextPost();
-                        this.props.navigation.navigate('routeFeed');
-                    }
-                    else{
-                        console.log('NOTHING TO POST');
-                        Alert.alert('Cannot Post!','Please write something to post!');
-                    }
-                }}/>
+            <View style={styles.inputCard}>
+                <TextInput
+                    multiline
+                    style={styles.titletextbox}
+                    placeholder="Title"
+                    autoCapitalize="none"
+                    numberOfLines={5}
+                    adjustsFontSizeToFit={true}
+                    minimumFontScale={0.1}
+                    onChangeText={post_title => this.setState({ post_title })}
+                />
             </View>
-            <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Clear" color="#4C9A2A"/>
+            <View style={styles.inputCard}>
+                <TextInput
+                    multiline
+                    style={styles.textbox}
+                    placeholder="What did you hear?"
+                    autoCapitalize="none"
+                    numberOfLines={5}
+                    adjustsFontSizeToFit={true}
+                    minimumFontScale={0.1}
+                    onChangeText={post_content => this.setState({ post_content })}
+                />
             </View>
-          </View>
+            <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
+                <View style={{ flex: 1, padding: 10 }}>
+                    <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress={() => {
+                        if (this.state.post_content != ""){
+                            this.handleTextPost();
+                            this.props.navigation.navigate('routeFeed');
+                        }
+                        else{
+                            console.log('NOTHING TO POST');
+                            Alert.alert('Cannot Post!','Please write something to post!');
+                        }
+                    }}/>
+                </View>
+                <View style={{ flex: 1, padding: 10 }}>
+                    <Button style={ styles.button } title="Clear" color="#4C9A2A"/>
+                </View>
+            </View>
             <View>
                 <Text style={{ fontSize: 10, color: '#BBB', marginBottom: 20 }}>Currently posting from ({this.state.location.latitude}, {this.state.location.longitude})</Text>
             </View>
@@ -213,12 +217,20 @@ const styles = StyleSheet.create({
     marginVertical: 15
   },
   textbox : {
-    height: 40,
+    height: 100,
     fontSize:13,
-    width: '90%',
+    width: '100%',
     borderColor: '#9b9b9b',
     borderBottomWidth: 1,
     marginTop: 8,
     marginVertical: 15
+  },
+  inputCard : {
+      padding: 10,
+      margin: 20,
+      marginVertical: 5,
+      width: '90%',
+      backgroundColor: "#efefef",
+      borderRadius: 8,
   }
 });

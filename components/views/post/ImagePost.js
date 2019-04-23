@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert, Dimensions } from 'react-native';
+import { View, ActivityIndicator, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -13,7 +13,7 @@ const win = Dimensions.get('window');
 const image_width = win.width * 0.922;
 const image_height = win.width * 0.922 * 0.75;
 export default class ImagePost extends React.Component {
-  state = { post_title : "", post_content: '', errorMessage: null,user: "",
+  state = { loading: false, loaded: false, post_title : "", post_content: '', errorMessage: null,user: "",
             location: {}, isText: false, imageURL : "", id:"", width:800, height:600}
   constructor(props){
       super(props);
@@ -35,7 +35,7 @@ export default class ImagePost extends React.Component {
       );
   }
   uploadImage = () => {
-        //set view to loading image
+        this.setState({loading: true});
         var uri = this.state.imageURL;
         var mime = 'image/jpeg'
           const sessionId = new Date().getTime().toString();
@@ -102,13 +102,14 @@ export default class ImagePost extends React.Component {
               .then(val=>console.log("saved"));
           })
           //success callback
+          this.setState({ loaded: true });
       }).catch((error)=>{
           //error callback
           console.log(error)
       });
   }
   handleImagePost = () => {
-      this.setState({isText: false});
+      this.setState({isText: false, loaded: false, loading: false});
       this._takePicture();
   }
   _takePicture = () => {
@@ -135,6 +136,11 @@ export default class ImagePost extends React.Component {
               console.log('User tapped custom button: ', response.customButton);
           } else {
               const source = { uri: response.uri };
+
+              this.setState({
+                imageSource: source,
+              });
+
               console.log(response.uri)
               this.resize(response.uri);
           }
@@ -200,38 +206,45 @@ export default class ImagePost extends React.Component {
           <Text style={styles.header}>Create Image Post</Text>
         </View>
         <View style={styles.container}>
-          <TextInput
-            multiline
-            style={styles.textbox}
-            placeholder="Title"
-            autoCapitalize="none"
-            numberOfLines={5}
-            adjustsFontSizeToFit={true}
-            minimumFontScale={0.1}
-            onChangeText={post_title => this.setState({ post_title })}
-            // value={this.state.post_content}
-          />
-          <Progress.Circle color="#4C9A2A" progress={0.4} size={50} />
-          <Image source={{ uri: this.state.imageURL }}/>
-          <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
-            <View style={{ flex: 1, padding: 10 }}>
-                <Button style={ styles.button } title="Choose Image" color="#4C9A2A" onPress={this.handleImagePost}/>
+            <View style={styles.inputCard}>
+                <TextInput
+                    multiline
+                    style={styles.textbox}
+                    placeholder="Title"
+                    autoCapitalize="none"
+                    numberOfLines={5}
+                    adjustsFontSizeToFit={true}
+                    minimumFontScale={0.1}
+                    onChangeText={post_title => this.setState({ post_title })}
+                    // value={this.state.post_content}
+                />
             </View>
-            <View style={{ flex: 1, padding: 10 }}>
-              <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress = {()=>{
-                  if (this.state.post_content.length > 0){
-                    this.navigateToPost()
-                }else{
-                    alert("You must choose a photo to upload")
+            <View style={{ marginTop: 150, marginBottom: 200, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                {!this.state.loaded && this.state.loading &&
+                    <ActivityIndicator style={{ position: 'absolute' }}size="large" color="#4C9A2A" />
                 }
-            }}/>
+                {this.state.loaded &&
+                    <Image style={{ width: '100%', height: 300, position: 'absolute' }} resizeMode='contain' onLoad={this._onLoad} source={{ uri: this.state.imageURL }}/>
+                }
             </View>
-          </View>
-          <View>
-                <Text style={{ fontSize: 10, color: '#BBB', marginBottom: 20 }}>Currently posting from ({this.state.location.latitude}, {this.state.location.longitude})</Text>
+                <View style={{ margin: 20 }}>
+                    <Button  title="Choose Image" color="#4C9A2A" onPress={this.handleImagePost}/>
+                </View>
+
+                <View style={{ margin: 20 }}>
+                    {this.state.loaded &&
+                        <Button title="Post!" color="#4C9A2A" onPress = {()=>{
+                            if (this.state.post_content.length > 0){
+                                this.navigateToPost()
+                            }
+                            else{
+                                alert("You must choose a photo to upload")
+                            }
+                        }}/>
+                    }
+                </View>
             </View>
         </View>
-      </View>
     );
   }
 }
@@ -249,10 +262,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container : {
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
-    flex: 15,
+    flexDirection: 'column',
+    flex: 1,
+
   },
   textbox : {
     height: 40,
@@ -263,4 +276,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginVertical: 15
   },
+  inputCard : {
+    padding: 10,
+    margin: 20,
+    marginVertical: 5,
+    width: '90%',
+    backgroundColor: "#efefef",
+    borderRadius: 8,
+}
 });
