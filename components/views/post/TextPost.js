@@ -134,69 +134,71 @@ export default class TextPost extends React.Component {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
+            <View style={{ width: '100%', height: '100%' }}>
+            <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
 
-          <View style={{ flex: 1, height: '100%' }}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
-              <Icon
-                style={{textAlign: "center"}}
-                size={25}
-                name='arrow-left'
-                color='#4C9A2A'
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View style={{ flex: 8, height: '100%' }}>
-            <Text style={styles.header}>Create Text Post</Text>
-          </View>
-
-        </View>
-
-        <View style={styles.container}>
-            <View style={styles.inputCard}>
-                <TextInput
-                    multiline
-                    style={styles.titletextbox}
-                    placeholder="Title"
-                    autoCapitalize="none"
-                    numberOfLines={5}
-                    adjustsFontSizeToFit={true}
-                    minimumFontScale={0.1}
-                    onChangeText={post_title => this.setState({ post_title })}
+            <View style={{ flex: 1, height: '100%' }}>
+                <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
+                <Icon
+                    style={{textAlign: "center"}}
+                    size={25}
+                    name='arrow-left'
+                    color='#4C9A2A'
                 />
+                </TouchableOpacity>
             </View>
-            <View style={styles.inputCard}>
-                <TextInput
-                    multiline
-                    style={styles.textbox}
-                    placeholder="What did you hear?"
-                    autoCapitalize="none"
-                    numberOfLines={5}
-                    adjustsFontSizeToFit={true}
-                    minimumFontScale={0.1}
-                    onChangeText={post_content => this.setState({ post_content })}
-                />
+
+            <View style={{ flex: 8, height: '100%' }}>
+                <Text style={styles.header}>Create Text Post</Text>
             </View>
-            <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
-                <View style={{ flex: 1, padding: 10 }}>
-                    <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress={() => {
-                        if (this.state.post_content != ""){
-                            this.handleTextPost();
-                            this.props.navigation.navigate('routeFeed');
-                        }
-                        else{
-                            console.log('NOTHING TO POST');
-                            Alert.alert('Cannot Post!','Please write something to post!');
-                        }
-                    }}/>
+
+            </View>
+
+            <View style={styles.container}>
+                <View style={styles.inputCard}>
+                    <TextInput
+                        multiline
+                        style={styles.titletextbox}
+                        placeholder="Title"
+                        autoCapitalize="none"
+                        numberOfLines={5}
+                        adjustsFontSizeToFit={true}
+                        minimumFontScale={0.1}
+                        onChangeText={post_title => this.setState({ post_title })}
+                    />
                 </View>
-                <View style={{ flex: 1, padding: 10 }}>
-                    <Button style={ styles.button } title="Clear" color="#4C9A2A"/>
+                <View style={styles.inputCard}>
+                    <TextInput
+                        multiline
+                        style={styles.textbox}
+                        placeholder="What did you hear?"
+                        autoCapitalize="none"
+                        numberOfLines={5}
+                        adjustsFontSizeToFit={true}
+                        minimumFontScale={0.1}
+                        onChangeText={post_content => this.setState({ post_content })}
+                    />
                 </View>
-            </View>
-            <View>
-                <Text style={{ fontSize: 10, color: '#BBB', marginBottom: 20 }}>Currently posting from ({this.state.location.latitude}, {this.state.location.longitude})</Text>
+                <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 20}}>
+                    <View style={{ flex: 1, padding: 10 }}>
+                        <Button style={ styles.button } title="Post!" color="#4C9A2A" onPress={() => {
+                            if (this.state.post_content != ""){
+                                this.handleTextPost();
+                                this.props.navigation.navigate('routeFeed');
+                            }
+                            else{
+                                console.log('NOTHING TO POST');
+                                Alert.alert('Cannot Post!','Please write something to post!');
+                            }
+                        }}/>
+                    </View>
+                    <View style={{ flex: 1, padding: 10 }}>
+                        <Button style={ styles.button } title="Clear" color="#4C9A2A"/>
+                    </View>
+                </View>
+                <View>
+                    <Text style={{ fontSize: 10, color: '#BBB', marginBottom: 20 }}>Currently posting from ({this.state.location.latitude}, {this.state.location.longitude})</Text>
+                </View>
             </View>
         </View>
         </TouchableWithoutFeedback>
