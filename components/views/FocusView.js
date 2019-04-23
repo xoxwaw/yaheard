@@ -5,6 +5,11 @@ import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
+//backend actions
+const dbactions = require('./Backend/DBActions');
+const caches = require('./Backend/CachesActions');
+const navigate = require('./Backend/Navigations');
+
 const win = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -109,7 +114,27 @@ export default class Focus extends React.Component {
             })
         }
     }
+    _upvote(post){
+        var superitems = this.state.items;
+        superitems.forEach(elem=>{
+            if (elem.id == post.id){
+                caches.upvote(post);
+                dbactions.upvote(post.id, this.state.email);
+            }
+        });
+        this.setState({items: superitems});
 
+    }
+    _downvote(post){
+        var superitems = this.state.items;
+        superitems.forEach(elem=>{
+            if (elem.id == post.id){
+                caches.downvote(post);
+                dbactions.downvote(post.id, this.state.email);
+            }
+        });
+        this.setState({items: superitems});
+    }
     _retrieveData = () =>{
           AsyncStorage.getItem('user').then(val=>{
               this.setState({user:val})
@@ -120,78 +145,6 @@ export default class Focus extends React.Component {
           });
 
     };
-
-    upvote = (pid) =>{
-        this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
-            const items = [];
-            querySnapshot.forEach(doc=>{
-                const {isUpvote, post, user} = doc.data();
-                items.push({
-                    id: doc.id,
-                    isUpvote: isUpvote,
-                    post: post,
-                    user: user
-                })
-            })
-            if (items.length > 0){
-                const {id,isUpvote, post, user} = items[0];
-                console.log(user,id,isUpvote, post);
-                this.user_post.doc(id).update("isUpvote",true);
-                if (isUpvote == false){
-                    this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(2))
-                }else{
-                    this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(-1));
-                    this.user_post.doc(id).delete();
-                }
-            }else{
-                console.log(pid,this.state.email)
-                this.user_post.add({
-                    user: this.state.email,
-                    post: pid,
-                    isUpvote: true
-                });
-                this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(1))
-            }
-        }).catch(err=>{
-            console.log(err)
-        })
-    }
-
-    downvote= (pid) =>{
-        this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
-            const items = [];
-            querySnapshot.forEach(doc=>{
-                const {isUpvote, post, user} = doc.data();
-                items.push({
-                    id: doc.id,
-                    isUpvote: isUpvote,
-                    post: post,
-                    user: user
-                })
-            })
-            if (items.length > 0){
-                const {id,isUpvote, post, user} = items[0];
-                console.log(user,id,isUpvote, post);
-                this.user_post.doc(id).update("isUpvote",false);
-                if (isUpvote == true){
-                    this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(2))
-                }else{
-                    this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(-1));
-                    this.user_post.doc(id).delete();
-                }
-            }else{
-                console.log(pid,this.state.email)
-                this.user_post.add({
-                    user: this.state.email,
-                    post: pid,
-                    isUpvote: false
-                });
-                this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(1))
-            }
-        }).catch(err=>{
-            console.log(err)
-        })
-    }
     comment =()=>{
         const item ={
             id: this.state.post_id,
@@ -230,7 +183,7 @@ export default class Focus extends React.Component {
                                   <Text style={styles.title}>{u.title}</Text>
                                   <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this.upvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u.id)}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
                                                 size={25}
@@ -245,7 +198,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u.id)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -340,21 +293,21 @@ export default class Focus extends React.Component {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                  
+
                               </View>
                           )
                       }
-  
+
                   })
               }
               </View>
-          
+
             <View style={{ backgroundColor: '#bbb', width: '100%', flex: 1 }}>
-            {!this.state.comments.length && 
+            {!this.state.comments.length &&
                 (
                     <Card>
                         <Text>No Comments yet!</Text>
-                    </Card> 
+                    </Card>
                 )
             }
             {
@@ -364,7 +317,7 @@ export default class Focus extends React.Component {
                         <Text>{u.content}</Text>
                         </Card>
                     )
-                }) 
+                })
             }
 
             </View>
@@ -373,4 +326,3 @@ export default class Focus extends React.Component {
         );
       }
   }
-  

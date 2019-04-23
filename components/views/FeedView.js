@@ -5,6 +5,11 @@ import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
+//backend actions
+const dbactions = require('./Backend/DBActions');
+const caches = require('./Backend/CachesActions');
+const navigate = require('./Backend/Navigations');
+
 const win = Dimensions.get('window');
 const image_width = win.width - 20;
 const image_height = win.width * 0.922 * 0.75;
@@ -71,11 +76,15 @@ class Feed extends React.Component {
     }
     _onRefresh = () => {
         this.setState({refreshing: true});
-        this.unsubscribe = this.state.query.onSnapshot(this.onCollectionUpdate);
+        var query = this.getDocumentNearBy(1.0);
+        this.setState({ query });
+        this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
         this.setState({refreshing: false});
     }
     reload = ()=>{
-        this.unsubscribe = this.state.query.onSnapshot(this.onCollectionUpdate);
+        var query = this.getDocumentNearBy(1.0);
+        this.setState({ query });
+        this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
     }
     savePostsToCaches(extra_posts){
         AsyncStorage.getItem('current_feed').then(val=>{
@@ -118,11 +127,10 @@ class Feed extends React.Component {
                         const last_loc = JSON.parse(loc);
                         if (Math.sqrt((Math.pow((location.longitude - last_loc.longitude), 2)+
                             Math.pow((location.latitude - last_loc.latitude),2))) <= 0.2){
-                                var query = this.getDocumentNearBy(1.0);
-                                this.setState({ query });
                                 AsyncStorage.getItem('feed').then(items=>{
                                     if (items){
                                         const allposts = JSON.parse(items);
+                                        console.log(allposts.length);
                                         this.setState({items: allposts.slice(0,5), last_ind: 6, allposts: allposts});
                                         console.log("GOT THEM");
                                         // this.reload();
@@ -154,147 +162,6 @@ class Feed extends React.Component {
               console.log(err);
           });
     };
-
-    upvote = (pid) =>{
-        // this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
-        //     const items = [];
-        //     querySnapshot.forEach(doc=>{
-        //         const {isUpvote, post, user} = doc.data();
-        //         items.push({
-        //             id: doc.id,
-        //             isUpvote: isUpvote,
-        //             post: post,
-        //             user: user
-        //         })
-        //     })
-        //     if (items.length > 0){
-        //         const {id,isUpvote, post, user} = items[0];
-        //         console.log(user,id,isUpvote, post);
-        //         this.user_post.doc(id).update("isUpvote",true);
-        //         if (isUpvote == false){
-        //             this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(2))
-        //         }else{
-        //             this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(-1));
-        //             this.user_post.doc(id).delete();
-        //         }
-        //     }else{
-        //         console.log(pid,this.state.email)
-        //         this.user_post.add({
-        //             user: this.state.email,
-        //             post: pid,
-        //             isUpvote: true
-        //         });
-        //         this.ref.doc(pid).update("upvote", firebase.firestore.FieldValue.increment(1))
-        //     }
-        // }).catch(err=>{
-        //     console.log(err)
-        // });
-        // this.state.items.forEach(elem=>{
-        //     if (elem.id == pid){
-        //         elem.up += 1
-        //     }
-        // })
-        var superitems = this.state.items;
-        superitems.forEach(elem=>{
-            if (elem.id == pid){
-                AsyncStorage.getItem(elem.id+"voted").then(val=>{
-                    if (val){
-                        const value = JSON.parse(val);
-                        if (value == true){
-                            elem.up -= 1
-                            AsyncStorage.removeItem(elem.id + "voted").then(val=>console.log())
-                        }else{
-                            elem.up += 2
-                            AsyncStorage.setItem(elem.id+"voted", JSON.stringify(true)).then(val=>{console.log()})
-                        }
-                    }else{
-                        elem.up += 1
-                        AsyncStorage.setItem(elem.id+"voted", JSON.stringify(true)).then(val=>{console.log()})
-                    }
-                });
-                AsyncStorage.getItem('upvoted').then(val=>{
-                    var upvoted = []
-                    if (val){
-                        var upvoted = JSON.parse(val);
-                    }
-                    upvoted.push({
-                        id: pid,
-                        content: elem.id
-                    });
-                    AsyncStorage.setItem('upvoted', JSON.stringify(upvoted)).then(val=>console.log())
-                })
-            }
-        });
-
-        this.setState({items: superitems})
-        AsyncStorage.setItem('feed', JSON.stringify(superitems)).then(val=>{
-            console.log("SAVE THE FEED")
-        });
-
-    }
-
-    downvote= (pid) =>{
-        // this.user_post.where('user','==',this.state.email).where('post','==', pid).get().then((querySnapshot)=>{
-        //     const items = [];
-        //     querySnapshot.forEach(doc=>{
-        //         const {isUpvote, post, user} = doc.data();
-        //         items.push({
-        //             id: doc.id,
-        //             isUpvote: isUpvote,
-        //             post: post,
-        //             user: user
-        //         })
-        //     })
-        //     if (items.length > 0){
-        //         const {id,isUpvote, post, user} = items[0];
-        //         this.user_post.doc(id).update("isUpvote",false);
-        //         if (isUpvote == true){
-        //             this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(2))
-        //         }else{
-        //             this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(-1));
-        //             this.user_post.doc(id).delete();
-        //         }
-        //     }else{
-        //         console.log(pid,this.state.email)
-        //         this.user_post.add({
-        //             user: this.state.email,
-        //             post: pid,
-        //             isUpvote: false
-        //         });
-        //         this.ref.doc(pid).update("downvote", firebase.firestore.FieldValue.increment(1))
-        //     }
-        // }).catch(err=>{
-        //     console.log(err)
-        // })
-        var superitems = this.state.items;
-        superitems.forEach(elem=>{
-            if (elem.id == pid){
-                AsyncStorage.getItem(elem.id+"voted").then(val=>{
-                    if (val){
-                        const value = JSON.parse(val);
-                        console.log(value)
-                        if (value == false){
-                            elem.down -= 1
-                            AsyncStorage.removeItem(elem.id+"voted").then(val=>console.log())
-                        }else{
-                            elem.down += 2
-                            AsyncStorage.setItem(pid+"voted", JSON.stringify(false)).then(val=>{console.log()})
-                        }
-                    }
-                    else{
-                        elem.down += 1
-                        AsyncStorage.setItem(pid+"voted", JSON.stringify(false)).then(val=>{console.log()})
-                    }
-                })
-            }
-        });
-
-        this.setState({items: superitems})
-        AsyncStorage.setItem('feed', JSON.stringify(superitems)).then(val=>{
-            console.log("SAVE THE FEED")
-        })
-
-    }
 
     getDocumentNearBy = (distance) => {
         const lat = 0.0144927536231884;
@@ -353,7 +220,27 @@ class Feed extends React.Component {
         this.savePostsToCaches(items.slice(0,6))
 
     }
+    _upvote(post){
+        var superitems = this.state.items;
+        superitems.forEach(elem=>{
+            if (elem.id == post.id){
+                caches.upvote(post);
+                dbactions.upvote(post.id, this.state.email);
+            }
+        });
+        this.setState({items: superitems});
 
+    }
+    _downvote(post){
+        var superitems = this.state.items;
+        superitems.forEach(elem=>{
+            if (elem.id == post.id){
+                caches.downvote(post);
+                dbactions.downvote(post.id, this.state.email);
+            }
+        });
+        this.setState({items: superitems});
+    }
     navigateToComment(post){
         const item = {
             post_id: post.id,
@@ -381,7 +268,6 @@ class Feed extends React.Component {
     }
     render() {
         return (
-
             <ScrollView contentContainerStyle={{ padding: 0, margin: 0 }}
                 refreshControl={
                     <RefreshControl
@@ -407,7 +293,7 @@ class Feed extends React.Component {
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this.upvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
                                                 size={25}
@@ -422,7 +308,7 @@ class Feed extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -487,7 +373,7 @@ class Feed extends React.Component {
                                     </TouchableOpacity>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress = {() => this.upvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10}} onPress = {() => this._upvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -500,7 +386,7 @@ class Feed extends React.Component {
                                             <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.up - u.down}</Text>
                                         </View>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress = {() => this.downvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10}} onPress = {() => this._downvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
