@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
+import { withNavigation  } from 'react-navigation';
+import {Image, View, ScrollView, Text, Button, StyleSheet, BackHandler, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
 import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -36,6 +37,17 @@ export default class Focus extends React.Component {
         this.user_post = firebase.firestore().collection('user_post');
         this.state = {post_id : "", user: "", content: "", items : [], comments: []}
         this._retrieveData();
+    }
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        return true;
     }
     componentDidMount(){
         return AsyncStorage.getItem('post').then((value)=>{
