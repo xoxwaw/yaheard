@@ -206,7 +206,7 @@ export default class Feed extends React.Component {
                         id: pid,
                         content: elem.id
                     });
-                    AsyncStorage.setItem('upvoted', upvoted).then(val=>console.log())
+                    AsyncStorage.setItem('upvoted', JSON.stringify(upvoted)).then(val=>console.log())
                 })
             }
         });
