@@ -21,7 +21,7 @@ export default class Create extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'column'}}>
-        <Text style={{ fontFamily: 'Pacifico-Bold', fontSize: 22, color: 'black', textAlign: 'center', width: '100%', backgroundColor: '#ccc', height: 30 }}>Settings</Text>
+        <Text style={{ fontFamily: 'Pacifico-Bold', fontSize: 22, color: 'black', textAlign: 'center', width: '100%', backgroundColor: '#ccc', height: 40 }}>Settings</Text>
           <View style={{ padding: 10 }}>
             <Button
                 style={{ margin: 10 }}

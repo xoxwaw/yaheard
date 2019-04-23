@@ -233,30 +233,30 @@ export default class ImagePost extends React.Component {
                     // value={this.state.post_content}
                 />
             </View>
-            <View style={{ marginTop: 150, marginBottom: 200, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ margin: 10 }}>
+                    <Button  title="Choose Image" color="#4C9A2A" onPress={this.handleImagePost}/>
+            </View>
+            <View style={{ margin: 10 }}>
+                {this.state.loaded &&
+                    <Button title="Post!" color="#4C9A2A" onPress = {()=>{
+                        if (this.state.post_content.length > 0){
+                            this.navigateToPost()
+                        }
+                        else{
+                            alert("You must choose a photo to upload")
+                        }
+                    }}/>
+                }
+            </View>
+            <View style={{ marginTop: 100, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 {!this.state.loaded && this.state.loading &&
                     <ActivityIndicator style={{ position: 'absolute' }}size="large" color="#4C9A2A" />
                 }
                 {this.state.loaded &&
-                    <Image style={{ width: '100%', height: 300, position: 'absolute' }} resizeMode='contain' onLoad={this._onLoad} source={{ uri: this.state.imageURL }}/>
+                    <Image style={{ width: '100%', height: win.height / 4, position: 'absolute' }} resizeMode='contain' onLoad={this._onLoad} source={{ uri: this.state.imageURL }}/>
                 }
             </View>
-                <View style={{ margin: 20 }}>
-                    <Button  title="Choose Image" color="#4C9A2A" onPress={this.handleImagePost}/>
-                </View>
-
-                <View style={{ margin: 20 }}>
-                    {this.state.loaded &&
-                        <Button title="Post!" color="#4C9A2A" onPress = {()=>{
-                            if (this.state.post_content.length > 0){
-                                this.navigateToPost()
-                            }
-                            else{
-                                alert("You must choose a photo to upload")
-                            }
-                        }}/>
-                    }
-                </View>
+                
             </View>
             </View>
             </TouchableWithoutFeedback>
