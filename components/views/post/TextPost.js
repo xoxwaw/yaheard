@@ -48,10 +48,8 @@ export default class TextPost extends React.Component {
       var {post_title, post_content, errorMessage, user,location, isText, id} = this.state;
 
       this.ref.add({
-          body: {
-              content: post_content,
-              title : post_title,
-          },
+          content: post_content,
+          title : post_title,
           isText : isText,
           user: user,
           upvote:1,
