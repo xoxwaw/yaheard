@@ -234,9 +234,6 @@ export default class ImagePost extends React.Component {
                 />
             </View>
             <View style={{ margin: 10 }}>
-                    <Button  title="Choose Image" color="#4C9A2A" onPress={this.handleImagePost}/>
-            </View>
-            <View style={{ margin: 10 }}>
                 {this.state.loaded &&
                     <Button title="Post!" color="#4C9A2A" onPress = {()=>{
                         if (this.state.post_content.length > 0){
@@ -249,6 +246,17 @@ export default class ImagePost extends React.Component {
                 }
             </View>
             <View style={{ marginTop: 100, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                {!this.state.loaded && !this.state.loading &&
+                    <TouchableOpacity style={styles.touch} onPress={this.handleImagePost} >
+                        <Icon
+                        style={{textAlign: "center"}}
+                        size={70}
+                        name='image'
+                        color='#4C9A2A'
+                        />
+                        <Text>Pick an Image</Text>
+                    </TouchableOpacity>
+                }
                 {!this.state.loaded && this.state.loading &&
                     <ActivityIndicator style={{ position: 'absolute' }}size="large" color="#4C9A2A" />
                 }
