@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert, Dimensions } from 'react-native';
+import { View, ActivityIndicator, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert, Dimensions, BackHandler } from 'react-native';
 import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -20,7 +20,21 @@ export default class ImagePost extends React.Component {
       this._retrieveData();
       this.ref = firebase.firestore().collection('posts');
       this.user_ref = firebase.firestore().collection('user_post');
+
+      this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.navigate('routeSelector')
+        return true;
+    }
   componentDidMount(){
       navigator.geolocation.getCurrentPosition(
           position => {

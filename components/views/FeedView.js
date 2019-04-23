@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Image, Alert, View, ScrollView, Text, Button, StyleSheet, RefreshControl, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
+import {withNavigation  } from 'react-navigation';
+import {Image, Alert, View, ScrollView, Text, Button, StyleSheet, RefreshControl, TouchableOpacity,  AsyncStorage, Dimensions, BackHandler } from 'react-native';
 import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Feed extends React.Component {
+class Feed extends React.Component {
 
     constructor(){
         super();
@@ -53,6 +54,20 @@ export default class Feed extends React.Component {
         //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
         this.state = {refreshing: false, items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
         this._retrieveData();
+
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    }
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.navigate('routeFeed')
+        return true;
     }
     _onRefresh = () => {
         this.setState({refreshing: true});
@@ -543,3 +558,4 @@ export default class Feed extends React.Component {
         );
     }
 }
+export default withNavigation(Feed);
