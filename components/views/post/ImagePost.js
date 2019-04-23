@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert, Dimensions, BackHandler } from 'react-native';
+import { View, ActivityIndicator, Text, StyleSheet, TextInput, Button, AsyncStorage, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, Alert, Dimensions, BackHandler } from 'react-native';
 import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -219,8 +219,10 @@ export default class ImagePost extends React.Component {
           </TouchableOpacity>
           <Text style={styles.header}>Create Image Post</Text>
         </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
             <View style={styles.inputCard}>
+                
                 <TextInput
                     multiline
                     style={styles.textbox}
@@ -258,6 +260,7 @@ export default class ImagePost extends React.Component {
                     }
                 </View>
             </View>
+            </TouchableWithoutFeedback>
         </View>
     );
   }
