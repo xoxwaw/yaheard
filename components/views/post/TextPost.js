@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image, TouchableOpacity, Alert, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -131,7 +131,7 @@ export default class TextPost extends React.Component {
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
-
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
 
           <View style={{ flex: 1, height: '100%' }}>
@@ -197,6 +197,7 @@ export default class TextPost extends React.Component {
                 <Text style={{ fontSize: 10, color: '#BBB', marginBottom: 20 }}>Currently posting from ({this.state.location.latitude}, {this.state.location.longitude})</Text>
             </View>
         </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   }

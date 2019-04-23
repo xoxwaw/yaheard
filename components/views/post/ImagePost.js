@@ -205,6 +205,7 @@ export default class ImagePost extends React.Component {
   render() {
     return (
       <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
           <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
             <Icon
@@ -216,7 +217,6 @@ export default class ImagePost extends React.Component {
           </TouchableOpacity>
           <Text style={styles.header}>Create Image Post</Text>
         </View>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
             <View style={styles.inputCard}>
 
