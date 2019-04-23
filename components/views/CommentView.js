@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, TextInput, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage } from 'react-native';
+import {Image, View, ScrollView, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity,  AsyncStorage } from 'react-native';
 import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -84,28 +84,30 @@ export default class Focus extends React.Component {
                 user: user,
                 isUpvote: true
             });
-            
+
         }).catch(err=> console.log(err));
     }
 
     render() {
       return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
-        <View style={{ flex: 1, padding: 10 }}>
-            <View style={styles.inputCard}>
-                <TextInput
-                    multiline
-                    style={styles.textbox}
-                    placeholder="Write a comment..."
-                    autoCapitalize="none"
-                    numberOfLines={5}
-                    adjustsFontSizeToFit={true}
-                    minimumFontScale={0.1}
-                    onChangeText={content => this.setState({ content })}
-                />
-            </View>
-          <Button style={ styles.button } title="Comment!" color="#4C9A2A" onPress = {this.postComment} />
-        </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={{ flex: 1, padding: 10 }}>
+                    <View style={styles.inputCard}>
+                        <TextInput
+                            multiline
+                            style={styles.textbox}
+                            placeholder="Write a comment..."
+                            autoCapitalize="none"
+                            numberOfLines={5}
+                            adjustsFontSizeToFit={true}
+                            minimumFontScale={0.1}
+                            onChangeText={content => this.setState({ content })}
+                        />
+                    </View>
+                <Button style={ styles.button } title="Comment!" color="#4C9A2A" onPress = {this.postComment} />
+                </View>
+            </TouchableWithoutFeedback>
         </View>
       );
     }
