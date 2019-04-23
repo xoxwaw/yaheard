@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { createSwitchNavigator, withNavigation  } from 'react-navigation'
 
 
@@ -14,6 +14,8 @@ import ReplyView from './views/ReplyView'
 
 import Header from './Header';
 import Controls from './Controls';
+
+const win = Dimensions.get('window');
 
 const ContentNav = createSwitchNavigator({
   routeFeed: { screen: FeedView },
@@ -35,7 +37,7 @@ class Main extends React.Component {
           <View style={{height: 50}}>
             <Header />
           </View>
-          <View style={{height: '88%', width: '100%', backgroundColor: '#ccc'}}>
+          <View style={{height: win.height - 100, width: '100%', backgroundColor: '#ccc'}}>
             <ContentNav navigation={this.props.navigation} />
           </View>
           <View style={{height: 50}}>
