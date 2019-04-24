@@ -8,6 +8,11 @@ import ImageResizer from 'react-native-image-resizer';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
 
+//backend actions
+const dbactions = require('../Backend/DBActions');
+const caches = require('../Backend/CachesActions');
+const navigate = require('../Backend/Navigations');
+
 const storage = firebase.storage();
 const win = Dimensions.get('window');
 const image_width = win.width * 0.922;
@@ -72,47 +77,24 @@ export default class ImagePost extends React.Component {
   }
   writePost = () => {
       var {post_title, post_content, errorMessage, user,location, isText, imageURL, id, height, width} = this.state;
-      this.ref.add({
+      const post = {
           content: post_content,
           title : post_title,
           isText : isText,
           user: user,
-          upvote: 1,
+          upvote: 0,
           downvote: 0,
           location: new firebase.firestore.GeoPoint(location.latitude, location.longitude),
           time: new Date().getTime(),
           height: height,
           width: width
-      }).then((data)=>{
-          this.user_ref.add({
-              post : data.id,
-              user: user,
-              isUpvote: true
-          });
+      }
+      this.ref.add(post).then((data)=>{
           this.setState({id: data.id});
-          AsyncStorage.getItem('recent_uploaded').then(val=>{
-              const {body, downvote, height,isText, location, time, upvote, user, width} = data.doc();
-              var recent_post = [];
-              const new_post = {
-                  title : title,
-                  content: content,
-                  isText: isText,
-                  up : upvote,
-                  down: downvote,
-                  location: location,
-                  time: time,
-                  width: width,
-                  height: height,
-                  user: user
-              };
-              if (val){
-                  var recent_posts = JSON.parse(val);
-              }
-              recent_posts.push(new_post)
-              AsyncStorage.setItem('recent_uploaded', JSON.stringify(recent_posts))
-              .then(val=>console.log("saved"));
-          })
           //success callback
+          post.id = post.id;
+          dbactions.upvote(data.id, user, user);
+          caches.upvote(post);
           this.setState({ loaded: true });
       }).catch((error)=>{
           //error callback
@@ -264,7 +246,7 @@ export default class ImagePost extends React.Component {
                     <Image style={{ width: '100%', height: win.height / 4, position: 'absolute' }} resizeMode='contain' onLoad={this._onLoad} source={{ uri: this.state.imageURL }}/>
                 }
             </View>
-                
+
             </View>
             </View>
             </TouchableWithoutFeedback>

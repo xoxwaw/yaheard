@@ -65,28 +65,8 @@ export default class TextPost extends React.Component {
               isUpvote: true
           })
           this.setState({id: data.id})
-          AsyncStorage.getItem('recent_uploaded').then(val=>{
-              const {body, downvote, height,isText, location, time, upvote, user, width} = data.doc();
-              var recent_post = [];
-              const new_post = {
-                  title : body.title,
-                  content: body.content,
-                  isText: isText,
-                  up : upvote,
-                  down: downvote,
-                  location: location,
-                  time: time,
-                  width: width,
-                  height: height,
-                  user: user
-              };
-              if (val){
-                  var recent_posts = JSON.parse(val);
-              }
-              recent_posts.push(new_post)
-              AsyncStorage.setItem('recent_uploaded', JSON.stringify(recent_posts))
-              .then(val=>console.log("saved"));
-          })
+          dbactions.upvote(data.id, user, user);
+          caches.upvote(post);
           //success callback
       }).catch((error)=>{
           //error callback

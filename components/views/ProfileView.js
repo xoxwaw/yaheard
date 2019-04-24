@@ -20,8 +20,17 @@ export default class Profile extends React.Component {
             }
         }).catch(err=>console.log(err));
         this.fetchUploaded();
+        this.fetchKarma();
     }
-
+    fetchKarma = () =>{
+        var user =[]
+        this.ref.where('email', '==', this.state.email).get().then(snapshot=>{
+            snapshot.forEach(doc=>{
+                const {email, karma} = doc.data();
+                this.setState({karma: karma});
+            })
+        })
+    }
     fetchRecent = () =>{
         AsyncStorage.getItem('current_feed').then(val=>{
             if (val){
@@ -39,7 +48,6 @@ export default class Profile extends React.Component {
             snapshot.forEach(doc=>{
                 var {isUpvote, post, user} = doc.data();
                 this.post_ref.doc(post).get().then(data=>{
-                    console.log("data", data.data());
                     const {content, downvote, height, isText, location, time, title,upvote, user, width} = data.data();
                     upvoted.push({
                         title : title,
@@ -51,20 +59,19 @@ export default class Profile extends React.Component {
                         time: time,
                         user: user,
                     });
-                    console.log("upvoted", upvoted);
                     this.setState({posts: upvoted});
-
                 }).catch(err=>console.log(err))
             });
             if (upvoted.length == 0){
-                this.setState({posts: upvoted});
+                this.setState({posts: []});
             }
         });
     }
     fetchUploaded =()=>{
-        var uploaded = []
+        var uploaded = [];
         this.post_ref.where('user', '==', this.state.email).limit(10).get().then(snapshot=>{
             snapshot.forEach(doc=>{
+                console.log("data", doc.data());
                 const {content, downvote, height, isText, location, time, title,upvote, user, width} = doc.data();
                 uploaded.push({
                     title : title,
@@ -77,10 +84,10 @@ export default class Profile extends React.Component {
                     user: user,
                 });
                 this.setState({posts: uploaded});
-                if (uploaded.length == 0){
-                    this.setState({posts: []})
-                }
             });
+            if (uploaded.length == 0){
+                this.setState({posts: []})
+            }
 
         }).catch(err=>console.log(err));
     }

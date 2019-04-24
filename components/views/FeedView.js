@@ -231,7 +231,7 @@ class Feed extends React.Component {
         superitems.forEach(elem=>{
             if (elem.id == post.id){
                 caches.upvote(post);
-                dbactions.upvote(post.id, this.state.email);
+                dbactions.upvote(post.id, this.state.email, post.user);
             }
         });
         this.setState({items: superitems});
@@ -242,17 +242,13 @@ class Feed extends React.Component {
         superitems.forEach(elem=>{
             if (elem.id == post.id){
                 caches.downvote(post);
-                dbactions.downvote(post.id, this.state.email);
+                dbactions.downvote(post.id, this.state.email, post.user);
             }
         });
         this.setState({items: superitems});
     }
     navigateToComment(post){
-        const item = {
-            post_id: post.id,
-            content: post.title,
-        }
-        AsyncStorage.setItem('comment', JSON.stringify(item))
+        AsyncStorage.setItem('comment', JSON.stringify(post))
         .then(val=> console.log("set successfully")).then(res=> this.props.navigation.navigate('routeComment'))
     }
     navigateToPost(post){

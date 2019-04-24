@@ -2,14 +2,26 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity  } from 'react-native'
 import styles from '../styles/authStyle'
 import firebase from 'react-native-firebase';
+
 export default class signUp extends React.Component {
+    constructor(){
+        this.ref = firebase.firestore().collection('users');
+    }
   state = { email: '', password: '', errorMessage: null }
   handleSignUp = () => {
       const {email, password, err} = this.state
     firebase.auth().createUserWithEmailAndPassword(email,password)
-    .then(()=>this.props.navigation.navigate('routeLogin')).catch(err=>{
+    .then(()=>{
+        this.ref.add({
+            email:email,
+            karma: 1
+        });
+        this.props.navigation.navigate('routeLogin')
+    }).catch(err=>{
         console.log(err)
-    })
+    });
+
+
   }
 
 render() {

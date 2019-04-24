@@ -1,6 +1,7 @@
 import {AsyncStorage} from 'react-native';
 module.exports = {
     navigateToPost: function(post){
+        console.log(post);
         AsyncStorage.setItem('post', JSON.stringify(post))
         .then((val)=>console.log("set successfully!")).
         then(res=>this.props.navigation.navigate('routeFocus'))

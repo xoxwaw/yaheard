@@ -31,60 +31,36 @@ module.exports = {
         // AsyncStorage.removeItem('upvoted').then(val=>console.log('remove'));
         AsyncStorage.getItem(post.id+"voted").then(val=>{
             if (val){
-                console.log(post.up);
+                console.log(post.upvote);
                 const value = JSON.parse(val);
                 if (value == true){
-                    post.up -= 1
+                    post.upvote -= 1
                     AsyncStorage.removeItem(post.id + "voted").then(val=>console.log())
                 }else{
-                    post.up += 2
+                    post.upvote += 2
                     AsyncStorage.setItem(post.id+"voted", JSON.stringify(true)).then(val=>{console.log()})
                 }
             }else{
-                post.up += 1
+                post.upvote += 1
                 AsyncStorage.setItem(post.id+"voted", JSON.stringify(true)).then(val=>{console.log()})
             }
         });
-        AsyncStorage.getItem('upvoted').then(val=>{
-            var upvoted = []
-            if (val){
-                var upvoted = JSON.parse(val);
-            }
-            var index = upvoted.indexOf(post);
-            if (index > -1){
-                console.log("key exists")
-            }else{
-                upvoted.push(post);
-            }
-            AsyncStorage.setItem('upvoted', JSON.stringify(upvoted)).then(val=>console.log())
-        })
     },
     downvote: function(post){
         AsyncStorage.getItem(post.id+"voted").then(val=>{
             if (val){
                 const value = JSON.parse(val);
                 if (value == false){
-                    post.down -= 1
+                    post.downvote -= 1
                     AsyncStorage.removeItem(post.id + "voted").then(val=>console.log())
                 }else{
-                    post.down += 2
+                    post.downvote += 2
                     AsyncStorage.setItem(post.id+"voted", JSON.stringify(false)).then(val=>{console.log()})
                 }
             }else{
-                post.down += 1
+                post.downvote += 1
                 AsyncStorage.setItem(post.id+"voted", JSON.stringify(false)).then(val=>{console.log()})
             }
         });
-        AsyncStorage.getItem('upvoted').then(val=>{
-            var upvoted = []
-            if (val){
-                var upvoted = JSON.parse(val);
-            }
-            var index = upvoted.indexOf(post);
-            if (index > -1){
-                upvoted.splice(index,1);
-            }
-            AsyncStorage.setItem('upvoted', JSON.stringify(upvoted)).then(val=>console.log())
-        })
     }
 }

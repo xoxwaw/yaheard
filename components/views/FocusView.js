@@ -40,7 +40,7 @@ export default class Focus extends React.Component {
         this.post_ref = firebase.firestore().collection('posts');
         this.comment_ref = firebase.firestore().collection('comments');
         this.user_post = firebase.firestore().collection('user_post');
-        this.state = {post_id : "", user: "", content: "", items : [], comments: []}
+        this.state = {post_id : "", user: "", content: "", items : [], comments: [], post:{}}
         this._retrieveData();
     }
     componentWillMount() {
@@ -60,14 +60,8 @@ export default class Focus extends React.Component {
             const items = [];
             items.push(item);
             console.log(items);
-            this.setState({items: items, post_id: item.id});
-            AsyncStorage.getItem(item.id).then(val=>{
-                if (val){
-                    this.setState({comments: JSON.parse(val)})
-                }else{
-                    this.unsubscribe = this.comment_ref.where("post_id", "==", item.id).onSnapshot(this.onCollectionUpdate)
-                }
-            })
+            this.setState({items: items, post_id: item.id, post: item});
+            this.unsubscribe = this.comment_ref.where("post_id", "==", item.id).onSnapshot(this.onCollectionUpdate)
         })
     }
     onCollectionUpdate = (querySnapshot) => {
@@ -109,7 +103,7 @@ export default class Focus extends React.Component {
         superitems.forEach(elem=>{
             if (elem.id == post.id){
                 caches.upvote(post);
-                dbactions.upvote(post.id, this.state.email);
+                dbactions.upvote(post.id, this.state.email, post.user);
             }
         });
         this.setState({items: superitems});
@@ -120,7 +114,7 @@ export default class Focus extends React.Component {
         superitems.forEach(elem=>{
             if (elem.id == post.id){
                 caches.downvote(post);
-                dbactions.downvote(post.id, this.state.email);
+                dbactions.downvote(post.id, this.state.email, post.user);
             }
         });
         this.setState({items: superitems});
@@ -136,10 +130,8 @@ export default class Focus extends React.Component {
 
     };
     comment =()=>{
-        const item ={
-            id: this.state.post_id,
-            content: this.state.content
-        }
+        AsyncStorage.setItem('comment', JSON.stringify(this.state.post))
+        .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeComment'))
     }
     reply=(comment)=>{
         const item = {
@@ -173,7 +165,7 @@ export default class Focus extends React.Component {
                                   <Text style={styles.title}>{u.title}</Text>
                                   <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
                                                 size={25}
@@ -188,7 +180,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -210,7 +202,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.comment()}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -236,7 +228,7 @@ export default class Focus extends React.Component {
                                   <Text>{u.title}</Text>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this.upvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
                                                 size={25}
@@ -251,7 +243,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={() => this.downvote(u.id)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -273,7 +265,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.comment(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
