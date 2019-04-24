@@ -224,11 +224,6 @@ class Feed extends React.Component {
         }
 
         this.setState({allposts: items})
-        // if (items.length > 6){
-        //     this.setState({
-        //     items:items.slice(0,6)
-        //     });
-        // }
 
     }
     _upvote(post){

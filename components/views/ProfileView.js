@@ -15,38 +15,13 @@ export default class Profile extends React.Component {
     }
     componentDidMount(){
         AsyncStorage.getItem('user').then(val=>{
-            this.setState({email: val});
-            AsyncStorage.getItem('recent_uploaded').then(value=>{
-                if (value){
-                    const recent_posts = JSON.parse(value);
-                    this.setState({posts: recent_posts})
-                }else{
-                    this.unsubscribe = this.post_ref.where('user', '==', val).limit(5).onSnapshot(this.onCollectionUpdate);
-                }
-            })
-        });
+            if (val){
+                this.setState({email: val});
+            }
+        }).catch(err=>console.log(err));
+        this.fetchUploaded();
     }
-    onCollectionUpdate =(snapshot) =>{
-        const recent_posts = [];
-        snapshot.forEach((doc)=>{
-            const {body, downvote, height, isText, location, time, user, upvote, width} = doc.data();
-            recent_posts.push({
-                title : body.title,
-                content: body.content,
-                isText: isText,
-                up : upvote,
-                down: downvote,
-                location: location,
-                time: time,
-                user: user,
-            });
-        });
-        console.log("RECENT"+recent_posts)
-        this.setState({posts: recent_posts});
-        AsyncStorage.setItem('recent_uploaded',JSON.stringify(recent_posts)).
-        then(val=>console.log("saved recent posts"));
-        // this.user_post.
-    }
+
     fetchRecent = () =>{
         AsyncStorage.getItem('current_feed').then(val=>{
             if (val){
@@ -58,24 +33,56 @@ export default class Profile extends React.Component {
         })
     }
     fetchUpvoted = () =>{
-        AsyncStorage.getItem('upvoted').then(val=>{
-            if (val){
-                const upvoted = JSON.parse(val);
-                this.setState({posts: upvoted.reverse()});
-            }else{
-                this.setState({posts: []})
+        var upvoted = [];
+        this.user_post.where('user','==',this.state.email).where('isUpvote','==',true).limit(10).get()
+        .then(snapshot=>{
+            snapshot.forEach(doc=>{
+                var {isUpvote, post, user} = doc.data();
+                this.post_ref.doc(post).get().then(data=>{
+                    console.log("data", data.data());
+                    const {content, downvote, height, isText, location, time, title,upvote, user, width} = data.data();
+                    upvoted.push({
+                        title : title,
+                        content: content,
+                        isText: isText,
+                        upvote : upvote,
+                        downvote: downvote,
+                        location: location,
+                        time: time,
+                        user: user,
+                    });
+                    console.log("upvoted", upvoted);
+                    this.setState({posts: upvoted});
+
+                }).catch(err=>console.log(err))
+            });
+            if (upvoted.length == 0){
+                this.setState({posts: upvoted});
             }
         });
     }
     fetchUploaded =()=>{
-        AsyncStorage.getItem('recent_uploaded').then(val=>{
-            if (val){
-                const uploaded = JSON.parse(val);
-                this.setState({posts: uploaded.reverse()});
-            }else{
-                this.setState({posts: []});
-            }
-        });
+        var uploaded = []
+        this.post_ref.where('user', '==', this.state.email).limit(10).get().then(snapshot=>{
+            snapshot.forEach(doc=>{
+                const {content, downvote, height, isText, location, time, title,upvote, user, width} = doc.data();
+                uploaded.push({
+                    title : title,
+                    content: content,
+                    isText: isText,
+                    upvote : upvote,
+                    downvote: downvote,
+                    location: location,
+                    time: time,
+                    user: user,
+                });
+                this.setState({posts: uploaded});
+                if (uploaded.length == 0){
+                    this.setState({posts: []})
+                }
+            });
+
+        }).catch(err=>console.log(err));
     }
     // navigateToPost(post){
     //     const items = {
@@ -109,7 +116,7 @@ export default class Profile extends React.Component {
                           <TouchableOpacity>
                           <Text>{u.title}</Text>
                           </TouchableOpacity>
-                          <Text>{u.up - u.down}</Text>
+                          <Text>{u.upvote - u.downvote}</Text>
                           </Card>
                       );
                    })
