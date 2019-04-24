@@ -75,7 +75,7 @@ export default class Focus extends React.Component {
                 down: downvote,
                 parent_id: parent_id,
                 user: user,
-                id: doc.id
+                id: doc.id,
             });
             console.log(content, post_id, user)
         });

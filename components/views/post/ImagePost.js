@@ -76,7 +76,9 @@ export default class ImagePost extends React.Component {
       });
   }
   writePost = () => {
-      var {post_title, post_content, errorMessage, user,location, isText, imageURL, id, height, width} = this.state;
+      const { loading, loaded, post_title , post_content, errorMessage,user ,
+                location, isText, imageURL , id, width, height} = this.state;
+        alert(height, width);
       const post = {
           content: post_content,
           title : post_title,
@@ -89,12 +91,14 @@ export default class ImagePost extends React.Component {
           height: height,
           width: width
       }
+
       this.ref.add(post).then((data)=>{
           this.setState({id: data.id});
           //success callback
           post.id = post.id;
           dbactions.upvote(data.id, user, user);
           caches.upvote(post);
+          this.setState({post:post});
           this.setState({ loaded: true });
       }).catch((error)=>{
           //error callback
@@ -171,17 +175,8 @@ export default class ImagePost extends React.Component {
         }
   };
   navigateToPost(){
-      const items = {
-          post_id: this.state.id,
-          title: this.state.post_title,
-          content: this.state.post_content,
-          isText: false,
-          location: this.state.location,
-          upvote: 1,
-          downvote: 0,
-          user: this.state.user
-      }
-      AsyncStorage.setItem('post', JSON.stringify(items))
+
+      AsyncStorage.setItem('post', JSON.stringify(this.state.post))
       .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
   }
   render() {
