@@ -12,21 +12,25 @@ export default class Profile extends React.Component {
         this.post_ref = firebase.firestore().collection('posts');
         this.storage = firebase.storage();
         this.state = {karma: 1, posts : [], email: ""};
+
     }
     componentDidMount(){
         AsyncStorage.getItem('user').then(val=>{
             if (val){
                 this.setState({email: val});
+                this.fetchKarma();
+                this.fetchUploaded();
             }
         }).catch(err=>console.log(err));
-        this.fetchUploaded();
-        this.fetchKarma();
     }
     fetchKarma = () =>{
         var user =[]
+        console.log(this.state.email);
         this.ref.where('email', '==', this.state.email).get().then(snapshot=>{
             snapshot.forEach(doc=>{
+
                 const {email, karma} = doc.data();
+                console.log(karma);
                 this.setState({karma: karma});
             })
         })
