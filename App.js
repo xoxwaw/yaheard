@@ -3,6 +3,9 @@ import { StyleSheet, Platform } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createSwitchNavigator } from 'react-navigation';
 
+//DISABLE IN APP WARNINGS
+console.disableYellowBox = true;
+
 var config = {
     apiKey: "AIzaSyBdkAdmQ4vQ1MlhQu2q7N6mvX6xV50yeNI",
     authDomain: "socialnetwork-fda05.firebaseapp.com",

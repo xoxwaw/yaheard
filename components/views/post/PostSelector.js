@@ -17,7 +17,7 @@ export default class Create extends React.Component {
                             resizeMode='cover'
                         />
                         <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{ position: 'absolute', fontFamily: 'Pacifico-Regular', fontSize: 50 }}>Post Text</Text>
+                            <Text style={{ position: 'absolute', fontFamily: 'Pacifico-Bold', fontSize: 50, width: '100%', textAlign: 'center' }}>Post Text</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -29,7 +29,7 @@ export default class Create extends React.Component {
                                 resizeMode='cover'
                             />
                             <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-                                <Text style={{ position: 'absolute', fontFamily: 'Pacifico-Regular', fontSize: 50 }}>Post Image</Text>
+                                <Text style={{ position: 'absolute', fontFamily: 'Pacifico-Bold', fontSize: 50, width: '100%', textAlign: 'center' }}>Post Image</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

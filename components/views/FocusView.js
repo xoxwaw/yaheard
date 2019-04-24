@@ -307,7 +307,7 @@ export default class Focus extends React.Component {
               }
               </View>
 
-            <View style={{ backgroundColor: '#bbb', width: '100%', flex: 1 }}>
+            <View style={{ backgroundColor: '#bbb', width: '100%', flex: 1, minHeight: 300 }}>
             {!this.state.comments.length &&
                 (
                     <Card>

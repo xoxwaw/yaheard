@@ -178,75 +178,75 @@ export default class ImagePost extends React.Component {
       AsyncStorage.setItem('post', JSON.stringify(this.state.post))
       .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
   }
-  render() {
-    return (
-      <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{ width: '100%', height: '100%' }}>
-        <View style={{ flexDirection: 'row', height: 30, backgroundColor: 'whitesmoke' }}>
-          <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routeSelector') }>
-            <Icon
-              style={{textAlign: "center"}}
-              size={25}
-              name='arrow-left'
-              color='#4C9A2A'
-            />
-          </TouchableOpacity>
-          <Text style={styles.header}>Create Image Post</Text>
-        </View>
-        <View style={styles.container}>
-            <View style={styles.inputCard}>
-
-                <TextInput
-                    multiline
-                    style={styles.textbox}
-                    placeholder="Title"
-                    autoCapitalize="none"
-                    numberOfLines={5}
-                    adjustsFontSizeToFit={true}
-                    minimumFontScale={0.1}
-                    onChangeText={post_title => this.setState({ post_title })}
-                    // value={this.state.post_content}
-                />
+    render() {
+        return (
+            <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <View style={{ width: '100%', height: '100%' }}>
+                        <View style={{ padding: 10 }}>
+                            <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30 }} onPress={() => this.props.navigation.navigate('routeSelector') }>
+                                <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
+                                    <Icon
+                                        style={{textAlign: "center", padding: 15}}
+                                        size={20}
+                                        name='arrow-left'
+                                        color='#4C9A2A'
+                                    />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.container}>
+                            <View style={styles.inputCard}>
+                                <TextInput
+                                    multiline
+                                    style={styles.textbox}
+                                    placeholder="Title"
+                                    autoCapitalize="none"
+                                    numberOfLines={5}
+                                    adjustsFontSizeToFit={true}
+                                    minimumFontScale={0.1}
+                                    onChangeText={post_title => this.setState({ post_title })}
+                                    // value={this.state.post_content}
+                                />
+                            </View>
+                            <View style={{ marginTop: 100, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                {!this.state.loaded && !this.state.loading &&
+                                    <TouchableOpacity style={styles.touch} onPress={this.handleImagePost} >
+                                        <Icon
+                                            style={{textAlign: "center"}}
+                                            size={70}
+                                            name='image'
+                                            color='#4C9A2A'
+                                        />
+                                        <Text>Pick an Image</Text>
+                                    </TouchableOpacity>
+                                }
+                                {!this.state.loaded && this.state.loading &&
+                                    <ActivityIndicator style={{ position: 'absolute' }}size="large" color="#4C9A2A" />
+                                }
+                                {this.state.loaded &&
+                                    <Image style={{ width: '100%', height: win.height / 4, position: 'absolute' }} resizeMode='contain' onLoad={this._onLoad} source={{ uri: this.state.imageURL }}/>
+                                }
+                            </View>
+                            <View style={{ flex: 1, alignContent: 'flex-end' }}></View>
+                            {this.state.loaded &&
+                                <TouchableOpacity style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}} onPress = {()=>{
+                                    if (this.state.post_content.length > 0){
+                                        this.navigateToPost()
+                                    }
+                                    else{
+                                        alert("You must choose a photo to upload")
+                                    }
+                                }}>
+                                    <Text style={{fontFamily: 'Pacifico-Bold', fontSize: 28, color: '#4C9A2A', width: '100%', textAlign: 'center'}}>Post!</Text>
+                                </TouchableOpacity>
+                            }
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
             </View>
-            <View style={{ margin: 10 }}>
-                {this.state.loaded &&
-                    <Button title="Post!" color="#4C9A2A" onPress = {()=>{
-                        if (this.state.post_content.length > 0){
-                            this.navigateToPost()
-                        }
-                        else{
-                            alert("You must choose a photo to upload")
-                        }
-                    }}/>
-                }
-            </View>
-            <View style={{ marginTop: 100, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                {!this.state.loaded && !this.state.loading &&
-                    <TouchableOpacity style={styles.touch} onPress={this.handleImagePost} >
-                        <Icon
-                        style={{textAlign: "center"}}
-                        size={70}
-                        name='image'
-                        color='#4C9A2A'
-                        />
-                        <Text>Pick an Image</Text>
-                    </TouchableOpacity>
-                }
-                {!this.state.loaded && this.state.loading &&
-                    <ActivityIndicator style={{ position: 'absolute' }}size="large" color="#4C9A2A" />
-                }
-                {this.state.loaded &&
-                    <Image style={{ width: '100%', height: win.height / 4, position: 'absolute' }} resizeMode='contain' onLoad={this._onLoad} source={{ uri: this.state.imageURL }}/>
-                }
-            </View>
-
-            </View>
-            </View>
-            </TouchableWithoutFeedback>
-        </View>
-    );
-  }
+        );
+    }
 }
 const styles = StyleSheet.create({
   button : {
@@ -270,11 +270,10 @@ const styles = StyleSheet.create({
   textbox : {
     height: 40,
     fontSize:20,
-    width: '90%',
-    borderColor: '#9b9b9b',
-    borderBottomWidth: 1,
+    width: '100%',
     marginTop: 8,
-    marginVertical: 15
+    marginVertical: 15,
+    textAlignVertical: 'top'
   },
   inputCard : {
     padding: 10,

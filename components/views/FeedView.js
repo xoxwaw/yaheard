@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {withNavigation  } from 'react-navigation';
-import {Image, Alert, View, ScrollView, Text, Button, StyleSheet, RefreshControl,
+import {Image, ActivityIndicator, Alert, View, ScrollView, Text, Button, StyleSheet, RefreshControl,
     TouchableOpacity,  AsyncStorage, Dimensions, BackHandler } from 'react-native';
 import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -58,7 +58,7 @@ class Feed extends React.Component {
         this.storage = firebase.storage();
         //orderBy: 0 - new, 1: popular, 2: controversial
         //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
-        this.state = {refreshing: false, items: [], images: [], query: null,
+        this.state = {loadingMorePosts: false, refreshing: false, items: [], images: [], query: null,
             location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
         this._retrieveData();
 
@@ -103,6 +103,7 @@ class Feed extends React.Component {
         })
     }
     fetchNextPosts = ()=>{
+        this.setState({loadingMorePosts: true}); // for loading indicator at bottom of feed
         // this.state.query.limit(1).onSnapshot(documentSnapshots=>{
         //     var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
         //     console.log("last", lastVisible);
@@ -135,7 +136,7 @@ class Feed extends React.Component {
             }
         }
         this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
-
+        this.setState({loadingMorePosts: false}); // for loading indicator at bottom of feed
         // this.savePostsToCaches(extra_posts)
     }
     componentDidMount() {
@@ -408,12 +409,17 @@ class Feed extends React.Component {
                 </View>
             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
                 <TouchableOpacity onPress={this.fetchNextPosts} style={{ backgroundColor: 'white', borderRadius: 30,  height: 50, width: 50, elevation: 5 }}>
-                    <Icon
-                        style={{textAlign: "center", padding: 10}}
-                        size={30}
-                        name='plus'
-                        color='#4C9A2A'
-                    />
+                    {!this.state.loadingMorePosts &&
+                        <Icon
+                            style={{textAlign: "center", padding: 10}}
+                            size={30}
+                            name='arrow-down'
+                            color='#4C9A2A'
+                        />
+                    }
+                    {this.state.loadingMorePosts &&
+                        <ActivityIndicator style={{ position: 'absolute' }} size="small" color="#4C9A2A" />
+                    }
                 </TouchableOpacity>
             </View>
             </ScrollView>

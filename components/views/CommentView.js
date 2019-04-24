@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   textbox : {
     marginTop: 80,
-    height: '100%',
+    height: 50,
     fontSize:16,
     width: '100%',
     marginTop: 8,
@@ -128,8 +128,8 @@ export default class Focus extends React.Component {
                         >
                         </TextInput>
                     </View>
-                <TouchableOpacity onPress = {this.postComment} style={{justifyContent: 'center',  alignItems: 'center', width: '100%', flex: 1, backgroundColor: '#ddd', elevation: 5}}>
-                    <Text style={{fontFamily: 'Pacifico-Regular', fontSize: 28, color: '#4C9A2A', width: '100%', textAlign: 'center'}}>Comment!</Text>
+                <TouchableOpacity onPress = {this.postComment} style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}}>
+                    <Text style={{fontFamily: 'Pacifico-Bold', fontSize: 28, color: '#4C9A2A', width: '100%', textAlign: 'center'}}>Comment!</Text>
                 </TouchableOpacity>
                 </View>
             </TouchableWithoutFeedback>
