@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {withNavigation  } from 'react-navigation';
-import {Image, Alert, View, ScrollView, Text, Button, StyleSheet, RefreshControl, TouchableOpacity,  AsyncStorage, Dimensions, BackHandler } from 'react-native';
+import {Image, Alert, View, ScrollView, Text, Button, StyleSheet, RefreshControl,
+    TouchableOpacity,  AsyncStorage, Dimensions, BackHandler } from 'react-native';
 import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -57,7 +58,8 @@ class Feed extends React.Component {
         this.storage = firebase.storage();
         //orderBy: 0 - new, 1: popular, 2: controversial
         //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
-        this.state = {refreshing: false, items: [], images: [], query: null, location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
+        this.state = {refreshing: false, items: [], images: [], query: null,
+            location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
         this._retrieveData();
 
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -76,13 +78,14 @@ class Feed extends React.Component {
     }
     _onRefresh = () => {
         this.setState({refreshing: true});
-        var query = this.getDocumentNearBy(1.0);
+        var query = this.getDocumentNearBy(0.01);
         this.setState({ query });
+        this.setState({last_ind: 5})
         this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
         this.setState({refreshing: false});
     }
     reload = ()=>{
-        var query = this.getDocumentNearBy(1.0);
+        var query = this.getDocumentNearBy(0.01);
         this.setState({ query });
         this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
     }
@@ -98,22 +101,40 @@ class Feed extends React.Component {
         })
     }
     fetchNextPosts = ()=>{
+        // this.state.query.limit(1).onSnapshot(documentSnapshots=>{
+        //     var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+        //     console.log("last", lastVisible);
+        //     // Construct a new query starting at this document,
+        //     // get the next 10 cities.
+        //     var query = this.getDocumentNearBy(1.0);
+        //     next = query.startAfter(lastVisible).limit(1).get().then(data=>console.log(data.doc()))
+        //     .catch(err=> console.log(err));
+        //     console.log(next)
+        //     this.setState({query: next});
+        //
+        // });
         const ind = this.state.last_ind;
-        var extra_posts = []
-        if (ind >= this.state.allposts.length){
-            Alert.alert("No more posts","Couldn't find any more posts in your current location! Try moving around.")
+        // var extra_posts = []
+        console.log(this.state.feedlength, ind)
+        if (ind >= this.state.feedlength){
+            Alert.alert("No more posts",
+            "Couldn't find any more posts in your current location! Try moving around.")
         }else{
-            if (ind+5 < this.state.allposts.length){
-                var items = this.state.items;
-                extra_posts = this.state.allposts.slice(ind, ind+5)
-                this.setState({last_ind: ind+5, items: items.concat(extra_posts)})
-                console.log(ind,items,extra_posts)
+            if (ind+5 < this.state.feedlength){
+                this.setState({last_ind: ind+5});
+        //         var items = this.state.items;
+        //         extra_posts = this.state.allposts.slice(ind, ind+5)
+        //         this.setState({last_ind: ind+5, items: items.concat(extra_posts)})
+        //         console.log(ind,items,extra_posts)
             }else{
-                extra_posts = this.state.allposts.slice(ind, this.state.allposts.length)
-                this.setState({items: this.state.allposts, last_ind: this.state.allposts.length});
+                this.setState({last_ind: this.state.feedlength})
+        //         extra_posts = this.state.allposts.slice(ind, this.state.allposts.length)
+        //         this.setState({items: this.state.allposts, last_ind: this.state.allposts.length});
             }
         }
-        this.savePostsToCaches(extra_posts)
+        this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
+
+        // this.savePostsToCaches(extra_posts)
     }
     componentDidMount() {
         const MAXIMUM_MOVING_DISTANCE = 0.2;
@@ -124,7 +145,10 @@ class Feed extends React.Component {
                     latitude: position.coords.latitude
                 }
                 this.setState({ location });
-                this.reload()
+                var query = this.getDocumentNearBy(1.0);
+                this.setState({query: query})
+                this.reload();
+                // this.fetchNextPosts();
                 AsyncStorage.setItem('last_location', JSON.stringify(location)).then(val=>{
                     console.log();
                 });
@@ -172,6 +196,7 @@ class Feed extends React.Component {
 
     onCollectionUpdate = (querySnapshot) => {
         const items = [];
+        console.log("HEY")
         querySnapshot.forEach((doc) => {
             const {content, downvote, height, isText, location, time,title, upvote, user,width} = doc.data();
             items.push({
@@ -190,15 +215,20 @@ class Feed extends React.Component {
         });
         AsyncStorage.setItem('feed', JSON.stringify(items)).then(val=>{
             console.log("save the feed successfully");
-        })
-        this.setState({last_ind: 6, allposts:items});
-
-        if (items.length > 6){
-            this.setState({
-            items:items.slice(0,6)
-            });
+        });
+        this.setState({feedlength: items.length});
+        if (this.state.last_ind <= this.state.feedlength){
+            this.setState({items:items.slice(0, this.state.last_ind)});
+        }else{
+            this.setState({items: items});
         }
-        this.savePostsToCaches(items.slice(0,6))
+
+        this.setState({allposts: items})
+        // if (items.length > 6){
+        //     this.setState({
+        //     items:items.slice(0,6)
+        //     });
+        // }
 
     }
     _upvote(post){
