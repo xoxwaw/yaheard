@@ -286,7 +286,7 @@ class Feed extends React.Component {
                                             <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
-                                                size={25}
+                                                size={20}
                                                 name='arrow-circle-up'
                                                 color='#4C9A2A'
                                                 />
@@ -301,20 +301,9 @@ class Feed extends React.Component {
                                             <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
-                                                    size={25}
+                                                    size={20}
                                                     name='arrow-circle-down'
                                                     color='#4C9A2A'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}}>
-                                                <Icon
-                                                    style={{textAlign: "center"}}
-                                                    size={25}
-                                                    name='flag'
-                                                    color='#c45e5e'
                                                 />
                                             </TouchableOpacity>
                                         </View>
@@ -323,12 +312,13 @@ class Feed extends React.Component {
                                             <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
-                                                    size={25}
+                                                    size={20}
                                                     name='comments'
                                                     color='#333'
                                                 />
                                             </TouchableOpacity>
                                         </View>
+
                                         <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
                                             <View style={{ flex: 1 }}></View>
                                             <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Posted at {u.time}.</Text>
@@ -366,7 +356,7 @@ class Feed extends React.Component {
                                             <TouchableOpacity style={{padding:10}} onPress = {() => this._upvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
-                                                    size={25}
+                                                    size={20}
                                                     name='arrow-circle-up'
                                                     color='#4C9A2A'
                                                 />
@@ -379,7 +369,7 @@ class Feed extends React.Component {
                                             <TouchableOpacity style={{padding:10}} onPress = {() => this._downvote(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
-                                                    size={25}
+                                                    size={20}
                                                     name='arrow-circle-down'
                                                     color='#4C9A2A'
                                                 />
@@ -387,20 +377,10 @@ class Feed extends React.Component {
                                             </TouchableOpacity>
                                         </View>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}}>
-                                                <Icon
-                                                    style={{textAlign: "center"}}
-                                                    size={25}
-                                                    name='flag'
-                                                    color='#c45e5e'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
-                                                    size={25}
+                                                    size={20}
                                                     name='comments'
                                                     color='#333'
                                                 />

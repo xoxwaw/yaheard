@@ -27,21 +27,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textbox : {
-    height: 100,
-    fontSize:13,
+    marginTop: 80,
+    height: '100%',
+    fontSize:16,
     width: '100%',
-    borderColor: '#9b9b9b',
-    borderBottomWidth: 1,
     marginTop: 8,
-    marginVertical: 15
+    marginVertical: 15,
+    elevation: 0,
+    marginLeft: 20,
+    textAlignVertical: 'top'
   },
   inputCard : {
-      padding: 10,
-      margin: 20,
       marginVertical: 5,
-      width: '90%',
-      backgroundColor: "#efefef",
+      width: '100%',
       borderRadius: 8,
+      flex: 8,
   }
 });
 export default class Focus extends React.Component {
@@ -100,23 +100,37 @@ export default class Focus extends React.Component {
 
     render() {
       return (
-        <View style={{ flex: 1, flexDirection: 'column' }}>
-        <Text>{this.state.post.title}</Text>
+        <View style={{ flex: 1, width: '100%', flexDirection: 'column' }}>
+            <View style={{ padding: 10, position: 'absolute', elevation: 5}}>
+                <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30, elevation: 5 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
+                    <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
+                        <Icon
+                            style={{textAlign: "center", padding: 15, elecation: 5}}
+                            size={20}
+                            name='arrow-left'
+                            color='#4C9A2A'
+                        />
+                    </View>
+                </TouchableOpacity>
+            </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View style={{ flex: 1, padding: 10 }}>
+                <View style={{ flex: 1, width: '100%', marginTop: 50}}>
                     <View style={styles.inputCard}>
                         <TextInput
                             multiline
                             style={styles.textbox}
                             placeholder="Write a comment..."
-                            autoCapitalize="none"
+                            autoCapitalize="sentences"
                             numberOfLines={5}
                             adjustsFontSizeToFit={true}
                             minimumFontScale={0.1}
                             onChangeText={content => this.setState({ content })}
-                        />
+                        >
+                        </TextInput>
                     </View>
-                <Button style={ styles.button } title="Comment!" color="#4C9A2A" onPress = {this.postComment} />
+                <TouchableOpacity onPress = {this.postComment} style={{justifyContent: 'center',  alignItems: 'center', width: '100%', flex: 1, backgroundColor: '#ddd', elevation: 5}}>
+                    <Text style={{fontFamily: 'Pacifico-Regular', fontSize: 28, color: '#4C9A2A', width: '100%', textAlign: 'center'}}>Comment!</Text>
+                </TouchableOpacity>
                 </View>
             </TouchableWithoutFeedback>
         </View>

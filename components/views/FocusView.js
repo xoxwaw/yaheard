@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withNavigation  } from 'react-navigation';
-import {Image, View, ScrollView, Text, Button, StyleSheet, BackHandler, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
+import {Image, ImageBackground, View, ScrollView, Text, Button, StyleSheet, BackHandler, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
 import {Card, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
@@ -31,7 +31,9 @@ const styles = StyleSheet.create({
       fontSize: 12,
   },
   title: {
-      fontSize: 14,
+      fontSize: 18,
+      textAlign: 'center',
+      width: '100%'
   }
 });
 export default class Focus extends React.Component {
@@ -145,24 +147,28 @@ export default class Focus extends React.Component {
     render() {
         return (
           <View style={{ flex: 1, flexDirection: 'column', width: '100%' }}>
-          <ScrollView style={{ flex: 1, width: '100%'  }}>
-              <View containerStyle={{padding: 0, width: '100%'}} >
-                  <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 30 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
-                      <View style={{ width: 40, height: 40, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
-                          <Icon
-                              style={{textAlign: "center", padding: 10}}
-                              size={20}
-                              name='arrow-left'
-                              color='#4C9A2A'
-                          />
-                      </View>
-                  </TouchableOpacity>
+            <ScrollView style={{ flex: 1, width: '100%'  }}>
+                <View containerStyle={{padding: 0, width: '100%'}} >
+
               {
                   this.state.items.map((u, i) => {
                       if (u.isText == true){
                           return (
-                              <View>
+                                <View>
+                                    <View style={{ padding: 10 }}>
+                                        <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
+                                            <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
+                                                <Icon
+                                                    style={{textAlign: "center", padding: 15}}
+                                                    size={20}
+                                                    name='arrow-left'
+                                                    color='#4C9A2A'
+                                                />
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
                                   <Text style={styles.title}>{u.title}</Text>
+                                  <Text style={styles.content}>{u.content}</Text>
                                   <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
@@ -217,14 +223,31 @@ export default class Focus extends React.Component {
                       }else{
                           return (
                               <View style={{ width: '100%' }}>
-                                  <Image
-                                      style= {{
-                                          width: win.width,
-                                          height: (u.height / u.width) * win.width,
-                                      }}
-                                      source={{uri: u.content}}
-                                      resizeMode={"contain"}
-                                  />
+
+
+                                    <ImageBackground
+                                        style= {{
+                                            width: win.width,
+                                            height: (u.height / u.width) * win.width,
+                                        }}
+                                        source={{uri: u.content}}
+                                        resizeMode={"contain"}
+                                    >
+                                        <View style={{ padding: 10 }}>
+                                            <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
+                                                <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
+                                                    <Icon
+                                                        style={{textAlign: "center", padding: 15}}
+                                                        size={20}
+                                                        name='arrow-left'
+                                                        color='#4C9A2A'
+                                                    />
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </ImageBackground>
+
+
                                   <Text>{u.title}</Text>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
