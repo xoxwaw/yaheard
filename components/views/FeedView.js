@@ -354,9 +354,7 @@ class Feed extends React.Component {
                                             />
                                         </View>
                                         <View style={{marginTop: u.height }}>
-                                            {this.state.title &&
-                                                <Text style={{margin: 20, fontSize: 24}}>{u.title}</Text>
-                                            }
+                                            <Text style={{margin: 20, fontSize: 24}}>{u.title}</Text>
                                         </View>
                                     </TouchableOpacity>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
