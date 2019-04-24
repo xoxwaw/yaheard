@@ -82,7 +82,7 @@ export default class ImagePost extends React.Component {
       const post = {
           content: post_content,
           title : post_title,
-          isText : isText,
+          isText : false,
           user: user,
           upvote: 0,
           downvote: 0,
@@ -98,7 +98,7 @@ export default class ImagePost extends React.Component {
           post.id = post.id;
           dbactions.upvote(data.id, user, user);
           caches.upvote(post);
-          this.setState({post:post});
+          this.setState({post: post});
           this.setState({ loaded: true });
       }).catch((error)=>{
           //error callback
@@ -175,7 +175,6 @@ export default class ImagePost extends React.Component {
         }
   };
   navigateToPost(){
-
       AsyncStorage.setItem('post', JSON.stringify(this.state.post))
       .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
   }
