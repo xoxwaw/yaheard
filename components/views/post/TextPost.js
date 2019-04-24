@@ -155,11 +155,9 @@ export default class TextPost extends React.Component {
             <View style={styles.container}>
                 <View style={styles.inputCard}>
                     <TextInput
-                        multiline
                         style={styles.titletextbox}
                         placeholder="Title"
-                        autoCapitalize="none"
-                        numberOfLines={5}
+                        autoCapitalize='sentences'
                         adjustsFontSizeToFit={true}
                         minimumFontScale={0.1}
                         onChangeText={post_title => this.setState({ post_title })}
@@ -170,7 +168,7 @@ export default class TextPost extends React.Component {
                         multiline
                         style={styles.textbox}
                         placeholder="What did you hear?"
-                        autoCapitalize="none"
+                        autoCapitalize='sentences'
                         numberOfLines={5}
                         adjustsFontSizeToFit={true}
                         minimumFontScale={0.1}
@@ -224,10 +222,9 @@ const styles = StyleSheet.create({
   },
   titletextbox : {
     height: 40,
+    width: 100,
+    maxWidth: '100%',
     fontSize:20,
-    width: '90%',
-    borderColor: '#9b9b9b',
-    borderBottomWidth: 1,
     marginTop: 8,
     marginVertical: 15
   },
@@ -236,16 +233,21 @@ const styles = StyleSheet.create({
     fontSize:13,
     width: '100%',
     borderColor: '#9b9b9b',
-    borderBottomWidth: 1,
-    marginTop: 8,
-    marginVertical: 15
+    borderBottomWidth: 1
   },
   inputCard : {
-      padding: 10,
-      margin: 20,
+      margin: 10,
       marginVertical: 5,
       width: '90%',
       backgroundColor: "#efefef",
       borderRadius: 8,
-  }
+  },
+  inputTitleCard : {
+    margin: 10,
+    marginVertical: 5,
+    width: 100,
+    maxWidth: '100%',
+    backgroundColor: "#efefef",
+    borderRadius: 8,
+}
 });

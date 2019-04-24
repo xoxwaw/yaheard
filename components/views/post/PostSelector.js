@@ -1,46 +1,42 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Button, AsyncStorage, Platform, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Button, AsyncStorage, Platform, ImageBackground } from 'react-native';
 import { withNavigation  } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
 export default class Create extends React.Component {
-  render() {
-    return (
-      <View style={{ width: '100%', flex: 1}}>
-        <View style={{ width: '100%', flex: 1, flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: '100%', backgroundColor: 'whitesmoke' }}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routePostText') }>
-              <Icon
-                style={{textAlign: "center"}}
-                size={50}
-                name='font'
-                color='#4C9A2A'
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1, height: '100%' }}>
-            <TouchableOpacity style={styles.touch} onPress={() => this.props.navigation.navigate('routePostImage') }>
-              <Icon
-                style={{textAlign: "center"}}
-                size={50}
-                name='image'
-                color='#4C9A2A'
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{ width: '100%', flex: 1, flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: '100%' }}></View>
-          <View style={{ flex: 1, height: '100%', backgroundColor: 'whitesmoke' }}></View>
-        </View>
-        <View style={{ width: '100%', flex: 1, flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: '100%', backgroundColor: 'whitesmoke' }}></View>
-          <View style={{ flex: 1, height: '100%' }}></View>
-        </View>
-      </View>
-    );
-  }
+    render() {
+        return (
+            <View style={{ width: '100%', height: '100%'}}>
+                <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
+                    <View style={{ flex: 1, height: '100%', backgroundColor: 'whitesmoke' }}>
+                        <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => this.props.navigation.navigate('routePostText') }>
+                        <ImageBackground
+                            source={{uri: 'https://cdn-images-1.medium.com/max/1600/0*pxVbW7V5iXP4VBfU.jpg'}}
+                            style={{ opacity: 0.2, width: '100%', height: '100%' }}
+                            resizeMode='cover'
+                        />
+                        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{ position: 'absolute', fontFamily: 'Pacifico-Regular', fontSize: 50 }}>Post Text</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1, height: '100%' }}>
+                    <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => this.props.navigation.navigate('routePostImage') }>
+                            <ImageBackground
+                                source={{uri: 'https://propane.com/wp-content/uploads/2018/10/Propane-Uses-Landscape-And-Turf-Management-Marquee-1800x1200-Mower-Vista.jpg'}}
+                                style={{ opacity: 0.2, width: '100%', height: '100%' }}
+                                resizeMode='cover'
+                            />
+                            <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+                                <Text style={{ position: 'absolute', fontFamily: 'Pacifico-Regular', fontSize: 50 }}>Post Image</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        );
+    }
 }
 const styles = StyleSheet.create({
   button : {
