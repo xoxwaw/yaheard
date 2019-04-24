@@ -5,6 +5,7 @@ import firebase from 'react-native-firebase';
 
 export default class signUp extends React.Component {
     constructor(){
+        super();
         this.ref = firebase.firestore().collection('users');
     }
   state = { email: '', password: '', errorMessage: null }
