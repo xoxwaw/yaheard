@@ -353,8 +353,10 @@ class Feed extends React.Component {
                                                 resizeMode={"stretch"}
                                             />
                                         </View>
-                                        <View style={{ padding: 20, marginTop: u.height }}>
-                                            <Text style={{fontSize: 24}}>{u.title}</Text>
+                                        <View style={{marginTop: u.height }}>
+                                            {this.state.title &&
+                                                <Text style={{margin: 20, fontSize: 24}}>{u.title}</Text>
+                                            }
                                         </View>
                                     </TouchableOpacity>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
