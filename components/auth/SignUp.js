@@ -2,12 +2,9 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity  } from 'react-native'
 import styles from '../styles/authStyle'
 import firebase from 'react-native-firebase';
-
+const ref = firebase.firestore().collection('users');
 export default class signUp extends React.Component {
-    constructor(){
-        super();
-        this.ref = firebase.firestore().collection('users');
-    }
+
   state = { email: '', password: '', errorMessage: null }
   handleSignUp = () => {
       const {email, password, err} = this.state
@@ -19,7 +16,7 @@ export default class signUp extends React.Component {
         });
         this.props.navigation.navigate('routeLogin')
     }).catch(err=>{
-        console.log(err)
+        alert(err)
     });
 
 

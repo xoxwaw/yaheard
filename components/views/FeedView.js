@@ -79,15 +79,17 @@ class Feed extends React.Component {
     _onRefresh = () => {
         this.setState({refreshing: true});
         var query = this.getDocumentNearBy(0.01);
-        this.setState({ query });
+        this.getLocation();
+        // this.setState({ query });
         this.setState({last_ind: 5})
-        this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
+        // this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
         this.setState({refreshing: false});
     }
     reload = ()=>{
-        var query = this.getDocumentNearBy(0.01);
-        this.setState({ query });
-        this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
+        this.getLocation();
+        // var query = this.getDocumentNearBy(0.01);
+        // this.setState({ query });
+        // this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
     }
     savePostsToCaches(extra_posts){
         AsyncStorage.getItem('current_feed').then(val=>{
@@ -138,6 +140,9 @@ class Feed extends React.Component {
     }
     componentDidMount() {
         const MAXIMUM_MOVING_DISTANCE = 0.2;
+        this.getLocation();
+    }
+    getLocation =() =>{
         navigator.geolocation.getCurrentPosition(
             position => {
                 const location = {
@@ -145,9 +150,10 @@ class Feed extends React.Component {
                     latitude: position.coords.latitude
                 }
                 this.setState({ location });
-                var query = this.getDocumentNearBy(1.0);
+                var query = this.getDocumentNearBy(0.01);
                 this.setState({query: query})
-                this.reload();
+                this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
+                // this.reload();
                 // this.fetchNextPosts();
                 AsyncStorage.setItem('last_location', JSON.stringify(location)).then(val=>{
                     console.log();
