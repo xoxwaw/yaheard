@@ -142,7 +142,7 @@ class Feed extends React.Component {
         this.getLocation();
     }
     getLocation =() =>{
-        navigator.geolocation.watchPosition(
+        navigator.geolocation.getCurrentPosition(
             position => {
                 const location = {
                     longitude: position.coords.longitude,
@@ -261,7 +261,7 @@ class Feed extends React.Component {
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
 	}
 
-	
+
     render() {
         return (
             <ScrollView contentContainerStyle={{ padding: 0, margin: 0 }}
@@ -434,7 +434,7 @@ function msToTime(s) {
   		var hrs = (s - mins) % 60;
 		s = s / 60;
 		var days = (s - hrs) / 24;
-	
+
   		if(days >= 1){
 			if (days >= 2){return Math.floor(days) + ' days';}
 			else{return Math.floor(days) + ' day';}
