@@ -434,7 +434,7 @@ function msToTime(s) {
 		s = (s - mins) / 60
   		var hrs = s % 24;
 		var days = (s - hrs) / 24;
-
+	
   		if(days >= 1){
 			if (days >= 2){return Math.floor(days) + ' days';}
 			else{return Math.floor(days) + ' day';}
@@ -446,5 +446,6 @@ function msToTime(s) {
 			else{return Math.floor(mins) + ' minute'};
 		}
     }
+
 
 export default withNavigation(Feed);
