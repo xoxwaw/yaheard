@@ -15,6 +15,7 @@ const addKarmaAction = function(user, isUpvote, inc){
     }).then(err=>console.log(err));
 
 }
+
 const voteAction = function(pid,uid, authorid, _isUpvote){
     const label = _isUpvote ? "upvote" : "downvote";
     user_post.where('user','==',uid).where('post','==', pid).get().then((querySnapshot)=>{
@@ -80,5 +81,26 @@ module.exports = {
     postReply: function(pid, cid){
         /*reply to a comment in a post
         parameter: post id, comment id*/
+    },
+    msToTime: function(s) {
+      		var ms = s % 1000;
+      		s = (s - ms) / 1000;
+      		var secs = s % 60;
+      		s = (s - secs) / 60;
+      		var mins = s % 60;
+    		s = (s - mins) / 60
+      		var hrs = s % 24;
+    		var days = (s - hrs) / 24;
+
+      		if(days >= 1){
+    			if (days >= 2){return Math.floor(days) + ' days';}
+    			else{return Math.floor(days) + ' day';}
+    		} else if(hrs >= 1){
+    			if (hrs >= 2){return Math.floor(hrs) + ' hours'}
+    			else{return Math.floor(hrs) + ' hour'};
+    		} else{
+    			if (mins >= 2){return Math.floor(mins) + ' minutes'}
+    			else{return Math.floor(mins) + ' minute'};
+    	}
     }
 }

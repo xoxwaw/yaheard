@@ -327,7 +327,7 @@ class Feed extends React.Component {
 
                                         <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
                                             <View style={{ flex: 1 }}></View>
-                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Posted {msToTime(new Date().getTime() - u.time)} ago.</Text>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Posted {dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
                                             <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Lat: {u.location.latitude}.</Text>
                                             <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Long: {u.location.longitude}.</Text>
                                             <View style={{ flex: 1 }}></View>
@@ -394,7 +394,7 @@ class Feed extends React.Component {
                                         </View>
                                         <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
                                             <View style={{ flex: 1 }}></View>
-                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Posted {msToTime(new Date().getTime() - u.time)} ago.</Text>
+                                            <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Posted {dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
                                             <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Lat: {u.location.latitude}.</Text>
                                             <Text style={{fontSize: 10, color: '#555', flex: 2, marginLeft: 10}}>Long: {u.location.longitude}.</Text>
                                             <View style={{ flex: 1 }}></View>
@@ -425,27 +425,7 @@ class Feed extends React.Component {
         );
     }
 }
-function msToTime(s) {
-  		var ms = s % 1000;
-  		s = (s - ms) / 1000;
-  		var secs = s % 60;
-  		s = (s - secs) / 60;
-  		var mins = s % 60;
-		s = (s - mins) / 60
-  		var hrs = s % 24;
-		var days = (s - hrs) / 24;
-	
-  		if(days >= 1){
-			if (days >= 2){return Math.floor(days) + ' days';}
-			else{return Math.floor(days) + ' day';}
-		} else if(hrs >= 1){
-			if (hrs >= 2){return Math.floor(hrs) + ' hours'}
-			else{return Math.floor(hrs) + ' hour'};
-		} else{
-			if (mins >= 2){return Math.floor(mins) + ' minutes'}
-			else{return Math.floor(mins) + ' minute'};
-		}
-    }
+
 
 
 export default withNavigation(Feed);
