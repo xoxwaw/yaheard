@@ -431,8 +431,8 @@ function msToTime(s) {
   		var secs = s % 60;
   		s = (s - secs) / 60;
   		var mins = s % 60;
-  		var hrs = (s - mins) % 60;
-		s = s / 60;
+		s = (s - mins) / 60
+  		var hrs = s % 24;
 		var days = (s - hrs) / 24;
 
   		if(days >= 1){
