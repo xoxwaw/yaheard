@@ -8,7 +8,6 @@ const storage = firebase.storage();
 
 const addKarmaAction = function(user, isUpvote, inc){
     inc = isUpvote ? inc : inc * (-1)
-    console.log(user, isUpvote,inc)
     user_ref.where('email','==',user).get().then(snapshot=>{
         snapshot.forEach(doc=>{
             user_ref.doc(doc.id).update("karma", firebase.firestore.FieldValue.increment(inc));

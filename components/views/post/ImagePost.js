@@ -78,7 +78,6 @@ export default class ImagePost extends React.Component {
   writePost = () => {
       const { loading, loaded, post_title , post_content, errorMessage,user ,
                 location, isText, imageURL , id, width, height} = this.state;
-        alert(height, width);
       const post = {
           content: post_content,
           title : post_title,
@@ -95,7 +94,9 @@ export default class ImagePost extends React.Component {
       this.ref.add(post).then((data)=>{
           this.setState({id: data.id});
           //success callback
-          post.id = post.id;
+          post.id = data.id;
+          post.width = image_width;
+          post.height = parseInt((height / width) * image_width),
           dbactions.upvote(data.id, user, user);
           caches.upvote(post);
           this.setState({post: post});
@@ -175,6 +176,7 @@ export default class ImagePost extends React.Component {
         }
   };
   navigateToPost(){
+      console.log(this.state.post);
       AsyncStorage.setItem('post', JSON.stringify(this.state.post))
       .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
   }

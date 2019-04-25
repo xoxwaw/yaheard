@@ -15,6 +15,7 @@ const win = Dimensions.get('window');
 const image_width = win.width - 20;
 const image_height = win.width * 0.922 * 0.75;
 //these are the calculated values for the width and height of an image post reletive to the screen.
+const MAXIMUM_MOVING_DISTANCE = 0.01;
 
 const styles = StyleSheet.create({
   content_container: {
@@ -78,8 +79,7 @@ class Feed extends React.Component {
     }
     _onRefresh = () => {
         this.setState({refreshing: true});
-        var query = this.getDocumentNearBy(0.01);
-        this.getLocation();
+        this.getLocation()
         // this.setState({ query });
         this.setState({last_ind: 5})
         // this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
@@ -118,7 +118,6 @@ class Feed extends React.Component {
         // });
         const ind = this.state.last_ind;
         // var extra_posts = []
-        console.log(this.state.feedlength, ind)
         if (ind >= this.state.feedlength){
             Alert.alert("No more posts",
             "Couldn't find any more posts in your current location! Try moving around.")
@@ -140,18 +139,17 @@ class Feed extends React.Component {
         // this.savePostsToCaches(extra_posts)
     }
     componentDidMount() {
-        const MAXIMUM_MOVING_DISTANCE = 0.2;
         this.getLocation();
     }
     getLocation =() =>{
-        navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.watchPosition(
             position => {
                 const location = {
                     longitude: position.coords.longitude,
                     latitude: position.coords.latitude
                 }
                 this.setState({ location });
-                var query = this.getDocumentNearBy(0.01);
+                var query = this.getDocumentNearBy(MAXIMUM_MOVING_DISTANCE);
                 this.setState({query: query})
                 this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
                 // this.reload();
@@ -203,7 +201,6 @@ class Feed extends React.Component {
 
     onCollectionUpdate = (querySnapshot) => {
         const items = [];
-        console.log("HEY")
         querySnapshot.forEach((doc) => {
             const {content, downvote, height, isText, location, time,title, upvote, user,width} = doc.data();
             items.push({
