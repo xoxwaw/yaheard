@@ -18,7 +18,7 @@ const win = Dimensions.get('window');
 const image_width = win.width * 0.922;
 const image_height = win.width * 0.922 * 0.75;
 export default class ImagePost extends React.Component {
-  state = { loading: false, loaded: false, post_title : "", post_content: '', errorMessage: null,user: "",
+  state = { isNavigate: false, loading: false, loaded: false, post_title : "", post_content: '', errorMessage: null,user: "",
             location: {}, isText: false, imageURL : "", id:"", width:800, height:600}
   constructor(props){
       super(props);
@@ -100,7 +100,8 @@ export default class ImagePost extends React.Component {
           dbactions.upvote(data.id, user, user);
           caches.upvote(post);
           this.setState({post: post});
-          this.setState({ loaded: true });
+          this.navigateToPost()
+
       }).catch((error)=>{
           //error callback
           console.log(error)
@@ -154,8 +155,9 @@ export default class ImagePost extends React.Component {
             .then((data) =>{
                 console.log(data.uri);
                 this.setState({imageURL: data.uri})
-                this.uploadImage(data.uri);
-                console.log("Upload successfully");
+                // this.setState({ loaded: true });
+                // this.uploadImage(data.uri);
+                this.setState({loaded: true})
             }).catch(err =>{
                 console.log(err);
                 alert('Unable to resize');
@@ -223,18 +225,19 @@ export default class ImagePost extends React.Component {
                                         <Text>Pick an Image</Text>
                                     </TouchableOpacity>
                                 }
-                                {!this.state.loaded && this.state.loading &&
+                                {this.state.loaded && this.state.loading &&
                                     <ActivityIndicator style={{ position: 'absolute' }}size="large" color="#4C9A2A" />
                                 }
-                                {this.state.loaded &&
+                                {this.state.loaded && !this.state.loading &&
                                     <Image style={{ width: '100%', height: win.height / 4, position: 'absolute' }} resizeMode='contain' onLoad={this._onLoad} source={{ uri: this.state.imageURL }}/>
                                 }
+
                             </View>
                             <View style={{ flex: 1, alignContent: 'flex-end' }}></View>
                             {this.state.loaded &&
                                 <TouchableOpacity style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}} onPress = {()=>{
-                                    if (this.state.post_content.length > 0){
-                                        this.navigateToPost()
+                                    if (this.state.imageURL.length > 0){
+                                        this.uploadImage()
                                     }
                                     else{
                                         alert("You must choose a photo to upload")
