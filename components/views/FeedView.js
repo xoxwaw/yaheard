@@ -358,9 +358,9 @@ class Feed extends React.Component {
                                             </TouchableOpacity>
                                         </View>
 
-                                        <View style={{flex: 2, flexDirection: 'column', height: '100%'}}>
+                                        <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
                                             <View style={{ flex: 1 }}></View>
-                                            <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10}}>Posted {dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
+                                            <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10, width: '100%', textAlign: 'center'}}>{dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
                                             <View style={{ flex: 1 }}></View>
                                         </View>
                                     </View>
@@ -423,9 +423,9 @@ class Feed extends React.Component {
                                                 />
                                             </TouchableOpacity>
                                         </View> 
-                                        <View style={{flex: 2, flexDirection: 'column', height: '100%'}}>
+                                        <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
                                             <View style={{ flex: 1 }}></View>
-                                            <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10}}>Posted {dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
+                                            <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10, width: '100%', textAlign: 'center'}}>{dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
                                             <View style={{ flex: 1 }}></View>
                                         </View>
                                     </View>
