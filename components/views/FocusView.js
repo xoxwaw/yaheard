@@ -350,7 +350,7 @@ export default class Focus extends React.Component {
             {!this.state.comments.length &&
                 (
                     <Card>
-                        <Text>No Comments yet!</Text>
+                        <Text style={{ fontSize: 20, padding: 15, width: '100%', textAlign: 'center' }}>No Comments yet!</Text>
                     </Card>
                 )
             }
