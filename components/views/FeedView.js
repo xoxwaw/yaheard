@@ -141,6 +141,19 @@ class Feed extends React.Component {
     componentDidMount() {
         this.getLocation();
     }
+
+    sortByDate(){
+        this.state.allposts.sort(function(a,b){
+            return (a.time > b.time) ? -1 : ((b.time > a.time) ? 1 : 0)
+        });
+    }
+
+    sortByPopular(){
+        this.state.allposts.sort(function(a,b){
+            return (a.upvote - a.downvote > b.upvote - b.downvote) ? -1 : ((b.upvote - b.downvote > a.upvote - a.downvote) ? 1 :0)
+        });
+    }
+
     getLocation =() =>{
         navigator.geolocation.getCurrentPosition(
             position => {
@@ -160,7 +173,7 @@ class Feed extends React.Component {
 
             },
             error => alert(error.message),
-            { enableHighAccuracy: false, timeout: 50000}
+            { enableHighAccuracy: false, timeout: 5000, maximumAge: 0}
         );
     }
     _retrieveData = () =>{
@@ -187,8 +200,7 @@ class Feed extends React.Component {
         let greaterGeopoint = new firebase.firestore.GeoPoint(greaterLat, greaterLon)
 
         let docRef = firebase.firestore().collection("posts");
-
-        let query = docRef.where("location", '>', lesserGeopoint).where("location", '<', greaterGeopoint)
+        let query = docRef.where("location", '>', lesserGeopoint).where("location", '<', greaterGeopoint).orderBy("location","asc")
         // if (this.state.orderBy == 0){
         //     query = query.orderBy("date","desc").limit(10);
         // }else if (this.state.orderBy == 1){
@@ -220,14 +232,16 @@ class Feed extends React.Component {
         AsyncStorage.setItem('feed', JSON.stringify(items)).then(val=>{
             console.log("save the feed successfully");
         });
+        this.setState({allposts: items})
+        this.sortByDate()
         this.setState({feedlength: items.length});
         if (this.state.last_ind <= this.state.feedlength){
-            this.setState({items:items.slice(0, this.state.last_ind)});
+            this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
         }else{
-            this.setState({items: items});
+            this.setState({items: this.state.allposts});
         }
 
-        this.setState({allposts: items})
+
 
     }
     _upvote(post){
@@ -273,6 +287,7 @@ class Feed extends React.Component {
                 />
                 }
             >
+            <View><Text>{this.state.location.longitude},{this.state.location.latitude}</Text></View>
                 <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
                 {
                     this.state.items.map((u, i) => {
