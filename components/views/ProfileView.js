@@ -62,6 +62,9 @@ export default class Profile extends React.Component {
                         location: location,
                         time: time,
                         user: user,
+                        width: width,
+                        height: height,
+                        id: doc.id
                     });
                     this.setState({posts: upvoted});
                 }).catch(err=>console.log(err))
@@ -86,6 +89,9 @@ export default class Profile extends React.Component {
                     location: location,
                     time: time,
                     user: user,
+                    width: width,
+                    height: height,
+                    id: doc.id
                 });
                 this.setState({posts: uploaded});
             });
@@ -95,20 +101,10 @@ export default class Profile extends React.Component {
 
         }).catch(err=>console.log(err));
     }
-    // navigateToPost(post){
-    //     const items = {
-    //         post_id: post.id,
-    //         title: post.title,
-    //         content: post.content,
-    //         isText: post.isText,
-    //         location: post.location,
-    //         upvote: post.up,
-    //         downvote: post.down,
-    //         user: post.user
-    //     }
-    //     AsyncStorage.setItem('post', JSON.stringify(items))
-    //     .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
-    // }
+    navigateToPost(post){
+        AsyncStorage.setItem('post', JSON.stringify(post))
+        .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
+    }
 
   render() {
     return (
@@ -135,13 +131,13 @@ export default class Profile extends React.Component {
                     this.state.posts.map((u, i) => {
                         return (
                             <Card>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress = {()=> this.navigateToPost(u)}>
                                 <Text>{u.title}{!u.title && "*No Title*"} - ({u.upvote - u.downvote})</Text>
                             </TouchableOpacity>
                             </Card>
                         );
                     })
-                }   
+                }
             </View>
 
         </ScrollView>
