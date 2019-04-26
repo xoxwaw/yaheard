@@ -28,10 +28,10 @@ const styles = StyleSheet.create({
     elevation: 10
   },
   content: {
-      fontSize: 12,
+      fontSize: 15,
   },
   title: {
-      fontSize: 18,
+      fontSize: 20,
       textAlign: 'center',
       width: '100%'
   }
@@ -159,7 +159,7 @@ export default class Focus extends React.Component {
                     </View>
     
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.reply(this)}>
                             <Text style={{ width: '100%', textAlign: 'center', color: '#7bc484' }}>Reply</Text>
                         </TouchableOpacity>
                     </View>
@@ -204,9 +204,11 @@ export default class Focus extends React.Component {
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                                  <Text style={styles.title}>{u.title}</Text>
-                                  <Text style={styles.content}>{u.content}</Text>
-                                  <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
+                                    <View style={{ padding: 15, backgroundColor: 'whitesmoke', borderRadius: 8, margin: 10 }}>
+                                        <Text style={styles.title}>{u.title}</Text>
+                                        <Text style={styles.content}>{u.content}</Text>
+                                    </View>
+                                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
                                                 <Icon
@@ -218,7 +220,7 @@ export default class Focus extends React.Component {
                                             </TouchableOpacity>
                                         </View>
 
-                                        <View style={{ flex: 1 }}>
+                                        <View style={{}}>
                                             <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
                                         </View>
 
@@ -298,7 +300,7 @@ export default class Focus extends React.Component {
                                             </TouchableOpacity>
                                         </View>
 
-                                        <View style={{ flex: 1 }}>
+                                        <View style={{}}>
                                             <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
                                         </View>
 
@@ -344,7 +346,7 @@ export default class Focus extends React.Component {
               }
               </View>
 
-            <View style={{ backgroundColor: '#bbb', width: '100%', flex: 1, minHeight: 300 }}>
+            <View style={{ backgroundColor: '#bbb', width: '100%', minHeight: '100%' }}>
             {!this.state.comments.length &&
                 (
                     <Card>

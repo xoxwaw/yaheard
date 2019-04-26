@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {Image, View, ScrollView, Text, Button, StyleSheet, FlatList, TouchableOpacity,  AsyncStorage } from 'react-native';
-import {Card, ListItem} from 'react-native-elements';
+import {Keyboard, View, TextInput, Text, Button, StyleSheet, TouchableWithoutFeedback, TouchableOpacity,  AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
@@ -61,10 +60,39 @@ export default class Focus extends React.Component {
 
     render() {
       return (
-        <View style={{ flex: 1, flexDirection: 'column' }}>
-        <View style={{ flex: 1, padding: 10 }}>
-          <Button style={ styles.button } title="Reply" color="#4C9A2A" onPress = {this.reply} />
-        </View>
+        <View style={{ flex: 1, width: '100%', flexDirection: 'column' }}>
+            <View style={{ padding: 10, position: 'absolute', elevation: 5}}>
+                <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30, elevation: 5 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
+                    <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
+                        <Icon
+                            style={{textAlign: "center", padding: 15, elecation: 5}}
+                            size={20}
+                            name='arrow-left'
+                            color='#4C9A2A'
+                        />
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={{ flex: 1, width: '100%', marginTop: 50}}>
+                    <View style={styles.inputCard}>
+                        <TextInput
+                            multiline
+                            style={styles.textbox}
+                            placeholder="Write a reply..."
+                            autoCapitalize="sentences"
+                            numberOfLines={5}
+                            adjustsFontSizeToFit={true}
+                            minimumFontScale={0.1}
+                            onChangeText={content => this.setState({ content })}
+                        >
+                        </TextInput>
+                    </View>
+                <TouchableOpacity onPress = {this.submitReply} style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}}>
+                    <Text style={{fontFamily: 'Pacifico-Bold', fontSize: 28, color: '#4C9A2A', width: '100%', textAlign: 'center'}}>Reply!</Text>
+                </TouchableOpacity>
+                </View>
+            </TouchableWithoutFeedback>
         </View>
       );
     }
