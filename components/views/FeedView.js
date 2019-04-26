@@ -183,7 +183,7 @@ class Feed extends React.Component {
 
             },
             error => alert(error.message),
-            { enableHighAccuracy: false, timeout: 10000, maximumAge: 0}
+            { enableHighAccuracy: false, timeout: 50000, maximumAge: 0}
         );
     }
     _retrieveData = () =>{
@@ -301,8 +301,12 @@ class Feed extends React.Component {
                 />
                 }
             >
-            <View><Text>{this.state.location.longitude},{this.state.location.latitude}</Text></View>
-                <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
+            <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <Card>
+                    <Text style={{padding: 10}}>{this.state.location.longitude},{this.state.location.latitude}</Text>
+                </Card>
+            </View>
+            <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
                 {
                     this.state.items.map((u, i) => {
                         if (u.isText == true){
