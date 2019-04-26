@@ -192,7 +192,7 @@ export default class Focus extends React.Component {
                       if (u.isText == true){
                           return (
                                 <View>
-                                    <View style={{ padding: 10 }}>
+                                    <View style={{ padding: 10, backgroundColor: 'whitesmoke', width: '100%' }}>
                                         <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
                                             <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
                                                 <Icon
@@ -204,7 +204,7 @@ export default class Focus extends React.Component {
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={{ padding: 15, backgroundColor: 'whitesmoke', borderRadius: 8, margin: 10 }}>
+                                    <View style={{ padding: 15, backgroundColor: 'whitesmoke'}}>
                                         <Text style={styles.title}>{u.title}</Text>
                                         <Text style={styles.content}>{u.content}</Text>
                                     </View>
@@ -286,8 +286,9 @@ export default class Focus extends React.Component {
                                         </View>
                                     </ImageBackground>
 
-
-                                  <Text>{u.title}</Text>
+                                    <View style={{ padding: 15, backgroundColor: 'whitesmoke'}}>
+                                        <Text style={styles.title}>{u.title}</Text>
+                                    </View>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
                                             <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
