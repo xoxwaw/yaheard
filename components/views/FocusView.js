@@ -79,7 +79,6 @@ export default class Focus extends React.Component {
                 user: user,
                 id: doc.id,
             });
-            console.log(content, post_id, user)
         });
         this.comment_tree = comments.filter(obj => obj.parent_id == "")
         this.comment_tree.forEach(elem=>{
@@ -143,6 +142,17 @@ export default class Focus extends React.Component {
         }
         AsyncStorage.setItem('comment', JSON.stringify(item))
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeReply'))
+    }
+
+    renderComment(node, depth=0){
+        return (
+            <View>
+            <Text style = {{paddingLeft: depth * 15, paddingTop: 10}}>{node.content}</Text>
+            {node.response &&
+                node.response.map((u,i) => this.renderComment(u, depth+1))
+            }
+            </View>
+        )
     }
     render() {
         return (
@@ -319,7 +329,7 @@ export default class Focus extends React.Component {
                 this.state.comments.map((u,i)=>{
                     return(
                         <Card>
-                        <Text>{u.content}</Text>
+                        {this.renderComment(u)}
                         </Card>
                     )
                 })
