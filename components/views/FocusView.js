@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withNavigation  } from 'react-navigation';
 import {Image, ImageBackground, View, ScrollView, Text, Button, StyleSheet, BackHandler, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
-import {Card, ListItem} from 'react-native-elements';
+import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
@@ -146,11 +146,38 @@ export default class Focus extends React.Component {
 
     renderComment(node, depth=0){
         return (
-            <View>
-            <Text style = {{paddingLeft: depth * 15, paddingTop: 10}}>{node.content}</Text>
-            {node.response &&
-                node.response.map((u,i) => this.renderComment(u, depth+1))
-            }
+            <View style={{ padding: 15 }}>
+            <Text style={{ marginBottom: 10 }}>{node.content}</Text>
+                <View style={{ flex: 1, flexDirection: 'row'}}>
+                    <View style={{ flex: 2 }}></View>
+                    <View style={{ flex: 2 }}>
+                        <Text style={{ width: '100%', textAlign: 'center', color: '#bbb' }}>{dbactions.msToTime(new Date().getTime() - node.date)} ago.</Text>
+                    </View>
+    
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
+                    </View>
+    
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity>
+                            <Text style={{ width: '100%', textAlign: 'center', color: '#7bc484' }}>Reply</Text>
+                        </TouchableOpacity>
+                    </View>
+    
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
+                    </View>
+    
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity>
+                            <Text style={{ width: '100%', textAlign: 'center', color: '#c47b7b' }}>Report</Text>
+                        </TouchableOpacity>
+                    </View>
+    
+                </View>
+                {node.response &&
+                    node.response.map((u,i) => this.renderComment(u, depth+1))
+                }
             </View>
         )
     }

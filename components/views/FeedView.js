@@ -183,7 +183,7 @@ class Feed extends React.Component {
 
             },
             error => alert(error.message),
-            { enableHighAccuracy: false, timeout: 5000, maximumAge: 0}
+            { enableHighAccuracy: false, timeout: 10000, maximumAge: 0}
         );
     }
     _retrieveData = () =>{
