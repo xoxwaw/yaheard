@@ -140,8 +140,9 @@ export default class Focus extends React.Component {
             content: comment.content,
             post_id: this.state.post_id
         }
+        AsyncStorage.setItem('post', JSON.stringify(this.state.post)).then(res=>console.log())
         AsyncStorage.setItem('comment', JSON.stringify(item))
-        .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeReply'))
+        .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeReply'));
     }
 
     renderComment(node, depth=0){
@@ -153,27 +154,27 @@ export default class Focus extends React.Component {
                     <View style={{ flex: 2 }}>
                         <Text style={{ width: '100%', textAlign: 'center', color: '#bbb' }}>{dbactions.msToTime(new Date().getTime() - node.date)} ago.</Text>
                     </View>
-    
+
                     <View style={{ flex: 1 }}>
                         <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
                     </View>
-    
+
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity onPress={()=>this.reply(this)}>
+                        <TouchableOpacity onPress={()=>this.reply(node)}>
                             <Text style={{ width: '100%', textAlign: 'center', color: '#7bc484' }}>Reply</Text>
                         </TouchableOpacity>
                     </View>
-    
+
                     <View style={{ flex: 1 }}>
                         <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
                     </View>
-    
+
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity>
                             <Text style={{ width: '100%', textAlign: 'center', color: '#c47b7b' }}>Report</Text>
                         </TouchableOpacity>
                     </View>
-    
+
                 </View>
                 {node.response &&
                     node.response.map((u,i) => this.renderComment(u, depth+1))

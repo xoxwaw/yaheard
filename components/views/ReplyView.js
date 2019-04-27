@@ -20,17 +20,25 @@ export default class Focus extends React.Component {
         this.post_ref = firebase.firestore().collection('posts');
         this.comment_ref = firebase.firestore().collection('comments');
         this.user_post = firebase.firestore().collection('user_post');
-        this.state = {comment_content: "",comment_id:"",content: "",post_id : "", user: ""}
+        this.state = {comment_content: "",comment_id:"",content: "",post_id : "", user: "",post: {}}
         this._retrieveData();
     }
     _retrieveData = () =>{
           AsyncStorage.getItem('user').then(val=>{
               this.setState({user:val})
           }).then(res=>{
-              this.console.log("GOT IT")
+              console.log("GOT IT")
           }).catch(err=>{
               console.log(err);
           });
+          AsyncStorage.getItem('post').then(val=>{
+              const value = JSON.parse(val)
+              this.setState({post: value});
+          }).then(res=>{
+              console.log("Got the post")
+          }).catch(err =>{
+              console.log(err)
+          })
     };
 
     componentDidMount(){
@@ -40,7 +48,7 @@ export default class Focus extends React.Component {
         })
     }
     submitReply = () =>{
-        const {comment_content, comment_id, content, post_id, user} = this.state;
+        const {comment_content, comment_id, content, post_id, user, post} = this.state;
         this.comment_ref.add({
             user: user,
             downvote: 0,
@@ -50,12 +58,17 @@ export default class Focus extends React.Component {
             content: content,
             date: new Date().getTime().toString()
         }).then(data=>{
-            this.user_ref.add({
+            this.user_post.add({
                 post : data.id,
                 user: user,
                 isUpvote: true
-            })
+            });
+            this.navigateToPost();
         }).catch(err=> console.log(err));
+    }
+    navigateToPost(){
+        AsyncStorage.setItem('post', JSON.stringify(this.state.post))
+        .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
     }
 
     render() {
