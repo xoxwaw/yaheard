@@ -10,6 +10,7 @@ import firebase from 'react-native-firebase';
 const dbactions = require('./Backend/DBActions');
 const caches = require('./Backend/CachesActions');
 const navigate = require('./Backend/Navigations');
+const client = require('./Backend/Client')
 
 const win = Dimensions.get('window');
 const image_width = win.width - 20;
@@ -140,28 +141,10 @@ class Feed extends React.Component {
     }
     componentDidMount() {
         this.getLocation();
+
     }
 
-    last24hours(){
-        this.state.allposts.filter(obj => new Date().getTime() - obj.time > 86400000)
-    }
-    pastMonth(){
-        this.state.allposts.filter(obj => new Date().getTime() - obj.time < 2592000000)
-    }
-    pastYear(){
-        this.state.allposts.filter(obj => new Date().getTime() - obj.time < 946080000000)
-    }
-    sortByDate(){
-        this.state.allposts.sort(function(a,b){
-            return (a.time > b.time) ? -1 : ((b.time > a.time) ? 1 : 0)
-        });
-    }
 
-    sortByPopular(){
-        this.state.allposts.sort(function(a,b){
-            return (a.upvote - a.downvote > b.upvote - b.downvote) ? -1 : ((b.upvote - b.downvote > a.upvote - a.downvote) ? 1 :0)
-        });
-    }
 
 
     getLocation =() =>{
@@ -243,11 +226,7 @@ class Feed extends React.Component {
             console.log("save the feed successfully");
         });
         this.setState({allposts: items})
-        this.last24hours()
-        // this.pastMonth()
-        this.sortByDate()
-
-        // this.sortByPopular();
+        client.sortByDate(this.state.allposts);
         this.setState({feedlength: items.length});
         if (this.state.last_ind <= this.state.feedlength){
             this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
@@ -422,7 +401,7 @@ class Feed extends React.Component {
                                                     color='#333'
                                                 />
                                             </TouchableOpacity>
-                                        </View> 
+                                        </View>
                                         <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
                                             <View style={{ flex: 1 }}></View>
                                             <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10, width: '100%', textAlign: 'center'}}>{dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>

@@ -9,6 +9,7 @@ import firebase from 'react-native-firebase';
 const dbactions = require('./Backend/DBActions');
 const caches = require('./Backend/CachesActions');
 const navigate = require('./Backend/Navigations');
+const client = require('./Backend/Client')
 
 const win = Dimensions.get('window');
 
@@ -93,6 +94,7 @@ export default class Focus extends React.Component {
 
     buildTree(node, comments){
         node.response = comments.filter(obj => obj.parent_id == node.id)
+        client.sortByDate(node.response)
         if (node.response.length > 0){
             node.response.forEach(elem=>{
                 this.buildTree(elem, comments);
@@ -147,7 +149,7 @@ export default class Focus extends React.Component {
 
     renderComment(node, depth=0){
         return (
-            <View style={{ padding: 15 }}>
+            <View style={{ paddingLeft: 15, paddingTop: 15 }}>
             <Text style={{ marginBottom: 10 }}>{node.content}</Text>
                 <View style={{ flex: 1, flexDirection: 'row'}}>
                     <View style={{ flex: 2 }}></View>
