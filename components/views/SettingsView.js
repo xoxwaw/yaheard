@@ -53,14 +53,14 @@ export default class Create extends React.Component {
             <Text style={{ fontFamily: 'Pacifico-Bold', fontSize: 22, color: 'black', textAlign: 'center', width: '100%', backgroundColor: '#ccc', height: 40 }}>Settings</Text>
                 
 
-                <View style={{ padding: 10, flex: 1 }}>
+                <View style={{ padding: 10, margin: 10, flex: 1, backgroundColor: '#ddd', borderRadius: 8, marginTop: 40}}>
                     <Picker selectedValue = {this.state.sort} onValueChange = {this.updateSort}>
                         <Picker.Item label = "Most Popular" value = "popular" />
                         <Picker.Item label = "Most Recent" value = "new" />
                     </Picker>
                 </View>
 
-                <View style={{ padding: 10, flex: 1 }}>
+                <View style={{ padding: 10, margin: 10, flex: 1, backgroundColor: '#ddd', borderRadius: 8, marginTop: 40}}>
                     <Picker selectedValue = {this.state.inc} onValueChange = {this.updateInc}>
                         <Picker.Item label = "Last day" value = "day" />
                         <Picker.Item label = "Last Month" value = "month" />
@@ -79,7 +79,7 @@ export default class Create extends React.Component {
                     accessibilityLabel="Log out of YaHeard"
                 />
             </View>
-            <View style={{ flex: 6 }}>
+            <View style={{ flex: 1 }}>
                 
             </View>
 
