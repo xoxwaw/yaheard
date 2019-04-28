@@ -7,6 +7,7 @@ const user_post = firebase.firestore().collection('user_post');
 const storage = firebase.storage();
 
 const addKarmaAction = function(user, isUpvote, inc){
+    /*add or substract karma from an user when a vote action is made*/
     inc = isUpvote ? inc : inc * (-1)
     user_ref.where('email','==',user).get().then(snapshot=>{
         snapshot.forEach(doc=>{

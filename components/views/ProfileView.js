@@ -115,9 +115,6 @@ export default class Profile extends React.Component {
             <Text style={{ margin: 10, paddingBottom: 5, fontSize: 20 }}>Karma: {this.state.karma}</Text>
         </View>
         <View style={{ flexDirection: 'row', width: '100%', backgroundColor: '#ddd'}}>
-            <TouchableOpacity style={{ elevation: 5, justifyContent: 'center',  alignItems: 'center', margin: 5, flex: 1, height: 40, borderRadius: 50, backgroundColor: '#efefef' }} onPress={this.fetchRecent}>
-                <Text style={{ fontSize: 15, color: '#444', width: '100%', textAlign: 'center'}}>History</Text>
-            </TouchableOpacity>
             <TouchableOpacity style={{ elevation: 5, justifyContent: 'center',  alignItems: 'center', margin: 5, flex: 1, height: 40, borderRadius: 50, backgroundColor: '#efefef' }} onPress={this.fetchUpvoted}>
                 <Text style={{ fontSize: 15, color: '#444', width: '100%', textAlign: 'center'}}>Upvoted</Text>
             </TouchableOpacity>

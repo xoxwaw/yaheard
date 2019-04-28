@@ -58,8 +58,6 @@ class Feed extends React.Component {
         this.ref = firebase.firestore().collection('posts');
         this.user_post = firebase.firestore().collection('user_post');
         this.storage = firebase.storage();
-        //orderBy: 0 - new, 1: popular, 2: controversial
-        //byDate: 0 - today, 1: this week, 2: this month, 3: this year, 4: all time
         this.state = {loadingMorePosts: false, refreshing: false, items: [], images: [], query: null,
             location: 'unknown', email: "", orderBy : 0, byDate: 0, allposts:[], last_ind:6};
         this._retrieveData();
@@ -81,16 +79,11 @@ class Feed extends React.Component {
     _onRefresh = () => {
         this.setState({refreshing: true});
         this.getLocation()
-        // this.setState({ query });
         this.setState({last_ind: 5})
-        // this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
         this.setState({refreshing: false});
     }
     reload = ()=>{
         this.getLocation();
-        // var query = this.getDocumentNearBy(0.01);
-        // this.setState({ query });
-        // this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
     }
     savePostsToCaches(extra_posts){
         AsyncStorage.getItem('current_feed').then(val=>{
@@ -104,48 +97,25 @@ class Feed extends React.Component {
         })
     }
     fetchNextPosts = ()=>{
-        this.setState({loadingMorePosts: true}); // for loading indicator at bottom of feed
-        // this.state.query.limit(1).onSnapshot(documentSnapshots=>{
-        //     var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
-        //     console.log("last", lastVisible);
-        //     // Construct a new query starting at this document,
-        //     // get the next 10 cities.
-        //     var query = this.getDocumentNearBy(1.0);
-        //     next = query.startAfter(lastVisible).limit(1).get().then(data=>console.log(data.doc()))
-        //     .catch(err=> console.log(err));
-        //     console.log(next)
-        //     this.setState({query: next});
-        //
-        // });
+        this.setState({loadingMorePosts: true}); // for loading indicator at bottom of feed;
         const ind = this.state.last_ind;
-        // var extra_posts = []
         if (ind >= this.state.feedlength){
             Alert.alert("No more posts",
             "Couldn't find any more posts in your current location! Try moving around.")
         }else{
             if (ind+5 < this.state.feedlength){
                 this.setState({last_ind: ind+5});
-        //         var items = this.state.items;
-        //         extra_posts = this.state.allposts.slice(ind, ind+5)
-        //         this.setState({last_ind: ind+5, items: items.concat(extra_posts)})
-        //         console.log(ind,items,extra_posts)
             }else{
                 this.setState({last_ind: this.state.feedlength})
-        //         extra_posts = this.state.allposts.slice(ind, this.state.allposts.length)
-        //         this.setState({items: this.state.allposts, last_ind: this.state.allposts.length});
             }
         }
         this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
         this.setState({loadingMorePosts: false}); // for loading indicator at bottom of feed
-        // this.savePostsToCaches(extra_posts)
     }
     componentDidMount() {
         this.getLocation();
 
     }
-
-
-
 
     getLocation =() =>{
         navigator.geolocation.getCurrentPosition(
@@ -158,8 +128,6 @@ class Feed extends React.Component {
                 var query = this.getDocumentNearBy(MAXIMUM_MOVING_DISTANCE);
                 this.setState({query: query})
                 this.unsubscribe = query.onSnapshot(this.onCollectionUpdate);
-                // this.reload();
-                // this.fetchNextPosts();
                 AsyncStorage.setItem('last_location', JSON.stringify(location)).then(val=>{
                     console.log();
                 });
@@ -180,7 +148,7 @@ class Feed extends React.Component {
     };
 
     getDocumentNearBy = (distance) => {
-        const lat = 0.0144927536231884;
+        const lat = 0.0144927536231884; //conversion unit
         const lon = 0.0181818181818182;
         const {longitude, latitude} = this.state.location;
         const lowerLat = latitude - (lat * distance);
@@ -194,13 +162,6 @@ class Feed extends React.Component {
 
         let docRef = firebase.firestore().collection("posts");
         let query = docRef.where("location", '>', lesserGeopoint).where("location", '<', greaterGeopoint).orderBy("location","asc")
-        // if (this.state.orderBy == 0){
-        //     query = query.orderBy("date","desc").limit(10);
-        // }else if (this.state.orderBy == 1){
-        //     query = query.orderBy("upvote", "desc")
-        // }else if (this.state.orderBy == 2){
-        //     query = query.orderBy("downvote","desc")
-        // }
         return query;
     }
 
@@ -233,9 +194,6 @@ class Feed extends React.Component {
         }else{
             this.setState({items: this.state.allposts});
         }
-
-
-
     }
     _upvote(post){
         var superitems = this.state.items;
@@ -348,7 +306,6 @@ class Feed extends React.Component {
                         }else{
                             return (
                                 <Card>
-
                                     <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
                                         <View>
                                             <Image

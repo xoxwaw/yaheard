@@ -102,26 +102,23 @@ export default class Focus extends React.Component {
             })
         }
     }
-    _upvote(post){
+    _upvote(){
         var superitems = this.state.items;
         superitems.forEach(elem=>{
-            if (elem.id == post.id){
-                caches.upvote(post);
-                dbactions.upvote(post.id, this.state.email, post.user);
-            }
+            caches.upvote(elem);
+            dbactions.upvote(elem.id, this.state.email, elem.user);
         });
         this.setState({items: superitems});
 
     }
-    _downvote(post){
+    _downvote(){
         var superitems = this.state.items;
         superitems.forEach(elem=>{
-            if (elem.id == post.id){
-                caches.downvote(post);
-                dbactions.downvote(post.id, this.state.email, post.user);
-            }
+            caches.downvote(elem);
+            dbactions.downvote(elem.id, this.state.email, elem.user);
         });
         this.setState({items: superitems});
+
     }
     _retrieveData = () =>{
           AsyncStorage.getItem('user').then(val=>{
@@ -212,7 +209,7 @@ export default class Focus extends React.Component {
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote()}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
                                                 size={25}
@@ -227,7 +224,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote()}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -293,7 +290,7 @@ export default class Focus extends React.Component {
                                     </View>
                                     <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45}}>
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
+                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote()}>
                                                 <Icon
                                                 style={{textAlign: "center"}}
                                                 size={25}
@@ -308,7 +305,7 @@ export default class Focus extends React.Component {
                                         </View>
 
                                         <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
+                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote()}>
                                                 <Icon
                                                     style={{textAlign: "center"}}
                                                     size={25}
@@ -360,7 +357,7 @@ export default class Focus extends React.Component {
             {
                 this.state.comments.map((u,i)=>{
                     return(
-                        <Card style={{ padding: 10 }}> 
+                        <Card style={{ padding: 10 }}>
                         {this.renderComment(u)}
                         </Card>
                     )

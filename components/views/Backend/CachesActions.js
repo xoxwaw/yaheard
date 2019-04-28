@@ -1,7 +1,5 @@
 import {AsyncStorage} from 'react-native';
 
-
-
 module.exports = {
     savePostToCaches: function(extra_posts){
         AsyncStorage.getItem('current_feed').then(val=>{
@@ -28,7 +26,6 @@ module.exports = {
         })
     },
     upvote: function(post){
-        // AsyncStorage.removeItem('upvoted').then(val=>console.log('remove'));
         AsyncStorage.getItem(post.id+"voted").then(val=>{
             if (val){
                 console.log(post.upvote);
