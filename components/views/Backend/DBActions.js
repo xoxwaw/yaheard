@@ -74,14 +74,6 @@ module.exports = {
         /*parameter: post id, user id, author id*/
         voteAction(pid,uid,authorid, false);
     },
-    postComment: function(pid){
-        /*comment on a post
-        paramter: post id*/
-    },
-    postReply: function(pid, cid){
-        /*reply to a comment in a post
-        parameter: post id, comment id*/
-    },
     msToTime: function(s) {
       		var ms = s % 1000;
       		s = (s - ms) / 1000;

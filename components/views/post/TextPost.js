@@ -45,6 +45,7 @@ export default class TextPost extends React.Component {
       );
   }
   writePost = () => {
+      /*write data into the database*/
       var {post_title, post_content, errorMessage, user,location, isText, id} = this.state;
 
       this.ref.add({
@@ -74,11 +75,9 @@ export default class TextPost extends React.Component {
       });
 
   }
-  clearText = () => {
-    //not yet written
-  }
 
   handleTextPost = () =>{
+      /*initial call for submiting post*/
       this.setState({isText: true});
       this.writePost();
   }

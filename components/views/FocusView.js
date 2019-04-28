@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
       width: '100%'
   }
 });
+
 export default class Focus extends React.Component {
     constructor(){
         super();
