@@ -18,7 +18,7 @@ const win = Dimensions.get('window');
 const image_width = win.width * 0.922;
 const image_height = win.width * 0.922 * 0.75;
 export default class ImagePost extends React.Component {
-  state = { isNavigate: false, loading: false, loaded: false, post_title : "", post_content: '', errorMessage: null,user: "",
+  state = { posted: false, isNavigate: false, loading: false, loaded: false, post_title : "", post_content: '', errorMessage: null,user: "",
             location: {}, isText: false, imageURL : "", id:"", width:800, height:600}
   constructor(props){
       super(props);
@@ -54,7 +54,7 @@ export default class ImagePost extends React.Component {
       );
   }
   uploadImage = () => {
-        this.setState({loading: true});
+        this.setState({loading: true, posted: true});
         var uri = this.state.imageURL;
         var mime = 'image/jpeg'
           const sessionId = new Date().getTime().toString();
@@ -108,7 +108,7 @@ export default class ImagePost extends React.Component {
       });
   }
   handleImagePost = () => {
-      this.setState({isText: false, loaded: false, loading: false});
+      this.setState({isText: false, loaded: false, loading: false, posted: false});
       this._takePicture();
   }
   _takePicture = () => {
@@ -234,10 +234,15 @@ export default class ImagePost extends React.Component {
 
                             </View>
                             <View style={{ flex: 1, alignContent: 'flex-end' }}></View>
-                            {this.state.loaded &&
+                            {this.state.loaded && !this.state.posted &&
                                 <TouchableOpacity style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}} onPress = {()=>{
-                                    if (this.state.imageURL.length > 0){
-                                        this.uploadImage()
+                                    if (this.state.imageURL.length > 0 ){
+                                        if (this.state.post_title.length > 0){
+                                            this.uploadImage()
+                                        }
+                                        else{
+                                            alert("Add a title!")
+                                        }
                                     }
                                     else{
                                         alert("You must choose a photo to upload")

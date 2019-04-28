@@ -150,7 +150,7 @@ export default class Focus extends React.Component {
 
     renderComment(node, depth=0){
         return (
-            <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}>
+            <View style={{ flexDirection: 'row', marginTop: 10, paddingBottom: 10 }}>
                 <View style={{ width: 10, borderColor: '#bbb', borderLeftWidth: 0.5 }}>
 
                 </View>
@@ -161,23 +161,12 @@ export default class Focus extends React.Component {
                         <View style={{ flex: 2 }}>
                             <Text style={{ width: '100%', textAlign: 'center', color: '#bbb' }}>{dbactions.msToTime(new Date().getTime() - node.date)} ago.</Text>
                         </View>
-                        
-                        <View style={{ flex: 1 }}>
-                            <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
-                        </View>
-                        
 
                         {depth < 5 &&
                             <View style={{ flex: 1 }}>
                                 <TouchableOpacity onPress={()=>this.reply(node)}>
                                     <Text style={{ width: '100%', textAlign: 'center', color: '#7bc484' }}>Reply</Text>
                                 </TouchableOpacity>
-                            </View>
-                        }
-
-                        {depth < 5 &&
-                            <View style={{ flex: 1 }}>
-                                <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
                             </View>
                         }
                         <View style={{ flex: 1 }}>
