@@ -150,38 +150,47 @@ export default class Focus extends React.Component {
 
     renderComment(node, depth=0){
         return (
-            <View style={{ paddingLeft: 15, paddingTop: 15 }}>
-            <Text style={{ marginBottom: 10 }}>{node.content}</Text>
-                <View style={{ flex: 1, flexDirection: 'row'}}>
-                    <View style={{ flex: 2 }}></View>
-                    <View style={{ flex: 2 }}>
-                        <Text style={{ width: '100%', textAlign: 'center', color: '#bbb' }}>{dbactions.msToTime(new Date().getTime() - node.date)} ago.</Text>
-                    </View>
-
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
-                    </View>
-
-                    <View style={{ flex: 1 }}>
-                        <TouchableOpacity onPress={()=>this.reply(node)}>
-                            <Text style={{ width: '100%', textAlign: 'center', color: '#7bc484' }}>Reply</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
-                    </View>
-
-                    <View style={{ flex: 1 }}>
-                        <TouchableOpacity>
-                            <Text style={{ width: '100%', textAlign: 'center', color: '#c47b7b' }}>Report</Text>
-                        </TouchableOpacity>
-                    </View>
+            <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10 }}>
+                <View style={{ width: 10, borderColor: '#bbb', borderLeftWidth: 0.5 }}>
 
                 </View>
-                {node.response &&
-                    node.response.map((u,i) => this.renderComment(u, depth+1))
-                }
+                <View style={{ flex: 1}}>
+                    <Text style={{ marginBottom: 10 }}>{node.content}</Text>
+                    <View style={{ flex: 1, flexDirection: 'row'}}>
+                        <View style={{ flex: 2 }}></View>
+                        <View style={{ flex: 2 }}>
+                            <Text style={{ width: '100%', textAlign: 'center', color: '#bbb' }}>{dbactions.msToTime(new Date().getTime() - node.date)} ago.</Text>
+                        </View>
+                        
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
+                        </View>
+                        
+
+                        {depth < 5 &&
+                            <View style={{ flex: 1 }}>
+                                <TouchableOpacity onPress={()=>this.reply(node)}>
+                                    <Text style={{ width: '100%', textAlign: 'center', color: '#7bc484' }}>Reply</Text>
+                                </TouchableOpacity>
+                            </View>
+                        }
+
+                        {depth < 5 &&
+                            <View style={{ flex: 1 }}>
+                                <Text style={{ width: '100%', textAlign: 'center' }}>|</Text>
+                            </View>
+                        }
+                        <View style={{ flex: 1 }}>
+                            <TouchableOpacity>
+                                <Text style={{ width: '100%', textAlign: 'center', color: '#c47b7b' }}>Report</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                    {node.response &&
+                        node.response.map((u,i) => this.renderComment(u, depth+1))
+                    }
+                </View>
             </View>
         )
     }
@@ -351,7 +360,7 @@ export default class Focus extends React.Component {
               }
               </View>
 
-            <View style={{ backgroundColor: '#bbb', width: '100%', minHeight: '100%' }}>
+            <View style={{ backgroundColor: '#ddd', width: '100%', minHeight: '100%' }}>
             {!this.state.comments.length &&
                 (
                     <Card>
@@ -362,7 +371,7 @@ export default class Focus extends React.Component {
             {
                 this.state.comments.map((u,i)=>{
                     return(
-                        <Card>
+                        <Card style={{ padding: 10 }}> 
                         {this.renderComment(u)}
                         </Card>
                     )
