@@ -51,30 +51,24 @@ export default class Create extends React.Component {
     return (
         <View style={{ flex: 1, flexDirection: 'column'}}>
             <Text style={{ fontFamily: 'Pacifico-Bold', fontSize: 22, color: 'black', textAlign: 'center', width: '100%', backgroundColor: '#ccc', height: 40 }}>Settings</Text>
-            
-            <View style={{ padding: 10, flex: 1 }}>
-                <View style={{ flexDirection: 'row', height: 50, backgroundColor: '#eee', borderRadius: 8 }}>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 15 }}>Sort By:</Text>
-                    </View>
+                
 
-                    <View style={{ flex: 3 }}>
-                        <Picker selectedValue = {this.state.sort} onValueChange = {this.updateSort}>
-                            <Picker.Item label = "Most Popular" value = "popular" />
-                            <Picker.Item label = "Most Recent" value = "new" />
-                        </Picker>
-                    </View>
-
-                    <View style={{ flex: 3 }}>
-                        <Picker selectedValue = {this.state.inc} onValueChange = {this.updateInc}>
-                            <Picker.Item label = "Last day" value = "day" />
-                            <Picker.Item label = "Last Month" value = "month" />
-                            <Picker.Item label = "Last Year" value = "year" />
-                            <Picker.Item label = "All Time" value = "all" />
-                        </Picker>
-                    </View>
+                <View style={{ padding: 10, flex: 1 }}>
+                    <Picker selectedValue = {this.state.sort} onValueChange = {this.updateSort}>
+                        <Picker.Item label = "Most Popular" value = "popular" />
+                        <Picker.Item label = "Most Recent" value = "new" />
+                    </Picker>
                 </View>
-            </View>
+
+                <View style={{ padding: 10, flex: 1 }}>
+                    <Picker selectedValue = {this.state.inc} onValueChange = {this.updateInc}>
+                        <Picker.Item label = "Last day" value = "day" />
+                        <Picker.Item label = "Last Month" value = "month" />
+                        <Picker.Item label = "Last Year" value = "year" />
+                        <Picker.Item label = "All Time" value = "all" />
+                    </Picker>
+                </View>
+
 
             <View style={{ padding: 10, flex: 1 }}>
                 <Button
