@@ -37,10 +37,10 @@ class Main extends React.Component {
           <View style={{height: 50}}>
             <Header />
           </View>
-          <View style={{height: win.height - 100, width: '100%', backgroundColor: '#ccc'}}>
+          <View style={{height: win.height - 75, width: '100%', backgroundColor: '#ccc'}}>
             <ContentNav navigation={this.props.navigation} />
           </View>
-          <View style={{height: 50}}>
+          <View style={{height: 100}}>
             <Controls />
           </View>
         </View>
