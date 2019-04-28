@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, Platform } from 'react-native';
 import { createSwitchNavigator, withNavigation  } from 'react-navigation'
 
 
@@ -37,7 +37,7 @@ class Main extends React.Component {
           <View style={{height: 50}}>
             <Header />
           </View>
-          <View style={{height: win.height - 75, width: '100%', backgroundColor: '#ccc'}}>
+          <View style={{height: Platform.OS === 'android' ? win.height - 75 : win.height - 100, width: '100%', backgroundColor: '#ccc'}}>
             <ContentNav navigation={this.props.navigation} />
           </View>
           <View style={{height: 100}}>
