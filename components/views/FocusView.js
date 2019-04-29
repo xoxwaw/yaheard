@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { withNavigation  } from 'react-navigation';
-import {Image, ImageBackground, View, ScrollView, Text, Button, StyleSheet, BackHandler, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
+import {ImageBackground, View, ScrollView, Text, StyleSheet, BackHandler, TouchableOpacity,  AsyncStorage, Dimensions } from 'react-native';
 import { Card } from './Card';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';

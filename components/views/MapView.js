@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { SwitchNavigator } from 'react-navigation'
+import { View, Text } from 'react-native';
 
 import styles from '../styles/postStyle' //for testing templates
 import { Icon } from 'react-native-elements'; //for testing templates

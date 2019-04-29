@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator, Text, StyleSheet, TextInput, Button, AsyncStorage, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, Alert, Dimensions, BackHandler } from 'react-native';
-import { withNavigation  } from 'react-navigation';
+import { View, ActivityIndicator, Text, StyleSheet, TextInput, AsyncStorage, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
-import RNFetchBlob from 'react-native-fetch-blob';
-import * as Progress from 'react-native-progress';
 
 //backend actions
 const dbactions = require('../Backend/DBActions');

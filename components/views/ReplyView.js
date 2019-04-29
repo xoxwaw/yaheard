@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Keyboard, View, TextInput, Text, Button, StyleSheet, TouchableWithoutFeedback, TouchableOpacity,  AsyncStorage } from 'react-native';
+import {Keyboard, View, TextInput, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity,  AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 

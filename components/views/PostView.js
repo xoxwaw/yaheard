@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, Platform, Image } from 'react-native';
+import { View } from 'react-native';
 import { createSwitchNavigator, withNavigation  } from 'react-navigation'
-import firebase from 'react-native-firebase';
 
 import ImagePost from './post/ImagePost';
 import TextPost from './post/TextPost';

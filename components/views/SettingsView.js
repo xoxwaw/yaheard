@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, AsyncStorage } from 'react-native';
-import { SwitchNavigator } from 'react-navigation';
+import { View, Text, Button, TouchableOpacity, AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
 
 const client = require('./Backend/Client');
