@@ -35,6 +35,7 @@ export default class Create extends React.Component {
     if (color == '#4C9A2A'){
         return {
             width: '100%',
+            height: 30,
             textAlign: 'center',
             fontFamily: 'Pacifico-Bold',
             fontSize: 20,
@@ -47,6 +48,7 @@ export default class Create extends React.Component {
     else{
         return {
             width: '100%',
+            height: 30,
             textAlign: 'center',
             fontFamily: 'Pacifico-Bold',
             fontSize: 20,
@@ -76,7 +78,7 @@ export default class Create extends React.Component {
     // sort to NEW
   }
   sortPop = () => {
-      AsyncStorage.setItem('sortTime', 'popular').then(res=> console.log())
+      AsyncStorage.setItem('sortType', 'popular').then(res=> console.log())
     this.setState({ inc: ['gray','#4C9A2A'] })
     // sort to POPULAR
   }
