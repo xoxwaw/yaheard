@@ -187,25 +187,36 @@ class Feed extends React.Component {
             console.log("save the feed successfully");
         });
         this.setState({allposts: items});
+        client.sortByPopular(this.state.allposts);
         AsyncStorage.getItem('sortTime').then(val=>{
+            console.log(val)
             if (val == 'day'){
-                client.last24hours(this.state.allposts)
+                const allposts = client.last24hours(this.state.allposts)
+                this.setState({allposts: allposts})
+                allposts.forEach(elem=>
+                console.log(new Date().getTime()- elem.time))
             }else if(val == 'month'){
-                client.pastMonth(this.state.allposts)
-            }else{
-                client.pastYear(this.state.allposts)
+                const allposts = client.pastMonth(this.state.allposts)
+                this.setState({allposts: allposts})
+            }else if (val == 'year'){
+                const allposts = client.pastYear(this.state.allposts)
+                this.setState({allposts: allposts})
             }
-        });
+            this.setState({feedlength: this.state.allposts.length});
+        }).catch(err => console.log(err));
         AsyncStorage.getItem('sortType').then(val =>{
+            console.log(val)
             if (val == 'new'){
                 client.sortByDate(this.state.allposts)
-            }else{
+            }else if (val == 'popular'){
                 client.sortByPopular(this.state.allposts);
             }
-        })
+        }).catch(err=>console.log(err));
         // client.sortByDate(this.state.allposts);
-        this.setState({feedlength: items.length});
-        if (this.state.last_ind <= this.state.feedlength){
+
+        if (this.state.feedlength == 0){
+            this.setState({items: []})
+        }else if (this.state.last_ind <= this.state.feedlength){
             this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
         }else{
             this.setState({items: this.state.allposts});

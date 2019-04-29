@@ -1,12 +1,13 @@
 module.exports = {
     last24hours:function(posts){
-        posts.filter(obj => new Date().getTime() - obj.time > 86400000)
+        return posts.filter(obj => new Date().getTime() - obj.time < 86400000)
     },
     pastMonth: function(posts){
-        posts.filter(obj => new Date().getTime() - obj.time < 2592000000)
+        return posts.filter(obj => new Date().getTime() - obj.time < 2592000000)
+
     },
     pastYear: function(posts){
-        posts.filter(obj => new Date().getTime() - obj.time < 946080000000)
+        return posts.filter(obj => new Date().getTime() - obj.time < 946080000000)
     },
     sortByDate: function(posts){
         posts.sort(function(a,b){

@@ -6,8 +6,38 @@ import firebase from 'react-native-firebase';
 const client = require('./Backend/Client');
 
 export default class Create extends React.Component {
-    state = {sort: ['gray','gray','gray'], inc: ['gray','gray']}
+    constructor(){
+        super()
+        this.state = {sort: ['gray','gray','#4C9A2A'], inc: ['#4C9A2A','gray']}
+        this._retrieveData()
+    }
 
+    _retrieveData(){
+        AsyncStorage.getItem('sortType').then(val=>{
+            if (val == 'popular'){
+                this.setState({ inc: ['#4C9A2A','gray'] })
+            }else if (val == 'new'){
+                this.setState({ inc: ['gray','#4C9A2A'] })
+            }
+        }).then(res=>{
+            console.log("GOT IT")
+        }).catch(err=>{
+            console.log(err);
+        });
+        AsyncStorage.getItem('sortTime').then(val=>{
+            if (val == 'day'){
+                this.setState({ sort: ['#4C9A2A','gray','gray'] })
+            }else if (val == 'month'){
+                this.setState({ sort: ['gray','#4C9A2A','gray'] })
+            }else if (val == 'year'){
+                this.setState({ sort: ['gray','gray','#4C9A2A'] })
+            }
+        }).then(res=>{
+            console.log("GOT IT")
+        }).catch(err=>{
+            console.log(err);
+        });
+    }
 
   logOut = () => {
     firebase.auth().signOut().then(function() {
@@ -58,28 +88,35 @@ export default class Create extends React.Component {
 
   }
   sortDay = () => {
-      AsyncStorage.setItem('sortTime', 'day').then(res=> console.log())
-    this.setState({ sort: ['#4C9A2A','gray','gray'] })
+      AsyncStorage.setItem('sortTime', 'day').then(()=> console.log()).then(val=>{
+          this.setState({ sort: ['#4C9A2A','gray','gray'] })
+      })
+
     // sort to day
   }
   sortMonth = () => {
-      AsyncStorage.setItem('sortTime', 'month').then(res=> console.log())
-    this.setState({ sort: ['gray','#4C9A2A','gray'] })
+      AsyncStorage.setItem('sortTime', 'month').then(()=> console.log()).then(val=>{
+          this.setState({ sort: ['gray','#4C9A2A','gray'] })
+      })
+
     // sort to month
   }
   sortYear = () => {
-      AsyncStorage.setItem('sortTime', 'year').then(res=> console.log())
-    this.setState({ sort: ['gray','gray','#4C9A2A'] })
+      AsyncStorage.setItem('sortTime', 'year').then(()=> console.log()).then(
+          val=> this.setState({ sort: ['gray','gray','#4C9A2A'] })
+      )
     // sort to year
   }
   sortNew = () => {
-      AsyncStorage.setItem('sortType', 'new').then(res=> console.log())
-    this.setState({ inc: ['#4C9A2A','gray'] })
+      AsyncStorage.setItem('sortType', 'new').then(()=> console.log("SORT BY NEW")).then(
+          this.setState({ inc: ['gray','#4C9A2A'] })
+      )
     // sort to NEW
   }
   sortPop = () => {
-      AsyncStorage.setItem('sortType', 'popular').then(res=> console.log())
-    this.setState({ inc: ['gray','#4C9A2A'] })
+      AsyncStorage.setItem('sortType', 'popular').then(()=> console.log("SORT BY POPULAR")).then(
+          val => this.setState({ inc: ['#4C9A2A','gray'] })
+      )
     // sort to POPULAR
   }
   render() {
@@ -110,12 +147,12 @@ export default class Create extends React.Component {
             <Text style={{ fontSize: 16, width: '100%', backgroundColor: '#ccc', marginLeft: 20, color: 'gray' }}>Sort posts by:</Text>
             <View style={{ padding: 10, margin: 10, flex: 1}}>
                 <View style={{ flexDirection: 'row', elevation: 5 }}>
-                    <TouchableOpacity onPress={this.sortNew} style={{ flex: 1, padding: 10, backgroundColor:'#eee', borderTopLeftRadius: 8, borderBottomLeftRadius: 8, borderColor: '#4C9A2A', borderWidth: 0.5 }}>
+                    <TouchableOpacity onPress={this.sortPop} style={{ flex: 1, padding: 10, backgroundColor:'#eee', borderTopLeftRadius: 8, borderBottomLeftRadius: 8, borderColor: '#4C9A2A', borderWidth: 0.5 }}>
                         <Text color={this.state.sort[0]} style={this.textStyle(0, 'inc')}>
                             Popular
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this.sortPop} style={{ flex: 1, padding: 10, backgroundColor:'#eee', borderTopRightRadius: 8, borderBottomRightRadius: 8, borderColor: '#4C9A2A', borderWidth: 0.5 }}>
+                    <TouchableOpacity onPress={this.sortNew} style={{ flex: 1, padding: 10, backgroundColor:'#eee', borderTopRightRadius: 8, borderBottomRightRadius: 8, borderColor: '#4C9A2A', borderWidth: 0.5 }}>
                         <Text color={this.state.sort[0]} style={this.textStyle(1, 'inc')}>
                             Recent
                         </Text>
