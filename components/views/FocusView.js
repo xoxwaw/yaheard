@@ -44,7 +44,7 @@ export default class Focus extends React.Component {
         this.post_ref = firebase.firestore().collection('posts');
         this.comment_ref = firebase.firestore().collection('comments');
         this.user_post = firebase.firestore().collection('user_post');
-        this.state = {post_id : "", user: "", content: "", items : [], comments: [], post:{}}
+        this.state = {post_id : "", email: "", content: "", items : [], comments: [], post:{}}
         this._retrieveData();
     }
     componentWillMount() {
@@ -104,25 +104,22 @@ export default class Focus extends React.Component {
     }
     _upvote(){
         var superitems = this.state.items;
-        superitems.forEach(elem=>{
-            caches.upvote(elem);
-            dbactions.upvote(elem.id, this.state.email, elem.user);
-        });
+        dbactions.upvote(superitems[0].id, this.state.email, superitems[0].user);
+        caches.upvote(superitems[0]);
         this.setState({items: superitems});
 
     }
     _downvote(){
         var superitems = this.state.items;
-        superitems.forEach(elem=>{
-            caches.downvote(elem);
-            dbactions.downvote(elem.id, this.state.email, elem.user);
-        });
+
+        dbactions.downvote(superitems[0].id, this.state.email, superitems[0].user);
+        caches.downvote(superitems[0]);
         this.setState({items: superitems});
 
     }
     _retrieveData = () =>{
           AsyncStorage.getItem('user').then(val=>{
-              this.setState({user:val})
+              this.setState({email:val})
           }).then(res=>{
               console.log("GOT IT")
           }).catch(err=>{
@@ -185,7 +182,6 @@ export default class Focus extends React.Component {
           <View style={{ flex: 1, flexDirection: 'column', width: '100%' }}>
             <ScrollView style={{ flex: 1, width: '100%'  }}>
                 <View containerStyle={{padding: 0, width: '100%'}} >
-
               {
                   this.state.items.map((u, i) => {
                       if (u.isText == true){

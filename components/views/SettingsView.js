@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, AsyncStorage } from 'react-native';
 import { SwitchNavigator } from 'react-navigation';
 import firebase from 'react-native-firebase';
 
@@ -8,7 +8,7 @@ const client = require('./Backend/Client');
 export default class Create extends React.Component {
     state = {sort: ['gray','gray','gray'], inc: ['gray','gray']}
 
-    
+
   logOut = () => {
     firebase.auth().signOut().then(function() {
       Alert.alert(
@@ -34,9 +34,9 @@ export default class Create extends React.Component {
     }
     if (color == '#4C9A2A'){
         return {
-            width: '100%', 
-            textAlign: 'center', 
-            fontFamily: 'Pacifico-Bold', 
+            width: '100%',
+            textAlign: 'center',
+            fontFamily: 'Pacifico-Bold',
             fontSize: 20,
             color: color,
             textShadowColor: '#4C9A2A',
@@ -46,32 +46,37 @@ export default class Create extends React.Component {
     }
     else{
         return {
-            width: '100%', 
-            textAlign: 'center', 
-            fontFamily: 'Pacifico-Bold', 
+            width: '100%',
+            textAlign: 'center',
+            fontFamily: 'Pacifico-Bold',
             fontSize: 20,
             color: color,
         }
     }
-    
+
   }
   sortDay = () => {
+      AsyncStorage.setItem('sortTime', 'day').then(res=> console.log())
     this.setState({ sort: ['#4C9A2A','gray','gray'] })
     // sort to day
   }
   sortMonth = () => {
+      AsyncStorage.setItem('sortTime', 'month').then(res=> console.log())
     this.setState({ sort: ['gray','#4C9A2A','gray'] })
     // sort to month
   }
   sortYear = () => {
+      AsyncStorage.setItem('sortTime', 'year').then(res=> console.log())
     this.setState({ sort: ['gray','gray','#4C9A2A'] })
     // sort to year
   }
   sortNew = () => {
+      AsyncStorage.setItem('sortType', 'new').then(res=> console.log())
     this.setState({ inc: ['#4C9A2A','gray'] })
     // sort to NEW
   }
   sortPop = () => {
+      AsyncStorage.setItem('sortTime', 'popular').then(res=> console.log())
     this.setState({ inc: ['gray','#4C9A2A'] })
     // sort to POPULAR
   }
@@ -79,7 +84,7 @@ export default class Create extends React.Component {
     return (
         <View style={{ flex: 1, flexDirection: 'column'}}>
             <Text style={{ fontFamily: 'Pacifico-Bold', fontSize: 22, color: 'black', textAlign: 'center', width: '100%', backgroundColor: '#ccc', height: 40 }}>Settings</Text>
-                
+
             <Text style={{ fontSize: 16, width: '100%', backgroundColor: '#ccc', marginLeft: 20, color: 'gray' }}>See posts from the last:</Text>
             <View style={{ padding: 10, margin: 10, flex: 1}}>
                 <View style={{ flexDirection: 'row', elevation: 5 }}>
@@ -126,7 +131,7 @@ export default class Create extends React.Component {
                 />
             </View>
             <View style={{ flex: 5 }}>
-                
+
             </View>
 
             <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', paddingTop: 100}}>

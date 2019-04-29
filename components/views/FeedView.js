@@ -186,8 +186,24 @@ class Feed extends React.Component {
         AsyncStorage.setItem('feed', JSON.stringify(items)).then(val=>{
             console.log("save the feed successfully");
         });
-        this.setState({allposts: items})
-        client.sortByDate(this.state.allposts);
+        this.setState({allposts: items});
+        AsyncStorage.getItem('sortTime').then(val=>{
+            if (val == 'day'){
+                client.last24hours(this.state.allposts)
+            }else if(val == 'month'){
+                client.pastMonth(this.state.allposts)
+            }else{
+                client.pastYear(this.state.allposts)
+            }
+        });
+        AsyncStorage.getItem('sortType').then(val =>{
+            if (val == 'new'){
+                client.sortByDate(this.state.allposts)
+            }else{
+                client.sortByPopular(this.state.allposts);
+            }
+        })
+        // client.sortByDate(this.state.allposts);
         this.setState({feedlength: items.length});
         if (this.state.last_ind <= this.state.feedlength){
             this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
