@@ -36,29 +36,29 @@ export default class Create extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-  button : {
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  header : {
-    fontSize: 18,
-    color: '#4C9A2A',
-    marginLeft: 20,
-    marginTop: 20,
-    flex: 1,
-  },
-  container : {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    flex: 15,
-  },
-  textbox : {
-    backgroundColor: '#ddd',
-    borderColor: '#ccc',
-    borderWidth: 2,
-    width: '90%',
-    marginBottom: 10,
-    height: 200,
-  }
+    button : {
+        marginLeft: 10,
+        marginRight: 10,
+    },
+    header : {
+        fontSize: 18,
+        color: '#4C9A2A',
+        marginLeft: 20,
+        marginTop: 20,
+        flex: 1,
+    },
+    container : {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        flex: 15,
+    },
+    textbox : {
+        backgroundColor: '#ddd',
+        borderColor: '#ccc',
+        borderWidth: 2,
+        width: '90%',
+        marginBottom: 10,
+        height: 200,
+    }
 });

@@ -6,42 +6,42 @@ import firebase from 'react-native-firebase';
 const navigate = require('./Backend/Navigations');
 
 const styles = StyleSheet.create({
-  content_container: {
-    backgroundColor: '#68bb59',
-    padding: 20,
-  },
-  content_item: {
-    backgroundColor: 'whitesmoke',
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-  },
-  content: {
-      fontSize: 12,
-      paddingBottom: 20,
-  },
-  button : {
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 20,
-  },
-  textbox : {
-    marginTop: 80,
-    height: 50,
-    fontSize:16,
-    width: '100%',
-    marginTop: 8,
-    marginVertical: 15,
-    elevation: 0,
-    marginLeft: 20,
-    textAlignVertical: 'top'
-  },
-  inputCard : {
-      marginVertical: 5,
-      width: '100%',
-      borderRadius: 8,
-      flex: 8,
-  }
+    content_container: {
+        backgroundColor: '#68bb59',
+        padding: 20,
+    },
+    content_item: {
+        backgroundColor: 'whitesmoke',
+        borderRadius: 10,
+        padding: 10,
+        marginBottom: 10,
+    },
+    content: {
+        fontSize: 12,
+        paddingBottom: 20,
+    },
+    button : {
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 20,
+    },
+    textbox : {
+        marginTop: 80,
+        height: 50,
+        fontSize:16,
+        width: '100%',
+        marginTop: 8,
+        marginVertical: 15,
+        elevation: 0,
+        marginLeft: 20,
+        textAlignVertical: 'top'
+    },
+    inputCard : {
+        marginVertical: 5,
+        width: '100%',
+        borderRadius: 8,
+        flex: 8,
+    }
 });
 export default class Focus extends React.Component {
     constructor(){
@@ -98,41 +98,41 @@ export default class Focus extends React.Component {
     }
 
     render() {
-      return (
-        <View style={{ flex: 1, width: '100%', flexDirection: 'column' }}>
-            <View style={{ padding: 10, position: 'absolute', elevation: 5}}>
-                <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30, elevation: 5 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
-                    <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
-                        <Icon
-                            style={{textAlign: "center", padding: 15, elecation: 5}}
-                            size={20}
-                            name='arrow-left'
-                            color='#4C9A2A'
-                        />
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View style={{ flex: 1, width: '100%', marginTop: 50}}>
-                    <View style={styles.inputCard}>
-                        <TextInput
-                            multiline
-                            style={styles.textbox}
-                            placeholder="Write a comment..."
-                            autoCapitalize="sentences"
-                            numberOfLines={5}
-                            adjustsFontSizeToFit={true}
-                            minimumFontScale={0.1}
-                            onChangeText={content => this.setState({ content })}
-                        >
-                        </TextInput>
-                    </View>
-                <TouchableOpacity onPress = {this.postComment} style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}}>
-                    <Text style={{fontFamily: 'Pacifico-Bold', fontSize: 28, color: '#4C9A2A', width: '100%', textAlign: 'center'}}>Comment!</Text>
-                </TouchableOpacity>
+        return (
+            <View style={{ flex: 1, width: '100%', flexDirection: 'column' }}>
+                <View style={{ padding: 10, position: 'absolute', elevation: 5}}>
+                    <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 30, elevation: 5 }} onPress={() => this.props.navigation.navigate('routeFeed') }>
+                        <View style={{ width: 50, height: 50, backgroundColor: 'whitesmoke', borderRadius: 30, position: 'absolute', elevation: 5 }}>
+                            <Icon
+                                style={{textAlign: "center", padding: 15, elecation: 5}}
+                                size={20}
+                                name='arrow-left'
+                                color='#4C9A2A'
+                            />
+                        </View>
+                    </TouchableOpacity>
                 </View>
-            </TouchableWithoutFeedback>
-        </View>
-      );
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <View style={{ flex: 1, width: '100%', marginTop: 50}}>
+                        <View style={styles.inputCard}>
+                            <TextInput
+                                multiline
+                                style={styles.textbox}
+                                placeholder="Write a comment..."
+                                autoCapitalize="sentences"
+                                numberOfLines={5}
+                                adjustsFontSizeToFit={true}
+                                minimumFontScale={0.1}
+                                onChangeText={content => this.setState({ content })}
+                            >
+                            </TextInput>
+                        </View>
+                    <TouchableOpacity onPress = {this.postComment} style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}}>
+                        <Text style={{fontFamily: 'Pacifico-Bold', fontSize: 28, color: '#4C9A2A', width: '100%', textAlign: 'center'}}>Comment!</Text>
+                    </TouchableOpacity>
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
+        );
     }
 }

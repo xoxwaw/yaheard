@@ -256,38 +256,38 @@ export default class ImagePost extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-  button : {
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 20,
-  },
-  header : {
-    fontSize: 18,
-    color: '#4C9A2A',
-    marginLeft: 20,
-    marginTop: 5,
-    flex: 1,
-  },
-  container : {
-    width: '100%',
-    flexDirection: 'column',
-    flex: 1,
+    button : {
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 20,
+    },
+    header : {
+        fontSize: 18,
+        color: '#4C9A2A',
+        marginLeft: 20,
+        marginTop: 5,
+        flex: 1,
+    },
+    container : {
+        width: '100%',
+        flexDirection: 'column',
+        flex: 1,
 
-  },
-  textbox : {
-    height: 40,
-    fontSize:20,
-    width: '100%',
-    marginTop: 8,
-    marginVertical: 15,
-    textAlignVertical: 'top'
-  },
-  inputCard : {
-    padding: 10,
-    margin: 20,
-    marginVertical: 5,
-    width: '90%',
-    backgroundColor: "#efefef",
-    borderRadius: 8,
-}
+    },
+    textbox : {
+        height: 40,
+        fontSize:20,
+        width: '100%',
+        marginTop: 8,
+        marginVertical: 15,
+        textAlignVertical: 'top'
+    },
+    inputCard : {
+        padding: 10,
+        margin: 20,
+        marginVertical: 5,
+        width: '90%',
+        backgroundColor: "#efefef",
+        borderRadius: 8,
+    }
 });

@@ -18,36 +18,36 @@ const image_height = win.width * 0.922 * 0.75;
 const MAXIMUM_MOVING_DISTANCE = 0.01;
 
 const styles = StyleSheet.create({
-  content_container: {
-    backgroundColor: '#68bb59',
-  },
-  content_item: {
-    backgroundColor: 'whitesmoke',
-    borderRadius: 10,
-  },
-  content: {
-      fontSize: 12,
-      paddingBottom: 20,
-      marginRight: 20,
-      marginTop: 20
-  },
-  control_button :{
-    flex: 1,
-    elevation: 10
-  },
-  title: {
+    content_container: {
+        backgroundColor: '#68bb59',
+    },
+    content_item: {
+        backgroundColor: 'whitesmoke',
+        borderRadius: 10,
+    },
+    content: {
+        fontSize: 12,
+        paddingBottom: 20,
+        marginRight: 20,
+        marginTop: 20
+    },
+    control_button :{
+        flex: 1,
+        elevation: 10
+    },
+    title: {
         fontSize: 18,
         borderColor: '#9b9b9b',
         borderBottomWidth: 1,
         marginTop: 20,
         marginRight: 20
-  },
-  title_image: {
+    },
+    title_image: {
         marginTop: image_height,
         fontSize: 18,
         borderColor: '#9b9b9b',
         borderBottomWidth: 1,
-  }
+    }
 });
 
 class Feed extends React.Component {
@@ -249,8 +249,6 @@ class Feed extends React.Component {
         AsyncStorage.setItem('post', JSON.stringify(post))
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
 	}
-
-
     render() {
         return (
             <ScrollView contentContainerStyle={{ padding: 0, margin: 0 }}
@@ -262,154 +260,154 @@ class Feed extends React.Component {
                 />
                 }
             >
-            <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <Card>
-                    <Text style={{padding: 10}}>{this.state.location.longitude},{this.state.location.latitude}</Text>
-                </Card>
-            </View>
-            <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
-                {
-                    this.state.items.map((u, i) => {
-                        if (u.isText == true){
-                            return (
-                                <Card>
-                                    <View style={{padding: 20}}>
-                                        <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
-                                            <Text style={{ fontSize: 24 }}>{u.title}</Text>
-                                            <Text style={{ fontSize: 16 }}>{u.content}</Text>
-                                        </TouchableOpacity>
-                                    </View>
-
-                                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
-
-                                        <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
-                                                <Icon
-                                                style={{textAlign: "center"}}
-                                                size={20}
-                                                name='arrow-circle-up'
-                                                color='#4C9A2A'
-                                                />
+                <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <Card>
+                        <Text style={{padding: 10}}>{this.state.location.longitude},{this.state.location.latitude}</Text>
+                    </Card>
+                </View>
+                <View containerStyle={{margin: 0, padding: 0, zIndex: 0}} >
+                    {
+                        this.state.items.map((u, i) => {
+                            if (u.isText == true){
+                                return (
+                                    <Card>
+                                        <View style={{padding: 20}}>
+                                            <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
+                                                <Text style={{ fontSize: 24 }}>{u.title}</Text>
+                                                <Text style={{ fontSize: 16 }}>{u.content}</Text>
                                             </TouchableOpacity>
                                         </View>
 
-                                        <View style={{ flex: 1 }}>
-                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
-                                        </View>
+                                        <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
 
-                                        <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
-                                                <Icon
-                                                    style={{textAlign: "center"}}
-                                                    size={20}
-                                                    name='arrow-circle-down'
-                                                    color='#4C9A2A'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
-                                                <Icon
-                                                    style={{textAlign: "center"}}
-                                                    size={20}
-                                                    name='comments'
-                                                    color='#333'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
-                                            <View style={{ flex: 1 }}></View>
-                                            <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10, width: '100%', textAlign: 'center'}}>{dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
-                                            <View style={{ flex: 1 }}></View>
-                                        </View>
-                                    </View>
-                                </Card>
-                            );
-                        }else{
-                            return (
-                                <Card>
-                                    <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
-                                        <View>
-                                            <Image
-                                                style= {{
-                                                    width: u.width,
-                                                    height: u.height,
-                                                    position: 'absolute',
-                                                    borderTopLeftRadius: 7,
-                                                    borderTopRightRadius: 7,
-                                                }}
-                                                source={{uri: u.content}}
-                                                resizeMode={"stretch"}
-                                            />
-                                        </View>
-                                        <View style={{marginTop: u.height }}>
-                                            <Text style={{margin: 20, fontSize: 24}}>{u.title}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
-                                        <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress = {() => this._upvote(u)}>
-                                                <Icon
+                                            <View style={styles.control_button}>
+                                                <TouchableOpacity style={{padding:10,}} onPress = {() => this._upvote(u)}>
+                                                    <Icon
                                                     style={{textAlign: "center"}}
                                                     size={20}
                                                     name='arrow-circle-up'
                                                     color='#4C9A2A'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={{flex: 1}}>
-                                            <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
-                                        </View>
-                                        <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress = {() => this._downvote(u)}>
-                                                <Icon
-                                                    style={{textAlign: "center"}}
-                                                    size={20}
-                                                    name='arrow-circle-down'
-                                                    color='#4C9A2A'
-                                                />
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
 
-                                            </TouchableOpacity>
+                                            <View style={{ flex: 1 }}>
+                                                <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
+                                            </View>
+
+                                            <View style={styles.control_button}>
+                                                <TouchableOpacity style={{padding:10}} onPress={() => this._downvote(u)}>
+                                                    <Icon
+                                                        style={{textAlign: "center"}}
+                                                        size={20}
+                                                        name='arrow-circle-down'
+                                                        color='#4C9A2A'
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+
+                                            <View style={styles.control_button}>
+                                                <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                                    <Icon
+                                                        style={{textAlign: "center"}}
+                                                        size={20}
+                                                        name='comments'
+                                                        color='#333'
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+
+                                            <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
+                                                <View style={{ flex: 1 }}></View>
+                                                <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10, width: '100%', textAlign: 'center'}}>{dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
+                                                <View style={{ flex: 1 }}></View>
+                                            </View>
                                         </View>
-                                        <View style={styles.control_button}>
-                                            <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
-                                                <Icon
-                                                    style={{textAlign: "center"}}
-                                                    size={20}
-                                                    name='comments'
-                                                    color='#333'
+                                    </Card>
+                                );
+                            }else{
+                                return (
+                                    <Card>
+                                        <TouchableOpacity onPress={()=>this.navigateToPost(u)}>
+                                            <View>
+                                                <Image
+                                                    style= {{
+                                                        width: u.width,
+                                                        height: u.height,
+                                                        position: 'absolute',
+                                                        borderTopLeftRadius: 7,
+                                                        borderTopRightRadius: 7,
+                                                    }}
+                                                    source={{uri: u.content}}
+                                                    resizeMode={"stretch"}
                                                 />
-                                            </TouchableOpacity>
+                                            </View>
+                                            <View style={{marginTop: u.height }}>
+                                                <Text style={{margin: 20, fontSize: 24}}>{u.title}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ddd', height: 45, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 }}>
+                                            <View style={styles.control_button}>
+                                                <TouchableOpacity style={{padding:10}} onPress = {() => this._upvote(u)}>
+                                                    <Icon
+                                                        style={{textAlign: "center"}}
+                                                        size={20}
+                                                        name='arrow-circle-up'
+                                                        color='#4C9A2A'
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{flex: 1}}>
+                                                <Text style={{fontSize: 20, textAlign: 'center', marginTop: 10}}>{u.upvote - u.downvote}</Text>
+                                            </View>
+                                            <View style={styles.control_button}>
+                                                <TouchableOpacity style={{padding:10}} onPress = {() => this._downvote(u)}>
+                                                    <Icon
+                                                        style={{textAlign: "center"}}
+                                                        size={20}
+                                                        name='arrow-circle-down'
+                                                        color='#4C9A2A'
+                                                    />
+
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={styles.control_button}>
+                                                <TouchableOpacity style={{padding:10}} onPress={()=>this.navigateToComment(u)}>
+                                                    <Icon
+                                                        style={{textAlign: "center"}}
+                                                        size={20}
+                                                        name='comments'
+                                                        color='#333'
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
+                                                <View style={{ flex: 1 }}></View>
+                                                <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10, width: '100%', textAlign: 'center'}}>{dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
+                                                <View style={{ flex: 1 }}></View>
+                                            </View>
                                         </View>
-                                        <View style={{flex: 3, flexDirection: 'column', height: '100%'}}>
-                                            <View style={{ flex: 1 }}></View>
-                                            <Text style={{fontSize: 12, color: '#555', flex: 1, marginLeft: 10, width: '100%', textAlign: 'center'}}>{dbactions.msToTime(new Date().getTime() - u.time)} ago.</Text>
-                                            <View style={{ flex: 1 }}></View>
-                                        </View>
-                                    </View>
-                                </Card>
-                            )
+                                    </Card>
+                                )
+                            }
+                        })
+                    }
+                    </View>
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
+                    <TouchableOpacity onPress={this.fetchNextPosts} style={{ backgroundColor: 'white', borderRadius: 30,  height: 50, width: 50, elevation: 5 }}>
+                        {!this.state.loadingMorePosts &&
+                            <Icon
+                                style={{textAlign: "center", padding: 10}}
+                                size={30}
+                                name='arrow-down'
+                                color='#4C9A2A'
+                            />
                         }
-                    })
-                }
+                        {this.state.loadingMorePosts &&
+                            <ActivityIndicator style={{ position: 'absolute' }} size="small" color="#4C9A2A" />
+                        }
+                    </TouchableOpacity>
                 </View>
-            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
-                <TouchableOpacity onPress={this.fetchNextPosts} style={{ backgroundColor: 'white', borderRadius: 30,  height: 50, width: 50, elevation: 5 }}>
-                    {!this.state.loadingMorePosts &&
-                        <Icon
-                            style={{textAlign: "center", padding: 10}}
-                            size={30}
-                            name='arrow-down'
-                            color='#4C9A2A'
-                        />
-                    }
-                    {this.state.loadingMorePosts &&
-                        <ActivityIndicator style={{ position: 'absolute' }} size="small" color="#4C9A2A" />
-                    }
-                </TouchableOpacity>
-            </View>
             </ScrollView>
         );
     }
