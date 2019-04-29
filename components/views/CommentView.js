@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {Text,Image, View, ScrollView, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity,  AsyncStorage } from 'react-native';
-import {Card, ListItem} from 'react-native-elements';
+import {Text, View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity,  AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 //backend actions

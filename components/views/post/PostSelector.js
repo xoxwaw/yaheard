@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Button, AsyncStorage, Platform, ImageBackground } from 'react-native';
-import { withNavigation  } from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import firebase from 'react-native-firebase';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 
 export default class Create extends React.Component {
     render() {

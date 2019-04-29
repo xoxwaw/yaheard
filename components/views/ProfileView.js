@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, AsyncStorage, ScrollView, Button, TouchableOpacity} from 'react-native';
-import { SwitchNavigator } from 'react-navigation'
+import { View, Text, AsyncStorage, ScrollView, TouchableOpacity} from 'react-native';
 import {Card} from 'react-native-elements'
 import firebase from 'react-native-firebase';
 

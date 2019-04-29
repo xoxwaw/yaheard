@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, AsyncStorage, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, BackHandler } from 'react-native';
-import { withNavigation  } from 'react-navigation';
+import { View, Text, StyleSheet, TextInput, AsyncStorage, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
-import RNFetchBlob from 'react-native-fetch-blob';
-import { tsConstructSignatureDeclaration } from '@babel/types';
 
 const storage = firebase.storage();
 
