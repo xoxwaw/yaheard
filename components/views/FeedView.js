@@ -188,22 +188,6 @@ class Feed extends React.Component {
         });
         this.setState({allposts: items});
         client.sortByPopular(this.state.allposts);
-        AsyncStorage.getItem('sortTime').then(val=>{
-            console.log(val)
-            if (val == 'day'){
-                const allposts = client.last24hours(this.state.allposts)
-                this.setState({allposts: allposts})
-                allposts.forEach(elem=>
-                console.log(new Date().getTime()- elem.time))
-            }else if(val == 'month'){
-                const allposts = client.pastMonth(this.state.allposts)
-                this.setState({allposts: allposts})
-            }else if (val == 'year'){
-                const allposts = client.pastYear(this.state.allposts)
-                this.setState({allposts: allposts})
-            }
-            this.setState({feedlength: this.state.allposts.length});
-        }).catch(err => console.log(err));
         AsyncStorage.getItem('sortType').then(val =>{
             console.log(val)
             if (val == 'new'){
@@ -212,15 +196,29 @@ class Feed extends React.Component {
                 client.sortByPopular(this.state.allposts);
             }
         }).catch(err=>console.log(err));
+        AsyncStorage.getItem('sortTime').then(val=>{
+            var allposts = []
+            if (val == 'day'){
+                allposts = client.last24hours(this.state.allposts)
+                this.setState({allposts: allposts})
+            }else if(val == 'month'){
+                allposts = client.pastMonth(this.state.allposts)
+                this.setState({allposts: allposts})
+            }else if (val == 'year'){
+                allposts = client.pastYear(this.state.allposts)
+                this.setState({allposts: allposts})
+            }
+            if (allposts.length == 0){
+                this.setState({items: []});
+                this.setState({last_ind: 0})
+            }else if (this.state.last_ind <= this.state.feedlength){
+                this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
+            }else{
+                this.setState({items: this.state.allposts});
+            }
+            this.setState({feedlength: allposts.length})
+        }).catch(err => console.log(err));
         // client.sortByDate(this.state.allposts);
-
-        if (this.state.feedlength == 0){
-            this.setState({items: []})
-        }else if (this.state.last_ind <= this.state.feedlength){
-            this.setState({items: this.state.allposts.slice(0, this.state.last_ind)});
-        }else{
-            this.setState({items: this.state.allposts});
-        }
     }
     _upvote(post){
         var superitems = this.state.items;
