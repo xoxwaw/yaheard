@@ -147,7 +147,7 @@ export default class TextPost extends React.Component {
                         <View style={{ flex: 1, flexDirection: 'row', width: "100%", margin: 0}}>
                             <View style={{ flex: 1, justifyContent: 'flex-end', padding: 0, width: '100%' }}>
                                 <TouchableOpacity style={{justifyContent: 'center',  alignItems: 'center', width: '100%', height: 80, backgroundColor: '#ddd', elevation: 5}} onPress={() => {
-                                    if (this.state.post_content != ""){
+                                    if (this.state.post_content != "" && this.state.post_title != ""){
                                         this.handleTextPost();
                                         this.props.navigation.navigate('routeFeed');
                                     }

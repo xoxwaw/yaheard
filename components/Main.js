@@ -18,34 +18,34 @@ import Controls from './Controls';
 const win = Dimensions.get('window');
 
 const ContentNav = createSwitchNavigator({
-  routeFeed: { screen: FeedView },
-  routePost: { screen: PostView },
-  routeProfile: { screen: ProfileView },
-  routeMap: { screen: MapView },
-  routeSettings: { screen: SettingsView },
-  routeFocus:{screen: FocusView},
-  routeComment:{screen: CommentView},
-  routeReply:{screen: ReplyView}
+    routeFeed: { screen: FeedView },
+    routePost: { screen: PostView },
+    routeProfile: { screen: ProfileView },
+    routeMap: { screen: MapView },
+    routeSettings: { screen: SettingsView },
+    routeFocus:{screen: FocusView},
+    routeComment:{screen: CommentView},
+    routeReply:{screen: ReplyView}
 });
 
 class Main extends React.Component {
-  static router = ContentNav.router;
-  render() {
-    return (
-      <View style={{position: 'absolute', width: '100%', top: 0, bottom: 0, left: 0, right: 0}}>
-        <View style={{flexDirection: 'column'}}>
-          <View style={{height: 50}}>
-            <Header />
-          </View>
-          <View style={{height: Platform.OS === 'android' ? win.height - 75 : win.height - 100, width: '100%', backgroundColor: '#ccc'}}>
-            <ContentNav navigation={this.props.navigation} />
-          </View>
-          <View style={{height: 100}}>
-            <Controls />
-          </View>
-        </View>
-      </View>
-    );
-  }
+    static router = ContentNav.router;
+    render() {
+        return (
+            <View style={{position: 'absolute', width: '100%', top: 0, bottom: 0, left: 0, right: 0}}>
+                <View style={{flexDirection: 'column'}}>
+                    <View style={{height: 50}}>
+                        <Header />
+                    </View>
+                    <View style={{height: Platform.OS === 'android' ? win.height - 75 : win.height - 100, width: '100%', backgroundColor: '#ccc'}}>
+                        <ContentNav navigation={this.props.navigation} />
+                    </View>
+                    <View style={{height: 100}}>
+                        <Controls />
+                    </View>
+                </View>
+            </View>
+        );
+    }
 }
 export default withNavigation(Main);

@@ -5,34 +5,34 @@ import firebase from 'react-native-firebase';
 
 const styles = StyleSheet.create({
     content_container: {
-      backgroundColor: '#68bb59',
-      padding: 20,
+        backgroundColor: '#68bb59',
+        padding: 20,
     },
     content_item: {
-      backgroundColor: 'whitesmoke',
-      borderRadius: 10,
-      padding: 10,
-      marginBottom: 10,
+        backgroundColor: 'whitesmoke',
+        borderRadius: 10,
+        padding: 10,
+        marginBottom: 10,
     },
     content: {
         fontSize: 12,
         paddingBottom: 20,
     },
     button : {
-      marginLeft: 10,
-      marginRight: 10,
-      marginBottom: 20,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 20,
     },
     textbox : {
-      marginTop: 80,
-      height: 50,
-      fontSize:16,
-      width: '100%',
-      marginTop: 8,
-      marginVertical: 15,
-      elevation: 0,
-      marginLeft: 20,
-      textAlignVertical: 'top'
+        marginTop: 80,
+        height: 50,
+        fontSize:16,
+        width: '100%',
+        marginTop: 8,
+        marginVertical: 15,
+        elevation: 0,
+        marginLeft: 20,
+        textAlignVertical: 'top'
     },
     inputCard : {
         marginVertical: 5,

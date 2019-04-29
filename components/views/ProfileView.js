@@ -105,39 +105,38 @@ export default class Profile extends React.Component {
         .then((val)=>console.log("set successfully!")).then(res=>this.props.navigation.navigate('routeFocus'))
     }
 
-  render() {
-    return (
-      <View style={{ flex: 1, flexDirection: 'column', width: '100%'}}>
-        <View style={{ width: '100%', backgroundColor: '#ddd' }}>
-            <Text style={{ margin: 10, paddingBottom: 5, fontSize: 20, borderColor: '#555', borderBottomWidth: 0.5 }}>{this.state.email}</Text>
-            <Text style={{ marginLeft: 10, fontSize: 12 }}>(Only you can see this profile)</Text>
-            <Text style={{ margin: 10, paddingBottom: 5, fontSize: 20 }}>Karma: {this.state.karma}</Text>
-        </View>
-        <View style={{ flexDirection: 'row', width: '100%', backgroundColor: '#ddd'}}>
-            <TouchableOpacity style={{ elevation: 5, justifyContent: 'center',  alignItems: 'center', margin: 5, flex: 1, height: 40, borderRadius: 50, backgroundColor: '#efefef' }} onPress={this.fetchUpvoted}>
-                <Text style={{ fontSize: 15, color: '#444', width: '100%', textAlign: 'center'}}>Upvoted</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ elevation: 5, justifyContent: 'center',  alignItems: 'center', margin: 5, flex: 1, height: 40, borderRadius: 50, backgroundColor: '#efefef' }} onPress = {this.fetchUploaded}>
-                <Text style={{ fontSize: 15, color: '#444', width: '100%', textAlign: 'center'}}>Uploads</Text>
-            </TouchableOpacity>
-        </View>
-        <ScrollView>
-            <View containerStyle={{padding: 0}} >
-                {
-                    this.state.posts.map((u, i) => {
-                        return (
-                            <Card>
-                            <TouchableOpacity onPress = {()=> this.navigateToPost(u)}>
-                                <Text>{u.title}{!u.title && "*No Title*"} - ({u.upvote - u.downvote})</Text>
-                            </TouchableOpacity>
-                            </Card>
-                        );
-                    })
-                }
+    render() {
+        return (
+            <View style={{ flex: 1, flexDirection: 'column', width: '100%'}}>
+                <View style={{ width: '100%', backgroundColor: '#ddd' }}>
+                    <Text style={{ margin: 10, paddingBottom: 5, fontSize: 20, borderColor: '#555', borderBottomWidth: 0.5 }}>{this.state.email}</Text>
+                    <Text style={{ marginLeft: 10, fontSize: 12 }}>(Only you can see this profile)</Text>
+                    <Text style={{ margin: 10, paddingBottom: 5, fontSize: 20 }}>Karma: {this.state.karma}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', width: '100%', backgroundColor: '#ddd'}}>
+                    <TouchableOpacity style={{ elevation: 5, justifyContent: 'center',  alignItems: 'center', margin: 5, flex: 1, height: 40, borderRadius: 50, backgroundColor: '#efefef' }} onPress={this.fetchUpvoted}>
+                        <Text style={{ fontSize: 15, color: '#444', width: '100%', textAlign: 'center'}}>Upvoted</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ elevation: 5, justifyContent: 'center',  alignItems: 'center', margin: 5, flex: 1, height: 40, borderRadius: 50, backgroundColor: '#efefef' }} onPress = {this.fetchUploaded}>
+                        <Text style={{ fontSize: 15, color: '#444', width: '100%', textAlign: 'center'}}>Uploads</Text>
+                    </TouchableOpacity>
+                </View>
+                <ScrollView>
+                    <View containerStyle={{padding: 0}} >
+                        {
+                            this.state.posts.map((u, i) => {
+                                return (
+                                    <Card>
+                                        <TouchableOpacity onPress = {()=> this.navigateToPost(u)}>
+                                            <Text>{u.title}{!u.title && "*No Title*"} - ({u.upvote - u.downvote})</Text>
+                                        </TouchableOpacity>
+                                    </Card>
+                                );
+                            })
+                        }
+                    </View>
+                </ScrollView>
             </View>
-
-        </ScrollView>
-      </View>
-    );
-  }
+        );
+    }
 }

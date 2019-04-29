@@ -1,39 +1,17 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-import styles from '../styles/postStyle' //for testing templates
-import { Icon } from 'react-native-elements'; //for testing templates
+
+// This component is still in development, but it is a 
+// feature we want to impliment in the future, so we
+// left it in the code for now.
 
 export default class Create extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, flexDirection: 'column' }}>
-
-        <Text>MAP VIEW</Text>
-
-        <View style={styles.type_a_container}>
-          <View style={styles.type_a_content}>
-            <Text>"This is a quote"</Text>
-          </View>
-          <View>
-            <View style={styles.type_a_info}>
-              <View style={{ flex: 2 }}>
-                <Icon size={15} name='clock' type='feather' color='#000'/>
-              </View>
-              <View style={{ flex: 5 }}>
-                <Text style={styles.type_a_text}>3 hours ago</Text>
-              </View>
-              <View style={{ flex: 2 }}>
-                <Icon size={15} name='map-pin' type='feather' color='#000'/>
-              </View>
-              <View style={{ flex: 12 }}>
-                <Text style={styles.type_a_text}>Near Earlham</Text>
-              </View>
+    render() {
+        return (
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+                <Text>MAP VIEW</Text>
             </View>
-          </View>
-        </View>
-
-      </View>
-    );
-  }
+        );
+    }
 }
