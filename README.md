@@ -1,4 +1,4 @@
-# Overheard
+# YaHeard
 An app by Porter, Phi, Ethan, Neil and Dan
 
 This app was built on the React-Native platform for CS345: Software Engineering.
